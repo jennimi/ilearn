@@ -9,4 +9,6 @@ class Lesson extends Model
 {
     /** @use HasFactory<\Database\Factories\LessonFactory> */
     use HasFactory;
+    
+    protected $guarded = ['id'];
 }

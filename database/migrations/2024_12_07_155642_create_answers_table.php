@@ -14,6 +14,13 @@ return new class extends Migration
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedBigInteger('question_id')->index();
+            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
+            $table->unsignedBigInteger('student_id')->index();
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+            $table->string('answer_key');
+            $table->string('answer_text');
+            $table->enum('is_correct', ['0', '1']); // 0 : incorrect, 1 : correct
         });
     }
 

@@ -9,4 +9,6 @@ class Module extends Model
 {
     /** @use HasFactory<\Database\Factories\ModuleFactory> */
     use HasFactory;
+    
+    protected $guarded = ['id'];
 }

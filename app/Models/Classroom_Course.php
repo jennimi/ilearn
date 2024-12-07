@@ -9,4 +9,6 @@ class Classroom_Course extends Model
 {
     /** @use HasFactory<\Database\Factories\ClassroomCourseFactory> */
     use HasFactory;
+    
+    protected $guarded = ['id'];
 }

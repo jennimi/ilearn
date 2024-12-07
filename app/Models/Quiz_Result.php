@@ -9,4 +9,6 @@ class Quiz_Result extends Model
 {
     /** @use HasFactory<\Database\Factories\QuizResultFactory> */
     use HasFactory;
+    
+    protected $guarded = ['id'];
 }

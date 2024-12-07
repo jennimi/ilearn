@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('lessons', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedBigInteger('module_id')->index();
+            $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
+            $table->string('title');
+            $table->longText('content');
         });
     }
 

@@ -9,4 +9,6 @@ class Discussion extends Model
 {
     /** @use HasFactory<\Database\Factories\DiscussionFactory> */
     use HasFactory;
+    
+    protected $guarded = ['id'];
 }

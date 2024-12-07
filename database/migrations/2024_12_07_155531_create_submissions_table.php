@@ -14,6 +14,14 @@ return new class extends Migration
         Schema::create('submissions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedBigInteger('assignment_id')->index();
+            $table->foreign('assignment_id')->references('id')->on('assignments')->onDelete('cascade');
+            $table->unsignedBigInteger('student_id')->index();
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+            $table->date('submission_date');
+            $table->integer('grade');
+            $table->longText('feedback');
+            $table->string('submitted_file')->nullable();
         });
     }
 
