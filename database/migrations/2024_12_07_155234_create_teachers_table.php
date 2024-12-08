@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone_number');
             $table->date('date_of_birth');
+            $table->unsignedBigInteger('admin_id')->index();
+            $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
         });
     }
 
