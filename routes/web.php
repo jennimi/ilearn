@@ -17,3 +17,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::middleware(['auth'])->get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 Route::middleware(['auth'])->get('/teacher/dashboard', [TeacherController::class, 'index'])->name('teacher.dashboard');
 Route::middleware(['auth'])->get('/student/dashboard', [StudentController::class, 'index'])->name('student.dashboard');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/users', [AdminController::class, 'showUserCreationForm'])->name('admin.users.create');
+    Route::post('/admin/users', [AdminController::class, 'createUsers'])->name('admin.users.store');
+});

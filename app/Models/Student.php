@@ -14,6 +14,7 @@ class Student extends Model
 
     protected $fillable = [
         'name',
+        'nik',
         'profile_picture',
         'email',
         'password',
@@ -22,7 +23,6 @@ class Student extends Model
         'address',
         'enrollment_date',
         'admin_id',
-        'classroom_id',
     ];
 
     public function user()
@@ -50,10 +50,10 @@ class Student extends Model
         return $this->hasMany(Submission::class, 'student_id', 'id');
     }
 
-    public function assigned(): BelongsTo
-    {
-        return $this->belongsTo(Classroom::class, 'classroom_id', 'id');
-    }
+    // public function assigned(): BelongsTo
+    // {
+    //     return $this->belongsTo(Classroom::class, 'classroom_id', 'id');
+    // }
 
     public function enrolled(): BelongsTo
     {

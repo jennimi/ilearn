@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name');
+            $table->string('nik');
             $table->string('profile_picture');
             $table->string('email');
             $table->string('password');
@@ -24,8 +25,8 @@ return new class extends Migration
             $table->date('enrollment_date');
             $table->unsignedBigInteger('admin_id')->index();
             $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
-            $table->unsignedBigInteger('classroom_id')->index();
-            $table->foreign('classroom_id')->references('id')->on('classrooms')->onDelete('cascade');
+            // $table->unsignedBigInteger('classroom_id')->index();
+            // $table->foreign('classroom_id')->references('id')->on('classrooms')->onDelete('cascade');
         });
     }
 

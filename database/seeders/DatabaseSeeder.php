@@ -115,6 +115,7 @@ class DatabaseSeeder extends Seeder
 
         Student::create([
             'name' => $student1->name,
+            'nik' => '23455',
             'profile_picture' => '/images/student1.jpg',
             'email' => $student1->email,
             'password' => $student1->password,
@@ -123,11 +124,11 @@ class DatabaseSeeder extends Seeder
             'address' => '123 Main Street',
             'enrollment_date' => '2022-01-10',
             'admin_id' => 1,
-            'classroom_id' => 1,
         ]);
 
         Student::create([
             'name' => $student2->name,
+            'nik' => '2346',
             'profile_picture' => '/images/student2.jpg',
             'email' => $student2->email,
             'password' => $student2->password,
@@ -136,7 +137,6 @@ class DatabaseSeeder extends Seeder
             'address' => '456 Elm Street',
             'enrollment_date' => '2022-08-15',
             'admin_id' => 2,
-            'classroom_id' => 2,
         ]);
     }
 }
