@@ -11,8 +11,21 @@ class Teacher extends Model
 {
     /** @use HasFactory<\Database\Factories\TeacherFactory> */
     use HasFactory;
-    
-    protected $guarded = ['id'];
+
+    protected $fillable = [
+        'name',
+        'profile_picture',
+        'email',
+        'password',
+        'phone_number',
+        'date_of_birth',
+        'admin_id',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'email', 'email');
+    }
 
     public function comments()
     {

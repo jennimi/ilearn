@@ -11,8 +11,12 @@ class Classroom extends Model
 {
     /** @use HasFactory<\Database\Factories\ClassroomFactory> */
     use HasFactory;
-    
-    protected $guarded = ['id'];
+
+    protected $fillable = [
+        'name',
+        'time_period',
+        'admin_id',
+    ];
 
     public function classes(): HasMany
     {

@@ -11,7 +11,17 @@ class Admin extends Model
     /** @use HasFactory<\Database\Factories\AdminFactory> */
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'name',
+        'profile_picture',
+        'email',
+        'password',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'email', 'email');
+    }
 
     public function delegate(): HasMany
     {
