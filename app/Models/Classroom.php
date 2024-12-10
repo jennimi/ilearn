@@ -34,10 +34,13 @@ class Classroom extends Model
         return $this->belongsToMany(Student::class, 'classroom_student');
     }
 
-
-
     public function made(): BelongsTo
     {
         return $this->belongsTo(Admin::class, 'admin_id', 'id');
+    }
+
+    public function reportCards()
+    {
+        return $this->hasMany(ReportCard::class);
     }
 }
