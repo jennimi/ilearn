@@ -16,6 +16,8 @@ return new class extends Migration
             $table->timestamps();
             $table->string('name');
             $table->year('time_period');
+            $table->unsignedBigInteger('teacher_id'); // Homeroom Teacher
+            $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('cascade');
             $table->unsignedBigInteger('admin_id')->index();
             $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
         });

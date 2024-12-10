@@ -50,10 +50,12 @@ class Student extends Model
         return $this->hasMany(Submission::class, 'student_id', 'id');
     }
 
-    // public function assigned(): BelongsTo
-    // {
-    //     return $this->belongsTo(Classroom::class, 'classroom_id', 'id');
-    // }
+    public function classrooms()
+    {
+        return $this->belongsToMany(Classroom::class, 'classroom_student');
+    }
+
+
 
     public function enrolled(): BelongsTo
     {

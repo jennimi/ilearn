@@ -15,6 +15,7 @@ class Classroom extends Model
     protected $fillable = [
         'name',
         'time_period',
+        'teacher_id',
         'admin_id',
     ];
 
@@ -23,10 +24,17 @@ class Classroom extends Model
         return $this->hasMany(Classroom_Course::class, 'classroom_id', 'id');
     }
 
-    public function students(): HasMany
+    public function teacher()
     {
-        return $this->hasMany(Student::class, 'classroom_id', 'id');
+        return $this->belongsTo(Teacher::class, 'teacher_id');
     }
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'classroom_student');
+    }
+
+
 
     public function made(): BelongsTo
     {

@@ -22,3 +22,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/users', [AdminController::class, 'showUserCreationForm'])->name('admin.users.create');
     Route::post('/admin/users', [AdminController::class, 'createUsers'])->name('admin.users.store');
 });
+
+use App\Http\Controllers\ClassroomController;
+
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::get('classrooms', [ClassroomController::class, 'index'])->name('admin.classrooms.index');
+    Route::get('classrooms/create', [ClassroomController::class, 'create'])->name('admin.classrooms.create');
+    Route::post('classrooms', [ClassroomController::class, 'store'])->name('admin.classrooms.store');
+    Route::get('classrooms/{id}', [ClassroomController::class, 'show'])->name('admin.classrooms.show');
+    Route::get('classrooms/{id}/edit', [ClassroomController::class, 'edit'])->name('admin.classrooms.edit');
+    Route::put('classrooms/{id}', [ClassroomController::class, 'update'])->name('admin.classrooms.update');
+    Route::get('classrooms/{id}/add-students', [ClassroomController::class, 'addStudentsForm'])->name('admin.classrooms.addStudentsForm');
+    Route::post('classrooms/{id}/add-students', [ClassroomController::class, 'addStudents'])->name('admin.classrooms.addStudents');
+    Route::delete('classrooms/{id}/remove-students', [ClassroomController::class, 'removeStudents'])->name('admin.classrooms.removeStudents');
+});

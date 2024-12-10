@@ -25,8 +25,6 @@ return new class extends Migration
             $table->date('enrollment_date');
             $table->unsignedBigInteger('admin_id')->index();
             $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
-            // $table->unsignedBigInteger('classroom_id')->index();
-            // $table->foreign('classroom_id')->references('id')->on('classrooms')->onDelete('cascade');
         });
     }
 

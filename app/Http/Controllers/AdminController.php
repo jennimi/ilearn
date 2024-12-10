@@ -10,15 +10,17 @@ use App\Models\User;
 use App\Models\Admin;
 use App\Models\Teacher;
 use App\Models\Student;
+use App\Models\Classroom;
 
 class AdminController extends Controller
 {
     public function index()
     {
-        // Retrieve admin details via the authenticated user
         $adminDetails = Auth::user()->admin;
 
-        return view('admin.dashboard', compact('adminDetails'));
+        $classrooms = Classroom::all();
+
+        return view('admin.dashboard', compact('adminDetails', 'classrooms'));
     }
 
     // Create Users

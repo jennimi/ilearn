@@ -84,18 +84,21 @@ class DatabaseSeeder extends Seeder
         Classroom::create([
             'name' => 'XIIA1',
             'time_period' => 2024,
+            'teacher_id' => 1,
             'admin_id' => 1,
         ]);
 
         Classroom::create([
             'name' => 'XIIA3',
             'time_period' => 2024,
+            'teacher_id' => 1,
             'admin_id' => 2,
         ]);
 
         Classroom::create([
             'name' => 'XIIA2',
             'time_period' => 2024,
+            'teacher_id' => 1,
             'admin_id' => 1,
         ]);
 
