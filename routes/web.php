@@ -19,13 +19,14 @@ Route::middleware(['auth'])->get('/teacher/dashboard', [TeacherController::class
 Route::middleware(['auth'])->get('/student/dashboard', [StudentController::class, 'index'])->name('student.dashboard');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/users', [AdminController::class, 'showUserCreationForm'])->name('admin.users.create');
-    Route::post('/admin/users', [AdminController::class, 'createUsers'])->name('admin.users.store');
+
 });
 
 use App\Http\Controllers\ClassroomController;
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::get('users', [AdminController::class, 'showUserCreationForm'])->name('admin.users.create');
+    Route::post('users', [AdminController::class, 'createUsers'])->name('admin.users.store');
     Route::get('classrooms', [ClassroomController::class, 'index'])->name('admin.classrooms.index');
     Route::get('classrooms/create', [ClassroomController::class, 'create'])->name('admin.classrooms.create');
     Route::post('classrooms', [ClassroomController::class, 'store'])->name('admin.classrooms.store');
@@ -35,4 +36,12 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('classrooms/{id}/add-students', [ClassroomController::class, 'addStudentsForm'])->name('admin.classrooms.addStudentsForm');
     Route::post('classrooms/{id}/add-students', [ClassroomController::class, 'addStudents'])->name('admin.classrooms.addStudents');
     Route::delete('classrooms/{id}/remove-students', [ClassroomController::class, 'removeStudents'])->name('admin.classrooms.removeStudents');
+    Route::get('courses/create', [AdminController::class, 'showCourseCreationForm'])->name('admin.courses.create');
+    Route::post('courses/store', [AdminController::class, 'storeCourse'])->name('admin.courses.store');
+    Route::get('/courses', [AdminController::class, 'indexCourses'])->name('admin.courses.index');
+    Route::get('/courses/{id}', [AdminController::class, 'showCourse'])->name('admin.courses.show');
+    Route::get('/courses/{id}/edit', [AdminController::class, 'editCourse'])->name('admin.courses.edit');
+    Route::put('/courses/{id}', [AdminController::class, 'updateCourse'])->name('admin.courses.update');
+    Route::delete('/courses/{id}', [AdminController::class, 'destroyCourse'])->name('admin.courses.destroy');
+
 });

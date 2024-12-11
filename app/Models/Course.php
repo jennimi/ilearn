@@ -11,18 +11,26 @@ class Course extends Model
 {
     /** @use HasFactory<\Database\Factories\CourseFactory> */
     use HasFactory;
-    
-    protected $guarded = ['id'];
 
-    public function taught(): BelongsTo
+    protected $fillable = [
+        'teacher_id',
+        'title',
+        'description',
+        'start_date',
+        'end_date',
+    ];
+
+    public function teacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class, 'teacher_id', 'id');
     }
 
-    public function subjects(): HasMany
+    public function classrooms()
     {
-        return $this->hasMany(Classroom_Course::class, 'course_id', 'id');
+        return $this->belongsToMany(Classroom::class, 'classroom_courses')
+            ->withPivot('day', 'start_time', 'end_time');
     }
+
 
     public function assignments(): HasMany
     {

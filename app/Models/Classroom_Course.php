@@ -10,8 +10,8 @@ class Classroom_Course extends Model
 {
     /** @use HasFactory<\Database\Factories\ClassroomCourseFactory> */
     use HasFactory;
-    
-    protected $guarded = ['id'];
+
+    protected $guarded = ['id', 'course_id', 'classroom_id', 'day', 'start_time', 'end_time'];
 
     public function classified(): BelongsTo
     {

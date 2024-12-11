@@ -11,8 +11,13 @@ class Module extends Model
 {
     /** @use HasFactory<\Database\Factories\ModuleFactory> */
     use HasFactory;
-    
-    protected $guarded = ['id'];
+
+    protected $fillable = [
+        'course_id',
+        'title',
+        'description',
+    ];
+
 
     public function course(): BelongsTo
     {
