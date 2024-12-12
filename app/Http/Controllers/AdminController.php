@@ -20,9 +20,11 @@ class AdminController extends Controller
     {
         $adminDetails = Auth::user()->admin;
 
-        $classrooms = Classroom::all();
+        $classrooms = Classroom::latest()->take(3)->get();
 
-        return view('admin.dashboard', compact('adminDetails', 'classrooms'));
+        $courses = Course::latest()->take(3)->get();
+
+        return view('admin.dashboard', compact('adminDetails', 'classrooms', 'courses'));
     }
 
     // Create Users
