@@ -15,8 +15,18 @@ class Module extends Model
     protected $fillable = [
         'course_id',
         'title',
-        'description',
+        'description'
     ];
+
+    protected static function booted()
+    {
+        static::created(function ($module) {
+            $module->discussion()->create([
+                'teacher_id' => $module->course->teacher_id,
+                'title' => "Discussion for {$module->title}",
+            ]);
+        });
+    }
 
 
     public function course(): BelongsTo
@@ -27,6 +37,11 @@ class Module extends Model
     public function lessons(): HasMany
     {
         return $this->hasMany(Lesson::class, 'module_id', 'id');
+    }
+
+    public function discussion()
+    {
+        return $this->hasOne(Discussion::class);
     }
 
     public function quizzes(): HasMany

@@ -47,4 +47,20 @@ class Teacher extends Model
         return $this->belongsTo(Admin::class, 'admin_id', 'id');
     }
 
+    public function courses()
+    {
+        return $this->hasMany(Course::class, 'teacher_id');
+    }
+
+    public function classrooms()
+    {
+        return $this->hasManyThrough(
+            Classroom::class,
+            Course::class,
+            'teacher_id',
+            'id',
+            'id',
+            'classroom_id'
+        )->withPivot('day', 'start_time', 'end_time');
+    }
 }

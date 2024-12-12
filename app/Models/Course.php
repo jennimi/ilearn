@@ -20,6 +20,26 @@ class Course extends Model
         'end_date',
     ];
 
+    protected static function booted()
+    {
+        static::created(function ($course) {
+            $defaultModules = [
+                ['title' => 'Module 1', 'description' => 'Introduction to the course.'],
+                ['title' => 'Module 2', 'description' => 'Core topics and concepts.'],
+                ['title' => 'Module 3', 'description' => 'Advanced topics and wrap-up.'],
+            ];
+
+            foreach ($defaultModules as $module) {
+                Module::create([
+                    'course_id' => $course->id,
+                    'title' => $module['title'],
+                    'description' => $module['description'],
+                ]);
+            }
+        });
+    }
+
+
     public function teacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class, 'teacher_id', 'id');
@@ -30,7 +50,6 @@ class Course extends Model
         return $this->belongsToMany(Classroom::class, 'classroom_courses')
             ->withPivot('day', 'start_time', 'end_time');
     }
-
 
     public function assignments(): HasMany
     {

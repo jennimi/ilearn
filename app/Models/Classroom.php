@@ -19,6 +19,13 @@ class Classroom extends Model
         'admin_id',
     ];
 
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'classroom_courses')
+            ->withPivot('day', 'start_time', 'end_time')
+            ->withTimestamps();
+    }
+
     public function classes(): HasMany
     {
         return $this->hasMany(Classroom_Course::class, 'classroom_id', 'id');

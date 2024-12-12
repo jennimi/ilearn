@@ -11,8 +11,12 @@ class Discussion extends Model
 {
     /** @use HasFactory<\Database\Factories\DiscussionFactory> */
     use HasFactory;
-    
-    protected $guarded = ['id'];
+
+    protected $guarded = [
+        'module_id',
+        'title',
+        'teacher_id'
+    ];
 
     public function comments(): HasMany
     {
