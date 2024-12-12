@@ -2,7 +2,16 @@
 
 @section('content')
     <div class="container">
-        <h1>Create Users</h1>
+        <div>
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-warning me-2">Back</a>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>Create Users</h1>
+            <div>
+                <button type="button" class="btn btn-success" id="addRow" disabled>Add Row</button>
+                <button type="submit" class="btn btn-primary" disabled id="submitButton">Create Users</button>
+            </div>
+        </div>
 
         @if (session('success'))
             <div class="alert alert-success">
@@ -22,7 +31,6 @@
 
         <form method="POST" action="{{ route('admin.users.store') }}">
             @csrf
-
             <div class="mb-3">
                 <label for="role" class="form-label">Select Role</label>
                 <select id="role" name="role" class="form-control" required>
@@ -40,8 +48,6 @@
                 <tbody id="tableBody"></tbody>
             </table>
 
-            <button type="button" class="btn btn-success" id="addRow" disabled>Add Row</button>
-            <button type="submit" class="btn btn-primary mt-3" disabled id="submitButton">Create Users</button>
         </form>
     </div>
 

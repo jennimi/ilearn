@@ -39,12 +39,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="#">About</a>
-                        </li>
+                        @if (auth()->user()->admin)
+                            <a class="nav-link text-white" href="{{ route('admin.dashboard') }}">Dashboard</a>
+                        @elseif(auth()->user()->teacher)
+                            <a class="nav-link text-white" href="{{ route('teacher.dashboard') }}">Dashboard</a>
+                        @elseif(auth()->user()->student)
+                            <a class="nav-link text-white" href="{{ route('student.dashboard') }}">Dashboard</a>
+                        @else
+                            <a class="nav-link text-white" href="{{ route('home') }}">Dashboard</a>
+                        @endif
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -73,7 +77,7 @@
                                     <li>
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                                    document.getElementById('logout-form').submit();">
                                             {{ __('Logout') }}
                                         </a>
                                     </li>
