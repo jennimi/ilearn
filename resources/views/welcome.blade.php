@@ -76,5 +76,7 @@
                 Log In
             </a>
         </div>
+
+        <img src="{{ asset('assets/jamir.png') }}" alt="Placeholder">
     </div>
 @endsection
