@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DiscussionController;
+use App\Http\Controllers\CommentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,11 +20,16 @@ Route::middleware(['auth'])->get('/admin/dashboard', [AdminController::class, 'i
 Route::middleware(['auth'])->get('/teacher/dashboard', [TeacherController::class, 'index'])->name('teacher.dashboard');
 Route::middleware(['auth'])->get('/student/dashboard', [StudentController::class, 'index'])->name('student.dashboard');
 
+Route::middleware(['auth'])->group(function () {
+    Route::post('discussions/{id}/comments', [DiscussionController::class, 'addComment'])->name('discussions.addComment');
+    Route::get('discussions/{id}', [DiscussionController::class, 'show'])->name('discussions.show');
+});
+
 Route::middleware(['auth'])->prefix('teacher')->group(function () {
     Route::get('courses/{id}', [TeacherController::class, 'showCourse'])->name('teacher.courses.show');
     Route::get('courses/{id}/modules', [TeacherController::class, 'showCourseModules'])->name('teacher.courses.modules');
     Route::post('courses/{id}/modules', [TeacherController::class, 'storeModule'])->name('teacher.modules.store');
-    Route::get('discussions/{id}', [DiscussionController::class, 'show'])->name('teacher.discussions.show');
+    Route::post('comments/{id}/reply', [CommentController::class, 'reply'])->name('teacher.comments.reply');
 });
 
 use App\Http\Controllers\ClassroomController;

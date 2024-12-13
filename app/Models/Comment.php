@@ -11,15 +11,20 @@ class Comment extends Model
     /** @use HasFactory<\Database\Factories\CommentFactory> */
     use HasFactory;
     
-    protected $guarded = ['id'];
+    protected $fillable = ['user_id', 'discussion_id', 'comment', 'parent_id'];
 
-    public function commentable()
+    public function discussion()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Discussion::class);
     }
 
-    public function discussed(): BelongsTo
+    public function replies()
     {
-        return $this->belongsTo(Discussion::class, 'discussion_id', 'id');
+        return $this->hasMany(Comment::class, 'parent_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'parent_id');
     }
 }

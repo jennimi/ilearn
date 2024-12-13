@@ -39,17 +39,15 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        @auth
-                            @if (auth()->user()->admin)
-                                <a class="nav-link text-white" href="{{ route('admin.dashboard') }}">Dashboard</a>
-                            @elseif(auth()->user()->teacher)
-                                <a class="nav-link text-white" href="{{ route('teacher.dashboard') }}">Dashboard</a>
-                            @elseif(auth()->user()->student)
-                                <a class="nav-link text-white" href="{{ route('student.dashboard') }}">Dashboard</a>
-                            @else
-                                <a class="nav-link text-white" href="{{ route('home') }}">Dashboard</a>
-                            @endif
-                        @endauth
+                        @if (auth()->check() && auth()->user()->role === 'admin' && auth()->user()->admin)
+                            <a class="nav-link text-white" href="{{ route('admin.dashboard') }}">Dashboard</a>
+                        @elseif(auth()->check() && auth()->user()->role === 'teacher' && auth()->user()->teacher)
+                            <a class="nav-link text-white" href="{{ route('teacher.dashboard') }}">Dashboard</a>
+                        @elseif(auth()->check() && auth()->user()->role === 'student' && auth()->user()->student)
+                            <a class="nav-link text-white" href="{{ route('student.dashboard') }}">Dashboard</a>
+                        @else
+                            <a class="nav-link text-white" href="{{ route('home') }}">Dashboard</a>
+                        @endif
 
                     </ul>
 

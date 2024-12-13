@@ -8,6 +8,8 @@ use App\Models\Teacher;
 use App\Models\User;
 use App\Models\Classroom;
 use App\Models\Course;
+use App\Models\Discussion;
+use App\Models\Comment;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -188,6 +190,47 @@ class DatabaseSeeder extends Seeder
             'day' => 'Wednesday',
             'start_time' => '09:00:00',
             'end_time' => '10:30:00',
+        ]);
+
+        // Add Comments to Discussions
+        $comment1 = Comment::create([
+            'user_id' => $student1->id, // Student One
+            'discussion_id' => 1,
+            'comment' => 'Can you explain this topic in more detail?',
+        ]);
+
+        $comment2 = Comment::create([
+            'user_id' => $student2->id, // Student Two
+            'discussion_id' => 1,
+            'comment' => 'I found this part confusing as well!',
+        ]);
+
+        $comment3 = Comment::create([
+            'user_id' => $student1->id, // Student One
+            'discussion_id' => 2,
+            'comment' => 'Can you provide more examples for this topic?',
+        ]);
+
+        // Replies to Comments by Teacher
+        Comment::create([
+            'user_id' => $teacher1->id, // Teacher One
+            'discussion_id' => 2,
+            'comment' => 'Sure, I will provide more details in tomorrow\'s lecture.',
+            'parent_id' => $comment1->id, // Reply to comment1
+        ]);
+
+        Comment::create([
+            'user_id' => $teacher1->id, // Teacher One
+            'discussion_id' => 3,
+            'comment' => 'Good point! Let me explain further in the discussion board.',
+            'parent_id' => $comment2->id, // Reply to comment2
+        ]);
+
+        Comment::create([
+            'user_id' => $teacher2->id, // Teacher Two
+            'discussion_id' => 2,
+            'comment' => 'I\'ll add more examples in the notes. Thanks for the suggestion!',
+            'parent_id' => $comment3->id, // Reply to comment3
         ]);
     }
 }

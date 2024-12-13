@@ -18,18 +18,18 @@ class Discussion extends Model
         'teacher_id'
     ];
 
-    public function comments(): HasMany
+    public function comments()
     {
-        return $this->hasMany(Comment::class, 'discussion_id', 'id');
+        return $this->hasMany(Comment::class);
     }
 
-    public function discusses(): BelongsTo
+    public function teacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class, 'teacher_id', 'id');
     }
 
-    public function lesson(): BelongsTo
+    public function module()
     {
-        return $this->belongsTo(Lesson::class, 'lesson_id', 'id');
+        return $this->belongsTo(Module::class);
     }
 }

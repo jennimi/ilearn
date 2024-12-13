@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedBigInteger('user_id');
-            $table->string('user_type');
-            $table->longText('content');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('discussion_id');
+            $table->foreign('discussion_id')->references('id')->on('discussions')->onDelete('cascade');
+            $table->longText('comment');
         });
     }
 

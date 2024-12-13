@@ -48,7 +48,7 @@
 
                         <!-- Link to Discussion -->
                         <p>
-                            <a href="{{ route('teacher.discussions.show', $module->discussion->id) }}" class="btn btn-link">Go to Discussion</a>
+                            <a href="{{ route('discussions.show', $module->discussion->id) }}" class="btn btn-link">Go to Discussion</a>
                         </p>
                     </div>
 
