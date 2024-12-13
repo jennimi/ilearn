@@ -39,15 +39,17 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        @if (auth()->user()->admin)
-                            <a class="nav-link text-white" href="{{ route('admin.dashboard') }}">Dashboard</a>
-                        @elseif(auth()->user()->teacher)
-                            <a class="nav-link text-white" href="{{ route('teacher.dashboard') }}">Dashboard</a>
-                        @elseif(auth()->user()->student)
-                            <a class="nav-link text-white" href="{{ route('student.dashboard') }}">Dashboard</a>
-                        @else
-                            <a class="nav-link text-white" href="{{ route('home') }}">Dashboard</a>
-                        @endif
+                        @auth
+                            @if (auth()->user()->admin)
+                                <a class="nav-link text-white" href="{{ route('admin.dashboard') }}">Dashboard</a>
+                            @elseif(auth()->user()->teacher)
+                                <a class="nav-link text-white" href="{{ route('teacher.dashboard') }}">Dashboard</a>
+                            @elseif(auth()->user()->student)
+                                <a class="nav-link text-white" href="{{ route('student.dashboard') }}">Dashboard</a>
+                            @else
+                                <a class="nav-link text-white" href="{{ route('home') }}">Dashboard</a>
+                            @endif
+                        @endauth
 
                     </ul>
 

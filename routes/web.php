@@ -25,6 +25,7 @@ Route::middleware(['auth'])->group(function () {
 use App\Http\Controllers\ClassroomController;
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::get('users/show', [AdminController::class, 'showUsers'])->name('admin.users.index');
     Route::get('users', [AdminController::class, 'showUserCreationForm'])->name('admin.users.create');
     Route::post('users', [AdminController::class, 'createUsers'])->name('admin.users.store');
     Route::get('classrooms', [ClassroomController::class, 'index'])->name('admin.classrooms.index');

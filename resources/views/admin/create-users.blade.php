@@ -5,31 +5,14 @@
         <div>
             <a href="{{ route('admin.dashboard') }}" class="btn btn-warning me-2">Back</a>
         </div>
-        <div class="d-flex justify-content-between align-items-center">
-            <h1>Create Users</h1>
-            <div>
-                <button type="button" class="btn btn-success" id="addRow" disabled>Add Row</button>
-                <button type="submit" class="btn btn-primary" disabled id="submitButton">Create Users</button>
-            </div>
-        </div>
-
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
         <form method="POST" action="{{ route('admin.users.store') }}">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>Create Users</h1>
+                <div>
+                    <button type="button" class="btn btn-success" id="addRow" disabled>Add Row</button>
+                    <button type="submit" class="btn btn-primary" disabled id="submitButton">Create Users</button>
+                </div>
+            </div>
             @csrf
             <div class="mb-3">
                 <label for="role" class="form-label">Select Role</label>
@@ -49,6 +32,24 @@
             </table>
 
         </form>
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+
+
     </div>
 
     <script>

@@ -6,7 +6,7 @@
             <h3>User Management</h3>
             <div>
                 <a href="{{ route('admin.users.create') }}" class="btn btn-primary me-2">Create User</a>
-                <a href="{{ route('admin.users.create') }}" class="btn btn-secondary">See All Users</a>
+                <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">See All Users</a>
             </div>
         </div>
         <!-- Metrics Section -->

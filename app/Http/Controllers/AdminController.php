@@ -27,6 +27,25 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('adminDetails', 'classrooms', 'courses'));
     }
 
+    // Show Users
+    public function showUsers(Request $request)
+    {
+        // Get the 'type' parameter from the request
+        $type = $request->input('type', 'students'); // Default to 'students'
+    
+        // Fetch users based on the type
+        if ($type === 'students') {
+            $users = Student::paginate(6);
+        } elseif ($type === 'teachers') {
+            $users = Teacher::paginate(6);
+        } else {
+            $users = collect(); // Empty collection if type is invalid
+        }
+    
+        // Pass the data to the view
+        return view('admin.users_index', compact('users', 'type'));
+    }
+    
     // Create Users
     public function showUserCreationForm()
     {
