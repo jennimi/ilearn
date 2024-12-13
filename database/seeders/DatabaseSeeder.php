@@ -192,43 +192,49 @@ class DatabaseSeeder extends Seeder
             'end_time' => '10:30:00',
         ]);
 
+        $discussion1 = Discussion::create([
+            'module_id' => 1, // Module ID
+            'teacher_id' => 1, // Use valid teacher ID
+            'title' => 'Discussion for Module 1',
+        ]);
+
         // Add Comments to Discussions
         $comment1 = Comment::create([
             'user_id' => $student1->id, // Student One
-            'discussion_id' => 1,
+            'discussion_id' => $discussion1->id,
             'comment' => 'Can you explain this topic in more detail?',
         ]);
 
         $comment2 = Comment::create([
             'user_id' => $student2->id, // Student Two
-            'discussion_id' => 1,
+            'discussion_id' => $discussion1->id,
             'comment' => 'I found this part confusing as well!',
         ]);
 
         $comment3 = Comment::create([
             'user_id' => $student1->id, // Student One
-            'discussion_id' => 2,
+            'discussion_id' => $discussion1->id,
             'comment' => 'Can you provide more examples for this topic?',
         ]);
 
         // Replies to Comments by Teacher
         Comment::create([
             'user_id' => $teacher1->id, // Teacher One
-            'discussion_id' => 2,
+            'discussion_id' => $discussion1->id,
             'comment' => 'Sure, I will provide more details in tomorrow\'s lecture.',
             'parent_id' => $comment1->id, // Reply to comment1
         ]);
 
         Comment::create([
             'user_id' => $teacher1->id, // Teacher One
-            'discussion_id' => 3,
+            'discussion_id' => $discussion1->id,
             'comment' => 'Good point! Let me explain further in the discussion board.',
             'parent_id' => $comment2->id, // Reply to comment2
         ]);
 
         Comment::create([
             'user_id' => $teacher2->id, // Teacher Two
-            'discussion_id' => 2,
+            'discussion_id' => $discussion1->id,
             'comment' => 'I\'ll add more examples in the notes. Thanks for the suggestion!',
             'parent_id' => $comment3->id, // Reply to comment3
         ]);

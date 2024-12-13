@@ -12,6 +12,7 @@ class DiscussionController extends Controller
 {
     public function show($id)
     {
+        // Find or create the discussion
         $discussion = Discussion::with([
             'module',
             'comments' => function ($query) {
@@ -20,7 +21,7 @@ class DiscussionController extends Controller
         ])->find($id);
 
         if (!$discussion) {
-            $module = Module::findOrFail($id); // Assuming $id is also the module_id
+            $module = Module::findOrFail($id);
             $discussion = $module->discussion()->create([
                 'teacher_id' => $module->course->teacher_id,
                 'title' => "Discussion for {$module->title}",
@@ -31,6 +32,7 @@ class DiscussionController extends Controller
 
         return view('discussions.show', compact('discussion'));
     }
+
 
 
 
