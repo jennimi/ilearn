@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'iLearn') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -33,6 +33,18 @@
             /* For Internet Explorer and Edge */
             scrollbar-width: none;
             /* For Firefox */
+        }
+        .tw-bg-image {
+            background-image: url('https://michiganvirtual.org/wp-content/uploads/2019/11/blended-v-student-centered-learning-1024x581.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
     </style>
 
