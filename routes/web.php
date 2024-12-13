@@ -7,6 +7,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DiscussionController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LessonController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -31,6 +32,7 @@ Route::middleware(['auth'])->prefix('teacher')->group(function () {
     Route::get('courses/{id}/modules', [TeacherController::class, 'showCourseModules'])->name('teacher.courses.modules');
     Route::post('courses/{id}/modules', [TeacherController::class, 'storeModule'])->name('teacher.modules.store');
     Route::post('comments/{id}/reply', [CommentController::class, 'reply'])->name('teacher.comments.reply');
+    Route::post('/modules/{module}/lessons', [LessonController::class, 'store'])->name('teacher.lessons.store');
 });
 
 use App\Http\Controllers\ClassroomController;

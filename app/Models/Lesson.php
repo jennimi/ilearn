@@ -11,8 +11,13 @@ class Lesson extends Model
 {
     /** @use HasFactory<\Database\Factories\LessonFactory> */
     use HasFactory;
-    
-    protected $guarded = ['id'];
+
+    protected $fillable = [
+        'module_id',
+        'title',
+        'content',
+        'visible',
+    ];
 
     public function discussion(): HasOne
     {
