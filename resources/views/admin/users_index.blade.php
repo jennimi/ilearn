@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="container">
-        <div class="mb-3">
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-warning me-2">Back</a>
+        <div>
+            <a href="javascript:void(0);" onclick="window.history.back();" class="btn btn-warning me-2">Back</a>
         </div>
 
         <h2 class="mb-4">Users</h2>

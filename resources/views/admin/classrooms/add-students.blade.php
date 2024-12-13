@@ -2,7 +2,10 @@
 
 @section('content')
 <div class="container">
-    <h1>Manage Students for {{ $classroom->name }}</h1>
+    <div>
+        <a href="javascript:void(0);" onclick="window.history.back();" class="btn btn-warning me-2">Back</a>
+    </div>
+    <h1 class="mb-3">Manage Students for {{ $classroom->name }}</h1>
 
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
