@@ -12,23 +12,21 @@ class DiscussionController extends Controller
 {
     public function show($id)
     {
-        // Find or create the discussion
-        $discussion = Discussion::with([
-            'module',
-            'comments' => function ($query) {
-                $query->whereNull('parent_id')->with(['replies.user', 'user']);
-            },
-        ])->find($id);
+        $module = Module::with(['course.teacher', 'discussion.comments.replies.user', 'discussion.comments.user'])
+            ->findOrFail($id);
 
-        if (!$discussion) {
-            $module = Module::findOrFail($id);
-            $discussion = $module->discussion()->create([
+        // Check if the discussion exists, create if it doesn't
+        if (!$module->discussion) {
+            $module->discussion()->create([
                 'teacher_id' => $module->course->teacher_id,
                 'title' => "Discussion for {$module->title}",
             ]);
 
-            $discussion->load(['module', 'comments.replies.user', 'comments.user']);
+            // Reload the discussion relationship
+            $module->load('discussion.comments.replies.user', 'discussion.comments.user');
         }
+
+        $discussion = $module->discussion;
 
         return view('discussions.show', compact('discussion'));
     }

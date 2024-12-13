@@ -34,6 +34,7 @@
             scrollbar-width: none;
             /* For Firefox */
         }
+
         .tw-bg-image {
             background-image: url('https://michiganvirtual.org/wp-content/uploads/2019/11/blended-v-student-centered-learning-1024x581.jpg');
             background-size: cover;
@@ -45,6 +46,34 @@
             width: 100%;
             height: 100%;
             z-index: -1;
+        }
+
+        .schedule-scroll-horizontal {
+            max-width: 100%;
+            /* Ensures it doesn’t overflow the container */
+            overflow-x: auto;
+            /* Horizontal scrolling */
+            scroll-behavior: smooth;
+            /* Smooth scrolling */
+            padding-bottom: 10px;
+            /* Space for better appearance */
+        }
+
+        .schedule-scroll-horizontal::-webkit-scrollbar {
+            height: 8px;
+            /* Thin horizontal scrollbar */
+        }
+
+        .schedule-scroll-horizontal::-webkit-scrollbar-thumb {
+            background: #007bff;
+            /* Match primary color */
+            border-radius: 10px;
+            /* Rounded scrollbar */
+        }
+
+        .schedule-scroll-horizontal::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            /* Light track */
         }
     </style>
 

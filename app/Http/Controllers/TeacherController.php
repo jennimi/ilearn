@@ -26,11 +26,15 @@ class TeacherController extends Controller
         // Get all courses taught by the teacher
         $allCourses = $teacher->courses;
 
-        return view('teacher.dashboard', compact('teacher', 'todaySchedules', 'allCourses'));
+        $recentCourseId = request()->cookie('recent_course_id');
+        $recentCourse = $recentCourseId ? Course::find($recentCourseId) : null;
+
+        return view('teacher.dashboard', compact('teacher', 'todaySchedules', 'allCourses', 'recentCourse'));
     }
 
     public function showCourse($id)
     {
+        cookie()->queue('recent_course_id', $id, 60 * 24); // Expires in 1 day
         $course = Course::with(['classrooms', 'modules.lessons'])->findOrFail($id);
         return view('teacher.courses.show', compact('course'));
     }

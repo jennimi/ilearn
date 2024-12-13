@@ -60,10 +60,11 @@
                                 </ul>
                             @endif
 
-                            <!-- Link to Discussion -->
+                            <!-- Link to Discussion -->           
                             <p>
-                                <a href="{{ route('discussions.show', $module->discussion->id) }}" class="btn btn-link">Go
-                                    to Discussion</a>
+                                <a href="{{ $module->discussion ? route('discussions.show', $module->discussion->id) : '#' }}"
+                                    class="btn btn-link">
+                                    Go to Discussion</a>
                             </p>
 
                             <!-- Add Lesson Button -->
