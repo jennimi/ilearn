@@ -12,14 +12,15 @@ class DiscussionController extends Controller
     public function show($id)
     {
         $discussion = Discussion::with([
-            'module',
+            'module', 
             'comments' => function ($query) {
-                $query->whereNull('parent_id')->with('replies');
+                $query->whereNull('parent_id')->with(['replies.user', 'user']);
             },
         ])->findOrFail($id);
 
         return view('discussions.show', compact('discussion'));
     }
+
 
 
     public function addComment(Request $request, $id)

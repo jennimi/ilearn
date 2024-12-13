@@ -23,6 +23,7 @@ Route::middleware(['auth'])->get('/student/dashboard', [StudentController::class
 Route::middleware(['auth'])->group(function () {
     Route::post('discussions/{id}/comments', [DiscussionController::class, 'addComment'])->name('discussions.addComment');
     Route::get('discussions/{id}', [DiscussionController::class, 'show'])->name('discussions.show');
+    Route::post('/discussions/{id}/comment', [DiscussionController::class, 'addComment'])->name('discussions.comment.store');
 });
 
 Route::middleware(['auth'])->prefix('teacher')->group(function () {

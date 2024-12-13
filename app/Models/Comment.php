@@ -10,7 +10,7 @@ class Comment extends Model
 {
     /** @use HasFactory<\Database\Factories\CommentFactory> */
     use HasFactory;
-    
+
     protected $fillable = ['user_id', 'discussion_id', 'comment', 'parent_id'];
 
     public function discussion()
@@ -26,5 +26,10 @@ class Comment extends Model
     public function parent()
     {
         return $this->belongsTo(Comment::class, 'parent_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
