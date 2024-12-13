@@ -62,6 +62,7 @@
                                 </div>
                             </div>
                         @endforeach
+
                         @if ($classrooms->isEmpty())
                             <div class="text-center">
                                 <p>No classrooms have been created</p>
@@ -89,8 +90,11 @@
                                         <h5 class="card-title">{{ $course->title }}</h5>
                                         <p class="card-text">{{ $course->description }}</p>
                                         <p class="card-text">Teacher: {{ $course->teacher->name }}</p>
-                                        <p class="card-text">Schedule : {{ $course->classrooms->first()->pivot->day}} {{ $course->classrooms->first()->pivot->start_time}}-{{ $course->classrooms->first()->pivot->end_time}}</p>
-                                        <p class="card-text">Start Date: {{ $course->start_date }} | End Date: {{ $course->end_date }}</p>
+                                        <p class="card-text">Schedule : {{ $course->classrooms->first()->pivot->day }}
+                                            {{ $course->classrooms->first()->pivot->start_time }}-{{ $course->classrooms->first()->pivot->end_time }}
+                                        </p>
+                                        <p class="card-text">Start Date: {{ $course->start_date }} | End Date:
+                                            {{ $course->end_date }}</p>
                                         <a href="{{ route('admin.courses.show', $course->id) }}"
                                             class="btn btn-primary">View
                                             course</a>

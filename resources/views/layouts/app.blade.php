@@ -21,6 +21,21 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <style>
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+            /* For Chrome, Safari, and Opera */
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            /* For Internet Explorer and Edge */
+            scrollbar-width: none;
+            /* For Firefox */
+        }
+    </style>
+
 </head>
 
 <body>

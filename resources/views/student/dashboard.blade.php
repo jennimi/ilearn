@@ -1,20 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <style>
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-            /* For Chrome, Safari, and Opera */
-        }
-
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            /* For Internet Explorer and Edge */
-            scrollbar-width: none;
-            /* For Firefox */
-        }
-    </style>
-
     @php
         $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     @endphp
