@@ -18,16 +18,15 @@ class Module extends Model
         'description'
     ];
 
-    protected static function booted()
-    {
-        static::created(function ($module) {
-            $module->discussion()->create([
-                'teacher_id' => $module->course->teacher_id,
-                'title' => "Discussion for {$module->title}",
-            ]);
-        });
-    }
-
+    // protected static function booted()
+    // {
+    //     static::created(function ($module) {
+    //         $module->discussion()->create([
+    //             'teacher_id' => $module->course->teacher_id,
+    //             'title' => "Discussion for {$module->title}",
+    //         ]);
+    //     });
+    // }
 
     public function course(): BelongsTo
     {

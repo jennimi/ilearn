@@ -6,17 +6,28 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Discussion;
+use App\Models\Module;
 
 class DiscussionController extends Controller
 {
     public function show($id)
     {
         $discussion = Discussion::with([
-            'module', 
+            'module',
             'comments' => function ($query) {
                 $query->whereNull('parent_id')->with(['replies.user', 'user']);
             },
-        ])->findOrFail($id);
+        ])->find($id);
+
+        if (!$discussion) {
+            $module = Module::findOrFail($id); // Assuming $id is also the module_id
+            $discussion = $module->discussion()->create([
+                'teacher_id' => $module->course->teacher_id,
+                'title' => "Discussion for {$module->title}",
+            ]);
+
+            $discussion->load(['module', 'comments.replies.user', 'comments.user']);
+        }
 
         return view('discussions.show', compact('discussion'));
     }
