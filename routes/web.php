@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\DiscussionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,8 +19,11 @@ Route::middleware(['auth'])->get('/admin/dashboard', [AdminController::class, 'i
 Route::middleware(['auth'])->get('/teacher/dashboard', [TeacherController::class, 'index'])->name('teacher.dashboard');
 Route::middleware(['auth'])->get('/student/dashboard', [StudentController::class, 'index'])->name('student.dashboard');
 
-Route::middleware(['auth'])->group(function () {
-
+Route::middleware(['auth'])->prefix('teacher')->group(function () {
+    Route::get('courses/{id}', [TeacherController::class, 'showCourse'])->name('teacher.courses.show');
+    Route::get('courses/{id}/modules', [TeacherController::class, 'showCourseModules'])->name('teacher.courses.modules');
+    Route::post('courses/{id}/modules', [TeacherController::class, 'storeModule'])->name('teacher.modules.store');
+    Route::get('discussions/{id}', [DiscussionController::class, 'show'])->name('teacher.discussions.show');
 });
 
 use App\Http\Controllers\ClassroomController;
@@ -44,5 +48,4 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/courses/{id}/edit', [AdminController::class, 'editCourse'])->name('admin.courses.edit');
     Route::put('/courses/{id}', [AdminController::class, 'updateCourse'])->name('admin.courses.update');
     Route::delete('/courses/{id}', [AdminController::class, 'destroyCourse'])->name('admin.courses.destroy');
-
 });

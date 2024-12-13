@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\User;
 use App\Models\Classroom;
+use App\Models\Course;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
+        // Create Admins
         $admin1 = User::create([
             'name' => 'Admin One',
             'email' => 'admin1@example.com',
@@ -47,6 +48,7 @@ class DatabaseSeeder extends Seeder
             'password' => $admin2->password,
         ]);
 
+        // Create Teachers
         $teacher1 = User::create([
             'name' => 'Teacher One',
             'email' => 'teacher1@example.com',
@@ -81,27 +83,29 @@ class DatabaseSeeder extends Seeder
             'admin_id' => 2,
         ]);
 
-        Classroom::create([
+        // Create Classrooms
+        $classroom1 = Classroom::create([
             'name' => 'XIIA1',
             'time_period' => 2024,
             'teacher_id' => 1,
             'admin_id' => 1,
         ]);
 
-        Classroom::create([
-            'name' => 'XIIA3',
-            'time_period' => 2024,
-            'teacher_id' => 1,
-            'admin_id' => 2,
-        ]);
-
-        Classroom::create([
+        $classroom2 = Classroom::create([
             'name' => 'XIIA2',
             'time_period' => 2024,
             'teacher_id' => 1,
             'admin_id' => 1,
         ]);
 
+        $classroom3 = Classroom::create([
+            'name' => 'XIIA3',
+            'time_period' => 2024,
+            'teacher_id' => 1,
+            'admin_id' => 2,
+        ]);
+
+        // Create Students
         $student1 = User::create([
             'name' => 'Student One',
             'email' => 'student1@example.com',
@@ -140,6 +144,50 @@ class DatabaseSeeder extends Seeder
             'address' => '456 Elm Street',
             'enrollment_date' => '2022-08-15',
             'admin_id' => 2,
+        ]);
+
+        // Create Courses
+        $course1 = Course::create([
+            'teacher_id' => 1,
+            'title' => 'Mathematics',
+            'description' => 'Advanced mathematics for senior high school.',
+            'start_date' => '2024-01-01',
+            'end_date' => '2024-06-30',
+        ]);
+
+        $course2 = Course::create([
+            'teacher_id' => 2,
+            'title' => 'Physics',
+            'description' => 'Fundamentals of physics with practical examples.',
+            'start_date' => '2024-01-01',
+            'end_date' => '2024-06-30',
+        ]);
+
+        $course3 = Course::create([
+            'teacher_id' => 1,
+            'title' => 'Chemistry',
+            'description' => 'Introduction to organic and inorganic chemistry.',
+            'start_date' => '2024-01-01',
+            'end_date' => '2024-06-30',
+        ]);
+
+        // Assign Courses to Classrooms with Schedules
+        $classroom1->courses()->attach($course1->id, [
+            'day' => 'Monday',
+            'start_time' => '08:00:00',
+            'end_time' => '09:30:00',
+        ]);
+
+        $classroom2->courses()->attach($course2->id, [
+            'day' => 'Thursday',
+            'start_time' => '10:00:00',
+            'end_time' => '11:30:00',
+        ]);
+
+        $classroom3->courses()->attach($course3->id, [
+            'day' => 'Wednesday',
+            'start_time' => '09:00:00',
+            'end_time' => '10:30:00',
         ]);
     }
 }
