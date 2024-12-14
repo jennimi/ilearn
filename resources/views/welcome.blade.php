@@ -76,7 +76,8 @@
                 Log In
             </a>
         </div>
-
-        <img src="{{ asset('assets/jamir.png') }}" alt="Placeholder">
+        <a href="{{ route('gemini.ask') }}">
+            <img src="{{ asset('assets/jamir.png') }}" alt="Placeholder">
+        </a>
     </div>
 @endsection
