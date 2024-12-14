@@ -89,8 +89,20 @@ class QuizController extends Controller
     public function takeQuiz($quizId)
     {
         $quiz = Quiz::with(['questions.choices'])->findOrFail($quizId);
+        $student = Auth::user()->student;
+
+        // Check if the student has already submitted the quiz
+        $quizResult = $student->quizResults()->where('quiz_id', $quizId)->first();
+
+        if ($quizResult) {
+            // Redirect to review if the student has already submitted the quiz
+            return redirect()->route('student.quizzes.review', $quizId)
+                ->with('info', 'You have already completed this quiz. Here is your review.');
+        }
+
         return view('student.quizzes.take', compact('quiz'));
     }
+
 
     public function submitQuiz(Request $request, $quizId)
     {

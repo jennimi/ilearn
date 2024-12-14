@@ -356,6 +356,7 @@ class DatabaseSeeder extends Seeder
             'description' => 'Test your knowledge of basic physics concepts.',
             'module_id' => 2, // Module 2
             'deadline' => Carbon::now()->addDays(1),
+            'duration' => 10
         ]);
 
         // Add Questions to the Quiz

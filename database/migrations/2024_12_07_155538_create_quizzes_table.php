@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
             $table->string('title');
             $table->string('description');
+            $table->integer('duration')->nullable();
             $table->timestamp('deadline')->nullable();
         });
     }

@@ -5,75 +5,151 @@
         <h1 class="text-primary">{{ $quiz->title }}</h1>
         <p class="text-muted">{{ $quiz->description }}</p>
 
-        <form id="quizForm" action="{{ route('student.quizzes.submit', $quiz->id) }}" method="POST">
-            @csrf
+        @if ($quiz->duration)
+            <div class="alert alert-warning">
+                <strong>Time Remaining:</strong>
+                <span id="timeRemaining">{{ $quiz->duration }}:00</span>
+            </div>
+        @endif
 
-            <div id="questionsContainer">
-                @foreach ($quiz->questions as $index => $question)
-                    <div class="question" data-question-id="{{ $question->id }}" data-index="{{ $index }}"
-                        style="display: none;">
-                        <h5>{{ $question->question_text }}</h5>
-                        @if ($question->image)
-                            <img src="{{ asset('storage/' . $question->image) }}" alt="Question Image"
-                                class="img-fluid mb-3">
-                        @endif
-
-                        <p><strong>Type:</strong> {{ $question->getTypeLabel() }}</p>
-
-                        @if ($question->getTypeLabel() === 'Single Choice')
-                            <div class="choices">
-                                @foreach ($question->choices as $choice)
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio"
-                                            name="answers[{{ $question->id }}]"
-                                            value="{{ $choice->id }}"
-                                            id="choice{{ $choice->id }}">
-                                        <label class="form-check-label" for="choice{{ $choice->id }}">
-                                            {{ $choice->choice_text }}
-                                        </label>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @elseif ($question->getTypeLabel() === 'Multiple Choice')
-                            <div class="choices">
-                                @foreach ($question->choices as $choice)
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox"
-                                            name="answers[{{ $question->id }}][]"
-                                            value="{{ $choice->id }}"
-                                            id="choice{{ $choice->id }}">
-                                        <label class="form-check-label" for="choice{{ $choice->id }}">
-                                            {{ $choice->choice_text }}
-                                        </label>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @elseif ($question->getTypeLabel() === 'Short Answer')
-                            <div class="choices">
-                                <input type="text" name="answers[{{ $question->id }}]"
-                                    class="form-control"
-                                    placeholder="Type your answer here">
-                            </div>
-                        @endif
+        <!-- Start Quiz Modal -->
+        <div class="modal fade" id="startQuizModal" tabindex="-1" aria-labelledby="startQuizModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="startQuizModalLabel">Confirm Start</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                @endforeach
+                    <div class="modal-body">
+                        Are you sure you want to start the quiz? Once started, the timer will begin.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="confirmStartQuizButton">Start Quiz</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar for navigation -->
+            <div class="col-md-3" id="questionList" style="display: none;">
+                <table class="table">
+                    <tbody>
+                        @foreach ($quiz->questions->chunk(5) as $row)
+                            <tr>
+                                @foreach ($row as $index => $question)
+                                    <td>
+                                        <button class="btn btn-outline-secondary question-nav"
+                                            data-index="{{ $loop->parent->index * 5 + $index }}">
+                                            {{ $loop->parent->index * 5 + $index + 1 }}
+                                        </button>
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
 
-            <button type="button" id="startQuizButton" class="btn btn-primary">Start Quiz</button>
-            <button type="button" id="previousQuestionButton" class="btn btn-secondary" style="display: none;">Previous</button>
-            <button type="button" id="nextQuestionButton" class="btn btn-secondary" style="display: none;">Next</button>
-            <button type="submit" id="submitQuizButton" class="btn btn-success" style="display: none;">Submit Quiz</button>
-        </form>
+            <!-- Quiz Content -->
+            <div class="col-md-9">
+                <form id="quizForm" action="{{ route('student.quizzes.submit', $quiz->id) }}" method="POST">
+                    @csrf
+
+                    <div id="questionsContainer">
+                        @foreach ($quiz->questions as $index => $question)
+                            <div class="question" data-question-id="{{ $question->id }}" data-index="{{ $index }}"
+                                style="display: none;">
+                                <h5>{{ $question->question_text }}</h5>
+                                @if ($question->image)
+                                    <img src="{{ asset('storage/' . $question->image) }}" alt="Question Image"
+                                        class="img-fluid mb-3">
+                                @endif
+
+                                <p><strong>Type:</strong> {{ $question->getTypeLabel() }}</p>
+
+                                @if ($question->getTypeLabel() === 'Single Choice')
+                                    <div class="choices">
+                                        @foreach ($question->choices as $choice)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio"
+                                                    name="answers[{{ $question->id }}]" value="{{ $choice->id }}"
+                                                    id="choice{{ $choice->id }}">
+                                                <label class="form-check-label" for="choice{{ $choice->id }}">
+                                                    {{ $choice->choice_text }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @elseif ($question->getTypeLabel() === 'Multiple Choice')
+                                    <div class="choices">
+                                        @foreach ($question->choices as $choice)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                    name="answers[{{ $question->id }}][]" value="{{ $choice->id }}"
+                                                    id="choice{{ $choice->id }}">
+                                                <label class="form-check-label" for="choice{{ $choice->id }}">
+                                                    {{ $choice->choice_text }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @elseif ($question->getTypeLabel() === 'Short Answer')
+                                    <div class="choices">
+                                        <input type="text" name="answers[{{ $question->id }}]" class="form-control"
+                                            placeholder="Type your answer here">
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <button type="button" id="startQuizButton" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#startQuizModal">Start Quiz</button>
+                    <button type="button" id="previousQuestionButton" class="btn btn-secondary"
+                        style="display: none;">Previous</button>
+                    <button type="button" id="nextQuestionButton" class="btn btn-secondary"
+                        style="display: none;">Next</button>
+                    <button type="submit" id="submitQuizButton" class="btn btn-success" style="display: none;">Submit
+                        Quiz</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const startButton = document.getElementById('startQuizButton');
+            const confirmStartButton = document.getElementById('confirmStartQuizButton');
             const previousButton = document.getElementById('previousQuestionButton');
             const nextButton = document.getElementById('nextQuestionButton');
             const submitButton = document.getElementById('submitQuizButton');
+            const questionList = document.getElementById('questionList');
             const questions = Array.from(document.querySelectorAll('.question'));
+            const questionNavButtons = Array.from(document.querySelectorAll('.question-nav'));
+            const timerElement = document.getElementById('timeRemaining');
+            const quizForm = document.getElementById('quizForm');
             let currentQuestionIndex = 0;
+
+            @if ($quiz->duration)
+                let timeRemaining = {{ $quiz->duration }} * 60; // Convert minutes to seconds
+                let timerInterval;
+
+                function updateTimer() {
+                    const minutes = Math.floor(timeRemaining / 60);
+                    const seconds = timeRemaining % 60;
+                    timerElement.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+
+                    if (timeRemaining <= 0) {
+                        clearInterval(timerInterval);
+                        alert('Time is up! Your quiz will now be submitted.');
+                        quizForm.submit(); // Automatically submit the quiz
+                    }
+
+                    timeRemaining--;
+                }
+            @endif
 
             function showQuestion(index) {
                 questions.forEach((question, i) => {
@@ -83,25 +159,48 @@
                 previousButton.style.display = index > 0 ? 'inline-block' : 'none';
                 nextButton.style.display = index < questions.length - 1 ? 'inline-block' : 'none';
                 submitButton.style.display = index === questions.length - 1 ? 'inline-block' : 'none';
+
+                questionNavButtons.forEach(button => button.classList.remove('active'));
+                if (questionNavButtons[index]) {
+                    questionNavButtons[index].classList.add('active');
+                }
             }
 
-            startButton.addEventListener('click', function () {
+            confirmStartButton.addEventListener('click', function() {
+                // Correctly hide the modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('startQuizModal'));
+                modal.hide(); // Close modal
+
+                // Hide start button, show quiz UI
                 startButton.style.display = 'none';
+                questionList.style.display = 'block';
                 showQuestion(currentQuestionIndex);
+
+                @if ($quiz->duration)
+                    timerInterval = setInterval(updateTimer, 1000);
+                @endif
             });
 
-            previousButton.addEventListener('click', function () {
+            previousButton.addEventListener('click', function() {
                 if (currentQuestionIndex > 0) {
                     currentQuestionIndex--;
                     showQuestion(currentQuestionIndex);
                 }
             });
 
-            nextButton.addEventListener('click', function () {
+            nextButton.addEventListener('click', function() {
                 if (currentQuestionIndex < questions.length - 1) {
                     currentQuestionIndex++;
                     showQuestion(currentQuestionIndex);
                 }
+            });
+
+            questionNavButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    currentQuestionIndex = index;
+                    showQuestion(currentQuestionIndex);
+                });
             });
         });
     </script>

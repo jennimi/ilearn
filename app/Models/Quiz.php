@@ -19,7 +19,8 @@ class Quiz extends Model
         'module_id',
         'title',
         'description',
-        'deadline'
+        'deadline',
+        'duration'
     ];
 
     public function isDeadlinePassed()
