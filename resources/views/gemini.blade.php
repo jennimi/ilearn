@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ask Gemini</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body class="p-5">
@@ -22,17 +24,24 @@
         @endif
 
         <!-- Form Section -->
-        <form action="{{ route('gemini.ask') }}" method="POST">
+        <form action="{{ route('gemini.ask') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
-                <label for="query" class="form-label">Your Question</label>
-                <textarea class="form-control" id="query" name="query" rows="3" required>{{ old('query', $query ?? '') }}</textarea>
+                <label for="file" class="form-label">Upload Your File (PDF/TXT)</label>
+                <input class="form-control" type="file" id="file" name="file" required>
             </div>
-            <button type="submit" class="btn btn-primary">Ask</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
 
+        <!-- Display Uploaded File Name Before Response -->
+        @if (!empty($fileName))
+            <div class="mt-4">
+                <h3>File Uploaded: {{ $fileName }}</h3>
+            </div>
+        @endif
+
         <!-- Results Section -->
-        @if (!empty($query))
+        @if (!empty($response))
             <hr>
             <h2>Results</h2>
 

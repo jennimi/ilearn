@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Smalot\PdfParser\Parser;
 
 class GeminiController extends Controller
 {
@@ -12,23 +13,61 @@ class GeminiController extends Controller
         $response = null;
         $query = null;
         $quiz = [];
+        $fileName = null;  // Initialize fileName variable
 
-        // Check if there's a query in the request
-        if ($request->isMethod('post')) {
+        // Check if a file is uploaded
+        if ($request->hasFile('file') && $request->file('file')->isValid()) {
+            // Get the file
+            $file = $request->file('file');
+
+            // Get the uploaded file name
+            $fileName = $file->getClientOriginalName();
+
+            // Read the contents of the file (e.g., PDF)
+            $fileContents = $this->parsePdfFile($file);
+
+            // Truncate the contents to 30,000 characters
+            $fileContents = $this->truncateText($fileContents, 30000);
+
+            // Sanitize file contents to ensure valid UTF-8 encoding
+            $fileContents = $this->sanitizeUtf8($fileContents);
+
+            // Prepare the query (context + file contents)
             $preQuery = "Make me an array of 10 multiple choice questions, where the format is \"Question1? | Question2? | Question3?\" like it were a multiple choice quiz from this article, separate with a |, do not comment on it at all:\n";
-            // $preQuery = "";
-            $query = $request->input('query');
-            $fullQuery = $preQuery."\n".$query;
-            // Call Gemini API with the provided query
+            $fullQuery = $preQuery . "\n" . $fileContents;
+
+            // Call the Gemini API with the sanitized content
             $response = $this->callGeminiApi($fullQuery);
 
+            // Process the response into questions
             $questions = $this->splitResponse($response);
-
-            $quiz = $this->makeQuestionsArray($query, $questions);
+            $quiz = $this->makeQuestionsArray($fileContents, $questions);
         }
 
-        // Return the view with the response (for both GET and POST)
-        return view('gemini', compact('query',   'response', 'quiz'));
+        // Return the view with the response and file name
+        return view('gemini', compact('query', 'response', 'quiz', 'fileName'));
+    }
+
+
+    // Parse PDF file and extract text
+    private function parsePdfFile($file)
+    {
+        $pdfParser = new Parser();
+        $pdfText = $pdfParser->parseFile($file->getPathname());
+        return $pdfText->getText();
+    }
+
+    // Truncate text to the specified length (e.g., 30,000 characters)
+    private function truncateText($text, $maxLength)
+    {
+        return mb_substr($text, 0, $maxLength);
+    }
+
+    // Ensure the text is valid UTF-8 by converting it
+    private function sanitizeUtf8($text)
+    {
+        // Convert to UTF-8 if necessary
+        return mb_convert_encoding($text, 'UTF-8', 'UTF-8');
     }
 
     private function callGeminiApi(string $query)
@@ -98,16 +137,14 @@ class GeminiController extends Controller
         return $choices;
     }
 
-    private function makeQuestionsArray($query, $questions){
+    private function makeQuestionsArray($query, $questions)
+    {
         $questionArray = [];
 
         foreach ($questions as $question) {
             // Here, you would add logic to dynamically determine the answers and options
             // For demonstration purposes, we will just hardcode answers and options
             $choices = $this->makeChoices($query, $question);
-
-            // $answer = "Sample answer for '$question'"; // Replace with actual logic
-            // $options = ["Option 1", "Option 2", "Option 3"]; // Replace with actual options
 
             $questionArray[] = [
                 'question' => $question,
