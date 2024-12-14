@@ -2,9 +2,14 @@
 
 @section('content')
     <div class="container">
-        <div>
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-warning me-2">Back</a>
+
+        <div class="tw-group tw-hover:tw-text-blue-500 tw-hover:tw-underline">
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-link tw-text-black tw-text-decoration-none tw-d-flex tw-align-items-center">
+                <i class="bi bi-arrow-left tw-me-2 tw-fs-4 tw-group-hover:tw-text-blue-500"></i>
+                <span class="tw-group-hover:tw-underline">Back</span>
+            </a>
         </div>
+
         <form method="POST" action="{{ route('admin.users.store') }}">
             <div class="d-flex justify-content-between align-items-center">
                 <h1>Create Users</h1>

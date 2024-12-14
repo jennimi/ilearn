@@ -10,10 +10,14 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\GeminiController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::match(['GET', 'POST'], '/gemini', [GeminiController::class, 'askGemini'])->name('gemini.ask');
+
 
 Auth::routes();
 

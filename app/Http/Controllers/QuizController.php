@@ -16,6 +16,7 @@ class QuizController extends Controller
     {
         $module = Module::findOrFail($moduleId);
 
+        // Validate the input
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -28,15 +29,17 @@ class QuizController extends Controller
             'description' => $request->input('description'),
         ]);
 
+        // Handle questions if provided
         if ($request->has('questions')) {
             $questions = json_decode($request->input('questions'), true);
 
             foreach ($questions as $questionData) {
-                $choices = $questionData['choices'] ?? [];
-                $correctAnswerIndex = $questionData['correct_answer'] ?? null;
+                $choices = $questionData['options'] ?? [];
+                $answerText = $questionData['answer'] ?? null; // Get the correct answer text
                 $imagePath = null;
 
-                if (isset($questionData['question_image'])) {
+                // Handle image if provided
+                if (!empty($questionData['question_image'])) {
                     $imageFile = base64_decode($questionData['question_image']);
                     $imageName = 'question_' . uniqid() . '.png';
                     $imagePath = 'question_images/' . $imageName;
@@ -44,25 +47,27 @@ class QuizController extends Controller
                     Storage::disk('public')->put($imagePath, $imageFile);
                 }
 
+                // Create the question
                 $question = $quiz->questions()->create([
-                    'question_text' => $questionData['question_text'],
-                    'question_type' => $questionData['question_type'],
+                    'question_text' => $questionData['question'],
+                    'question_type' => 1, // Assume 1 = multiple-choice; adjust if needed
                     'points' => $questionData['points'] ?? 1,
                     'image' => $imagePath,
                 ]);
 
-                if (!empty($choices)) {
-                    foreach ($choices as $index => $choiceText) {
-                        $question->choices()->create([
-                            'choice_text' => $choiceText,
-                            'is_correct' => $questionData['question_type'] != 2 && $correctAnswerIndex == $index,
-                        ]);
-                    }
+                // Create choices and identify the correct answer
+                foreach ($choices as $choiceText) {
+                    $question->choices()->create([
+                        'choice_text' => $choiceText,
+                        'is_correct' => $choiceText === $answerText,
+                    ]);
                 }
             }
         }
 
-        return redirect()->route('teacher.quizzes.show', $quiz->id)->with('success', 'Quiz created successfully!');
+        return redirect()
+            ->route('teacher.quizzes.show', $quiz->id)
+            ->with('success', 'Quiz created successfully!');
     }
 
 
