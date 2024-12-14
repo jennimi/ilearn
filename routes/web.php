@@ -8,6 +8,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DiscussionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\QuizController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,7 +33,11 @@ Route::middleware(['auth'])->prefix('teacher')->group(function () {
     Route::get('courses/{id}/modules', [TeacherController::class, 'showCourseModules'])->name('teacher.courses.modules');
     Route::post('courses/{id}/modules', [TeacherController::class, 'storeModule'])->name('teacher.modules.store');
     Route::post('comments/{id}/reply', [CommentController::class, 'reply'])->name('teacher.comments.reply');
-    Route::post('/modules/{module}/lessons', [LessonController::class, 'store'])->name('teacher.lessons.store');
+    Route::post('modules/{module}/lessons', [LessonController::class, 'store'])->name('teacher.lessons.store');
+    Route::put('lessons/{id}/update', [LessonController::class, 'update'])->name('teacher.lessons.update');
+    Route::post('modules/{id}/quizzes', [QuizController::class, 'storeQuiz'])->name('teacher.quizzes.store');
+    Route::get('modules/{id}/quizzes/create', [QuizController::class, 'createQuiz'])->name('teacher.quizzes.create');
+    Route::get('quizzes/{id}', [QuizController::class, 'showQuiz'])->name('teacher.quizzes.show');
 });
 
 use App\Http\Controllers\ClassroomController;

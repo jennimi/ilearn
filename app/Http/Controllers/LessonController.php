@@ -32,4 +32,15 @@ class LessonController extends Controller
 
         return redirect()->route('teacher.courses.show', $module->course_id)->with('success', 'Lesson added successfully!');
     }
+
+    public function update(Request $request, $id)
+    {
+        $lesson = Lesson::findOrFail($id);
+
+        $lesson->update([
+            'visible' => $request->input('visible'),
+        ]);
+
+        return redirect()->back()->with('success', 'Lesson visibility updated successfully.');
+    }
 }

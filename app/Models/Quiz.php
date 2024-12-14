@@ -12,15 +12,19 @@ class Quiz extends Model
 {
     /** @use HasFactory<\Database\Factories\QuizFactory> */
     use HasFactory;
-    
-    protected $guarded = ['id'];
+
+    protected $fillable = [
+        'module_id',
+        'title',
+        'description',
+    ];
 
     public function result(): HasOne
     {
         return $this->hasOne(Quiz_Result::class, 'quiz_id', 'id');
     }
 
-    public function test(): BelongsTo
+    public function module(): BelongsTo
     {
         return $this->belongsTo(Module::class, 'module_id', 'id');
     }

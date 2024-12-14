@@ -34,6 +34,14 @@
                         <div class="accordion-body">
                             <p>{{ $module->description }}</p>
 
+                            <!-- Link to Discussion -->
+                            <p>
+                                <a href="{{ $module->discussion ? route('discussions.show', $module->discussion->id) : '#' }}"
+                                    class="btn btn-link">
+                                    Go
+                                    to Discussion</a>
+                            </p>
+
                             <h5>Lessons</h5>
                             @if ($module->lessons->isEmpty())
                                 <p>No lessons available for this module.</p>
@@ -42,7 +50,14 @@
                                     @foreach ($module->lessons as $lesson)
                                         <li>
                                             <strong>{{ $lesson->title }}</strong>
-                                            <p>Visible to Students: {{ $lesson->visible ? 'Yes' : 'No' }}</p>
+                                            <p>Visible to Students:
+                                                <button type="button"
+                                                    class="btn btn-outline-{{ $lesson->visible ? 'success' : 'danger' }} btn-sm"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#toggleVisibilityModal{{ $lesson->id }}">
+                                                    {{ $lesson->visible ? 'Visible' : 'Hidden' }}
+                                                </button>
+                                            </p>
 
                                             <!-- PDF Snippet -->
                                             <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px;">
@@ -54,18 +69,66 @@
 
                                             <a href="{{ asset('storage/' . $lesson->content) }}" target="_blank"
                                                 class="btn btn-sm btn-success">View Full PDF</a>
+
+                                            <!-- Toggle Visibility Modal -->
+                                            <div class="modal fade" id="toggleVisibilityModal{{ $lesson->id }}"
+                                                tabindex="-1"
+                                                aria-labelledby="toggleVisibilityModalLabel{{ $lesson->id }}"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <form method="POST"
+                                                        action="{{ route('teacher.lessons.update', $lesson->id) }}">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title"
+                                                                    id="toggleVisibilityModalLabel{{ $lesson->id }}">
+                                                                    Update Lesson Visibility
+                                                                </h5>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Are you sure you want to
+                                                                <strong>{{ $lesson->visible ? 'hide' : 'show' }}</strong>
+                                                                this
+                                                                lesson to students?
+                                                            </div>
+                                                            <input type="hidden" name="visible"
+                                                                value="{{ $lesson->visible ? 0 : 1 }}">
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Cancel</button>
+                                                                <button type="submit"
+                                                                    class="btn btn-primary">Confirm</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </li>
                                     @endforeach
 
                                 </ul>
                             @endif
 
-                            <!-- Link to Discussion -->           
-                            <p>
-                                <a href="{{ $module->discussion ? route('discussions.show', $module->discussion->id) : '#' }}"
-                                    class="btn btn-link">
-                                    Go to Discussion</a>
-                            </p>
+                            <!-- Quizzes Section -->
+                            <h5>Quizzes</h5>
+                            @if ($module->quizzes->isEmpty())
+                                <p>No quizzes available for this module.</p>
+                            @else
+                                <ul>
+                                    @foreach ($module->quizzes as $quiz)
+                                        <li>
+                                            <strong>{{ $quiz->title }}</strong>
+                                            <p>{{ $quiz->description }}</p>
+                                            <a href="{{ route('teacher.quizzes.show', $quiz->id) }}"
+                                                class="btn btn-sm btn-success">View Quiz</a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
 
                             <!-- Add Lesson Button -->
                             <button class="btn btn-primary mt-3" data-bs-toggle="modal"
@@ -113,6 +176,11 @@
                                     </form>
                                 </div>
                             </div>
+
+                            <!-- Create Quiz Button -->
+                            <a href="{{ route('teacher.quizzes.create', $module->id) }}"
+                                class="btn btn-primary mt-3">Create Quiz</a>
+
                         </div>
                     </div>
                 </div>
@@ -124,14 +192,16 @@
         <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addModuleModal">Add Module</button>
 
         <!-- Add Module Modal -->
-        <div class="modal fade" id="addModuleModal" tabindex="-1" aria-labelledby="addModuleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addModuleModal" tabindex="-1" aria-labelledby="addModuleModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <form method="POST" action="{{ route('teacher.modules.store', $course->id) }}">
                     @csrf
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="addModuleModalLabel">Add Module</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">

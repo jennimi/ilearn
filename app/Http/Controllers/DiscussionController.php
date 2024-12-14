@@ -33,7 +33,6 @@ class DiscussionController extends Controller
 
 
 
-
     public function addComment(Request $request, $id)
     {
         $request->validate([

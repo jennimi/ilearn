@@ -10,8 +10,8 @@ class Answer extends Model
 {
     /** @use HasFactory<\Database\Factories\AnswerFactory> */
     use HasFactory;
-    
-    protected $guarded = ['id'];
+
+    protected $fillable = ['question_id', 'student_id', 'answer_key', 'answer_text', 'is_correct'];
 
     public function answered(): BelongsTo
     {

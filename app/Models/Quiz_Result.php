@@ -10,8 +10,13 @@ class Quiz_Result extends Model
 {
     /** @use HasFactory<\Database\Factories\QuizResultFactory> */
     use HasFactory;
-    
-    protected $guarded = ['id'];
+
+    protected $fillable = [
+        'quiz_id',
+        'student_id',
+        'submission_date',
+        'score',
+    ];
 
     public function checked(): BelongsTo
     {
