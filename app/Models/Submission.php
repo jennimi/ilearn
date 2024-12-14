@@ -10,16 +10,16 @@ class Submission extends Model
 {
     /** @use HasFactory<\Database\Factories\SubmissionFactory> */
     use HasFactory;
-    
+
     protected $guarded = ['id'];
 
-    public function submitted(): BelongsTo
+    public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'student_id', 'id');
     }
 
-    
-    public function tasks(): BelongsTo
+
+    public function assignment(): BelongsTo
     {
         return $this->belongsTo(Assignment::class, 'assignment_id', 'id');
     }

@@ -13,12 +13,12 @@ class Answer extends Model
 
     protected $fillable = ['question_id', 'student_id', 'answer_key', 'answer_text', 'is_correct'];
 
-    public function answered(): BelongsTo
+    public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'student_id', 'id');
     }
 
-    public function questioned(): BelongsTo
+    public function quiz(): BelongsTo
     {
         return $this->belongsTo(Quiz::class, 'quiz_id', 'id');
     }

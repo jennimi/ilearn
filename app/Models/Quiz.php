@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+use Carbon\Carbon;
+
 class Quiz extends Model
 {
     /** @use HasFactory<\Database\Factories\QuizFactory> */
@@ -17,11 +19,17 @@ class Quiz extends Model
         'module_id',
         'title',
         'description',
+        'deadline'
     ];
+
+    public function isDeadlinePassed()
+    {
+        return $this->deadline && Carbon::now()->greaterThan($this->deadline);
+    }
 
     public function result(): HasOne
     {
-        return $this->hasOne(Quiz_Result::class, 'quiz_id', 'id');
+        return $this->hasOne(QuizResult::class, 'quiz_id', 'id');
     }
 
     public function module(): BelongsTo
@@ -32,5 +40,10 @@ class Quiz extends Model
     public function questions(): HasMany
     {
         return $this->hasMany(Question::class, 'quiz_id', 'id');
+    }
+
+    public function quizResults()
+    {
+        return $this->hasMany(QuizResult::class, 'quiz_id', 'id');
     }
 }

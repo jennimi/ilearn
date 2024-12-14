@@ -52,11 +52,6 @@ class Course extends Model
             ->withPivot('day', 'start_time', 'end_time');
     }
 
-    public function assignments(): HasMany
-    {
-        return $this->hasMany(Assignment::class, 'course_id', 'id');
-    }
-
     public function modules(): HasMany
     {
         return $this->hasMany(Module::class, 'course_id', 'id');

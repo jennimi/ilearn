@@ -40,9 +40,9 @@ class Student extends Model
         return $this->hasMany(Answer::class, 'student_id', 'id');
     }
 
-    public function evaluate(): HasMany
+    public function quizResults(): HasMany
     {
-        return $this->hasMany(Quiz_Result::class, 'student_id', 'id');
+        return $this->hasMany(QuizResult::class);
     }
 
     public function submits(): HasMany

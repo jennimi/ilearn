@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->unsignedBigInteger('course_id')->index();
-            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
+            $table->unsignedBigInteger('module_id')->index();
+            $table->foreign('module_id')->references('id')->on('courses')->onDelete('cascade');
             $table->string('title');
             $table->longText('description');
-            $table->date('due_date');
+            $table->timestamp('deadline')->nullable();
         });
     }
 

@@ -47,4 +47,9 @@ class Module extends Model
     {
         return $this->hasMany(Quiz::class);
     }
+
+    public function assignments(): HasMany
+    {
+        return $this->hasMany(Assignment::class, 'module_id', 'id');
+    }
 }

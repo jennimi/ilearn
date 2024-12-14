@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Quiz_Result extends Model
+class QuizResult extends Model
 {
     /** @use HasFactory<\Database\Factories\QuizResultFactory> */
     use HasFactory;
@@ -18,7 +18,7 @@ class Quiz_Result extends Model
         'score',
     ];
 
-    public function checked(): BelongsTo
+    public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'student_id', 'id');
     }

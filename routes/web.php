@@ -9,6 +9,7 @@ use App\Http\Controllers\DiscussionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\AssignmentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,7 +26,19 @@ Route::middleware(['auth'])->get('/student/dashboard', [StudentController::class
 Route::middleware(['auth'])->group(function () {
     Route::post('discussions/{id}/comments', [DiscussionController::class, 'addComment'])->name('discussions.addComment');
     Route::get('discussions/{id}', [DiscussionController::class, 'show'])->name('discussions.show');
-    Route::post('/discussions/{id}/comment', [DiscussionController::class, 'addComment'])->name('discussions.comment.store');
+    Route::post('discussions/{id}/comment', [DiscussionController::class, 'addComment'])->name('discussions.comment.store');
+});
+
+Route::middleware(['auth'])->prefix('student')->group(function () {
+    Route::get('courses/{id}', [StudentController::class, 'showCourse'])->name('student.courses.show');
+    Route::get('quizzes/{id}/take', [QuizController::class, 'takeQuiz'])->name('student.quizzes.take');
+    Route::post('quizzes/{id}/submit', [QuizController::class, 'submitQuiz'])->name('student.quizzes.submit');
+    Route::get('quizzes/{id}/start', [QuizController::class, 'startQuiz'])->name('student.quizzes.start');
+    Route::post('quizzes/{id}/question/{questionId}', [QuizController::class, 'submitAnswer'])->name('student.quizzes.submitAnswer');
+    Route::get('quizzes/{id}/start', [QuizController::class, 'startQuiz'])->name('student.quizzes.start');
+    Route::get('quizzes/{quiz}/review', [QuizController::class, 'reviewQuiz'])->name('student.quizzes.review');
+    Route::get('assignments/{id}', [AssignmentController::class, 'show'])->name('student.assignments.show');
+    Route::post('assignments/{id}/submit', [AssignmentController::class, 'submit'])->name('student.assignments.submit');
 });
 
 Route::middleware(['auth'])->prefix('teacher')->group(function () {
