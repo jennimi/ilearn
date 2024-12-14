@@ -26,7 +26,7 @@
                             {{ $question->getTypeLabel() }}
                             ({{ $question->question_type === '0' ? 'Single Choice' : ($question->question_type === '1' ? 'Multiple Choice' : 'Short Answer') }})
                         </p>
-                        <p><strong>Points:</strong> {{ $question->points }}</p>
+                        <p><strong>Points: </strong> {{ $question->points }}</p>
 
                         <!-- Choices or Correct Answer -->
 

@@ -38,6 +38,7 @@ Route::middleware(['auth'])->prefix('teacher')->group(function () {
     Route::post('modules/{id}/quizzes', [QuizController::class, 'storeQuiz'])->name('teacher.quizzes.store');
     Route::get('modules/{id}/quizzes/create', [QuizController::class, 'createQuiz'])->name('teacher.quizzes.create');
     Route::get('quizzes/{id}', [QuizController::class, 'showQuiz'])->name('teacher.quizzes.show');
+    Route::get('leaderboard', [TeacherController::class, 'leaderboard'])->name('teacher.leaderboard');
 });
 
 use App\Http\Controllers\ClassroomController;

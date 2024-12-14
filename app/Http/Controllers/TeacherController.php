@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-
 use App\Models\Course;
 use App\Models\Module;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 class TeacherController extends Controller
 {
     public function index()
@@ -60,27 +62,35 @@ class TeacherController extends Controller
     public function storeLesson(Request $request, $moduleId)
     {
         $module = Module::findOrFail($moduleId);
-
+    
+        // Validate input data
         $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'content' => 'required|file|mimes:pdf|max:2048', // Ensure it's a PDF file
             'visible' => 'required|boolean',
         ]);
-
+    
+        // Handle file upload
+        $filePath = $request->file('content')->store('lessons', 'public');
+        // Create the lesson with the file path
         $lesson = $module->lessons()->create([
             'title' => $request->input('title'),
-            'content' => $request->input('content'),
+            'content' => $filePath, // Save the file path in the database
             'visible' => $request->input('visible'),
         ]);
-
+    
         // Automatically create a discussion for the lesson
         $lesson->discussion()->create([
             'teacher_id' => Auth::user()->teacher->id,
             'title' => "Discussion for {$lesson->title}",
             'description' => "Discuss the content of {$lesson->title} here.",
         ]);
-
+    
         return redirect()->route('teacher.courses.show', $module->course->id)
             ->with('success', 'Lesson added successfully!');
+    }
+
+    public function leaderboard(){
+        return view('teacher.courses.leaderboard');
     }
 }

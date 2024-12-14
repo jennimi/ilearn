@@ -2,30 +2,35 @@
 
 @section('content')
     <div class="container">
-        <h1>Create Quiz</h1>
+        <h1 class="mb-4">Create Quiz</h1>
+
         <form method="POST" action="{{ route('teacher.quizzes.store', $module->id) }}" id="createQuizForm">
             @csrf
-            <div class="mb-3">
+
+            <div class="mb-4">
                 <label for="title" class="form-label">Quiz Title</label>
                 <input type="text" class="form-control" id="title" name="title" required>
             </div>
-            <div class="mb-3">
+
+            <div class="mb-4">
                 <label for="description" class="form-label">Quiz Description</label>
                 <textarea class="form-control" id="description" name="description" rows="3"></textarea>
             </div>
 
             <!-- Questions Section -->
-            <div class="mb-3">
+            <div class="mb-4">
                 <h4>Questions</h4>
-                <button type="button" class="btn btn-secondary mb-3" data-bs-toggle="modal"
-                    data-bs-target="#addQuestionModal">Add Question</button>
+                <button type="button" class="btn btn-outline-primary mb-3" data-bs-toggle="modal"
+                    data-bs-target="#addQuestionModal">
+                    <i class="bi bi-plus-circle"></i> Add Question
+                </button>
                 <div id="questionsContainer"></div>
             </div>
 
             <!-- Hidden Input for Questions Data -->
             <input type="hidden" name="questions" id="questionsData">
 
-            <button type="submit" class="btn btn-primary">Create Quiz</button>
+            <button type="submit" class="btn btn-success">Create Quiz</button>
         </form>
     </div>
 
@@ -49,7 +54,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="question_type" class="form-label">Question Type</label>
-                            <select class="form-control" id="question_type" required>
+                            <select class="form-select" id="question_type" required>
                                 <option value="" disabled selected>Please choose question type</option>
                                 <option value="0">Single Choice</option>
                                 <option value="1">Multiple Choice</option>
@@ -59,9 +64,10 @@
 
                         <!-- Answer Options Section -->
                         <div id="answerOptions" class="d-none">
-                            <h6>Answers</h6>
+                            <h6 class="mb-3">Answer Choices</h6>
                             <div id="answerFields"></div>
-                            <button type="button" class="btn btn-secondary add-answer">Add Another Answer</button>
+                            <button type="button" class="btn btn-outline-secondary add-answer"><i
+                                    class="bi bi-plus-circle"></i> Add Another Answer</button>
                         </div>
 
                         <!-- Correct Answer for Short Answer -->
@@ -123,12 +129,12 @@
                     const choiceIndex = answerFields.children.length;
                     const type = questionTypeDropdown.value === '0' ? 'radio' : 'checkbox';
                     const choiceDiv = document.createElement('div');
-                    choiceDiv.classList.add('input-group', 'mb-2');
+                    choiceDiv.classList.add('input-group', 'mb-3');
                     choiceDiv.innerHTML = `
-                <input type="text" class="form-control choice-text" placeholder="Answer Option" required>
-                <input type="${type}" name="correct_answer" class="form-check-input correct-choice" value="${choiceIndex}" style="margin: 0 10px;">
-                <button type="button" class="btn btn-danger remove-answer">Remove</button>
-            `;
+                        <input type="text" class="form-control choice-text" placeholder="Answer Option" required>
+                        <input type="${type}" name="correct_answer" class="form-check-input correct-choice" value="${choiceIndex}" style="margin: 0 10px;">
+                        <button type="button" class="btn btn-danger remove-answer"><i class="bi bi-x-circle"></i> Remove</button>
+                    `;
                     answerFields.appendChild(choiceDiv);
 
                     // Remove choice logic
@@ -141,19 +147,18 @@
             saveQuestionButton.addEventListener('click', function() {
                 const questionText = document.getElementById('question_text').value.trim();
                 const questionType = addQuestionForm.querySelector('#question_type').value;
-                console.log('Selected question type:', questionType);
                 const questionImage = document.getElementById('question_image').files[0];
 
-                const choices = Array.from(answerFields.querySelectorAll('.choice-text')).map(input => input
-                    .value.trim()).filter(choice => choice !== '');
-                const correctAnswers = questionType === '0'
-                    ?
+                const choices = Array.from(answerFields.querySelectorAll('.choice-text'))
+                    .map(input => input.value.trim())
+                    .filter(choice => choice !== '');
+                const correctAnswers = questionType === '0' ?
                     [Array.from(answerFields.querySelectorAll('.correct-choice')).findIndex(input => input
                         .checked)] :
-                    questionType === '1'
-                    ?
-                    Array.from(answerFields.querySelectorAll('.correct-choice')).map((input, index) => (
-                        input.checked ? index : null)).filter(index => index !== null) :
+                    questionType === '1' ?
+                    Array.from(answerFields.querySelectorAll('.correct-choice'))
+                    .map((input, index) => (input.checked ? index : null))
+                    .filter(index => index !== null) :
                     [];
                 const shortAnswer = questionType === '2' ? document.getElementById('short_correct_answer')
                     .value.trim() : null;
@@ -186,37 +191,41 @@
                     reader.readAsDataURL(questionImage);
                 }
 
+                // Create question object
                 const question = {
                     question_text: questionText,
                     question_type: questionType,
                     question_image: questionImageBase64,
                     points: 1,
                     choices: questionType !== '2' ? choices : [],
-                    correct_answers: questionType === '2' ? shortAnswer : correctAnswers,
+                    correct_answers: questionType === '2' ? [shortAnswer] :
+                    correctAnswers, // Correctly include shortAnswer
                 };
 
                 questions.push(question);
 
                 // Display the question in the list
                 const questionDiv = document.createElement('div');
-                questionDiv.classList.add('mb-3');
+                questionDiv.classList.add('card', 'mb-3');
                 questionDiv.innerHTML = `
+        <div class="card-body">
             <h5>${question.question_text}</h5>
-            <p>Type: ${questionType === '0' ? 'Single Choice' : questionType === '1' ? 'Multiple Choice' : 'Short Answer'}</p>
-        `;
+            <p class="text-muted">Type: ${questionType === '0' ? 'Single Choice' : questionType === '1' ? 'Multiple Choice' : 'Short Answer'}</p>
+    `;
                 if (questionType !== '2') {
                     const choicesList = document.createElement('ul');
                     question.choices.forEach((choice, index) => {
                         const li = document.createElement('li');
                         li.innerHTML =
-                            `${choice} ${question.correct_answers.includes(index) ? '<strong>(Correct)</strong>' : ''}`;
+                            `${choice} ${question.correct_answers.includes(index) ? '<span class="badge bg-success ms-2">Correct</span>' : ''}`;
                         choicesList.appendChild(li);
                     });
                     questionDiv.appendChild(choicesList);
                 } else {
-                    questionDiv.innerHTML += `<p>Correct Answer: ${question.correct_answers}</p>`;
+                    questionDiv.innerHTML +=
+                        `<p class="px-3"><strong>Correct Answer:</strong> ${question.correct_answers[0]}</p>`;
                 }
-
+                questionDiv.innerHTML += '</div>';
                 questionsContainer.appendChild(questionDiv);
 
                 // Save questions as JSON in hidden input

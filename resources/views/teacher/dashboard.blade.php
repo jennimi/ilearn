@@ -10,8 +10,10 @@
                         <h3 class="card-title mb-0">Today's Schedule ({{ now()->format('l') }})</h3>
                     </div>
                     <div class="card-body">
-                        @if ($todaySchedules->isEmpty())
-                            <p class="text-muted">No classes scheduled for today.</p>
+                        @if ($todaySchedules->first()->classrooms->isEmpty())
+                            <div class="text-center">
+                                <p class="text-muted">No classes scheduled for today</p>
+                            </div>
                         @else
                             <div class="d-flex gap-3 overflow-auto schedule-scroll-horizontal">
                                 @foreach ($todaySchedules as $course)
@@ -67,7 +69,7 @@
                 <p class="text-muted">No recent course available.</p>
             @endif
         </div>
-        
+
         <!-- All Courses -->
         <div class="">
             <h3 class="mb-4">All Courses</h3>

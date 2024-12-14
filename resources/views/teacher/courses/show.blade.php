@@ -2,73 +2,86 @@
 
 @section('content')
     <div class="container">
-        <h1>{{ $course->title }}</h1>
-        <p>{{ $course->description }}</p>
+        <h1 class="mb-4 text-primary">{{ $course->title }}</h1>
+        <p class="text-muted">{{ $course->description }}</p>
 
-        <!-- Classrooms Section -->
-        <h3>Classrooms</h3>
-        <ul>
-            @foreach ($course->classrooms as $classroom)
-                <li>
-                    {{ $classroom->name }} -
-                    {{ $classroom->pivot->day }}:
-                    {{ $classroom->pivot->start_time }} - {{ $classroom->pivot->end_time }}
-                </li>
-            @endforeach
-        </ul>
+        <div class="mb-5">
+            <h3 class="text-secondary">Classrooms</h3>
+            <ul class="list-group">
+                @foreach ($course->classrooms as $classroom)
+                    <li class="list-group-item d-flex justify-content-between align-items-center" style="height: 75px">
+                        <div class="d-flex flex-column">
+                            <span>{{ $classroom->name }}</span>
+                            <span class="badge bg-info text-dark mt-2">{{ $classroom->pivot->day }}:
+                                {{ $classroom->pivot->start_time }} - {{ $classroom->pivot->end_time }}</span>
+                        </div>
+                        <a href="{{ route('teacher.leaderboard')}}"
+                            class="btn btn-primary btn-md">View Leaderboard</a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
 
         <!-- Modules and Lessons Section -->
-        <h3>Modules</h3>
         <div class="accordion" id="modulesAccordion">
+            <h3 class="text-secondary">Modules</h3>
             @foreach ($course->modules as $module)
-                <div class="accordion-item">
+                <div class="accordion-item mb-3 shadow-sm border">
                     <h2 class="accordion-header" id="heading{{ $module->id }}">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#collapse{{ $module->id }}" aria-expanded="false"
                             aria-controls="collapse{{ $module->id }}">
-                            {{ $module->title }}
+                            <span class="fw-bold">{{ $module->title }}</span>
+                            <span class="text-muted ms-2">{{ $module->description }}</span>
                         </button>
                     </h2>
                     <div id="collapse{{ $module->id }}" class="accordion-collapse collapse"
                         aria-labelledby="heading{{ $module->id }}" data-bs-parent="#modulesAccordion">
                         <div class="accordion-body">
-                            <p>{{ $module->description }}</p>
 
-                            <!-- Link to Discussion -->
-                            <p>
-                                <a href="{{ $module->discussion ? route('discussions.show', $module->discussion->id) : '#' }}"
-                                    class="btn btn-link">
-                                    Go
-                                    to Discussion</a>
-                            </p>
-
-                            <h5>Lessons</h5>
+                            <!-- Lessons Section -->
+                            <h5 class="text-secondary">Lessons</h5>
                             @if ($module->lessons->isEmpty())
-                                <p>No lessons available for this module.</p>
+                                <p class="text-danger">No lessons available for this module.</p>
                             @else
-                                <ul>
+                                <ul class="list-group mb-4">
                                     @foreach ($module->lessons as $lesson)
-                                        <li>
-                                            <strong>{{ $lesson->title }}</strong>
-                                            <p>Visible to Students:
-                                                <button type="button"
-                                                    class="btn btn-outline-{{ $lesson->visible ? 'success' : 'danger' }} btn-sm"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#toggleVisibilityModal{{ $lesson->id }}">
-                                                    {{ $lesson->visible ? 'Visible' : 'Hidden' }}
-                                                </button>
-                                            </p>
-
-                                            <!-- PDF Snippet -->
-                                            <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px;">
-                                                <iframe
-                                                    src="{{ asset('storage/' . $lesson->content) }}#toolbar=0&navpanes=0&scrollbar=0&zoom=50"
-                                                    width="50%" height="200px">
-                                                </iframe>
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <strong>{{ $lesson->title }}</strong>
+                                                    <div>
+                                                        <span
+                                                            class="badge bg-{{ $lesson->visible ? 'success' : 'danger' }}">
+                                                            {{ $lesson->visible ? 'Visible' : 'Hidden' }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <a href="{{ asset('storage/' . $lesson->content) }}" target="_blank"
+                                                        class="btn btn-success btn-sm">
+                                                        View Full PDF
+                                                    </a>
+                                                    <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#toggleVisibilityModal{{ $lesson->id }}">
+                                                        Update Visibility
+                                                    </button>
+                                                </div>
                                             </div>
 
-                                            <a href="{{ asset('storage/' . $lesson->content) }}" target="_blank"
-                                                class="btn btn-sm btn-success">View Full PDF</a>
+                                            <div class="mt-3">
+                                                <div class="card shadow-sm">
+                                                    <div class="card-body text-center">
+                                                        <iframe
+                                                            src="{{ asset('storage/' . $lesson->content) }}#toolbar=0&navpanes=0&scrollbar=0&zoom=50"
+                                                            width="50%" height="200px" class="border rounded"></iframe>
+                                                        <div class="mt-3">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
 
                                             <!-- Toggle Visibility Modal -->
                                             <div class="modal fade" id="toggleVisibilityModal{{ $lesson->id }}"
@@ -92,8 +105,7 @@
                                                             <div class="modal-body">
                                                                 Are you sure you want to
                                                                 <strong>{{ $lesson->visible ? 'hide' : 'show' }}</strong>
-                                                                this
-                                                                lesson to students?
+                                                                this lesson to students?
                                                             </div>
                                                             <input type="hidden" name="visible"
                                                                 value="{{ $lesson->visible ? 0 : 1 }}">
@@ -109,30 +121,33 @@
                                             </div>
                                         </li>
                                     @endforeach
-
                                 </ul>
                             @endif
 
                             <!-- Quizzes Section -->
-                            <h5>Quizzes</h5>
+                            <h5 class="text-secondary">Quizzes</h5>
                             @if ($module->quizzes->isEmpty())
-                                <p>No quizzes available for this module.</p>
+                                <p class="text-danger">No quizzes available for this module.</p>
                             @else
-                                <ul>
+                                <ul class="list-group mb-4">
                                     @foreach ($module->quizzes as $quiz)
-                                        <li>
-                                            <strong>{{ $quiz->title }}</strong>
-                                            <p>{{ $quiz->description }}</p>
-                                            <a href="{{ route('teacher.quizzes.show', $quiz->id) }}"
-                                                class="btn btn-sm btn-success">View Quiz</a>
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <strong>{{ $quiz->title }}</strong>
+                                                    <p class="text-muted">{{ $quiz->description }}</p>
+                                                </div>
+                                                <a href="{{ route('teacher.quizzes.show', $quiz->id) }}"
+                                                    class="btn btn-outline-success btn-sm">
+                                                    View Quiz
+                                                </a>
+                                            </div>
                                         </li>
                                     @endforeach
                                 </ul>
                             @endif
 
-                            <!-- Add Lesson Button -->
-                            <button class="btn btn-primary mt-3" data-bs-toggle="modal"
-                                data-bs-target="#addLessonModal{{ $module->id }}">Add Lesson</button>
+
 
                             <!-- Add Lesson Modal -->
                             <div class="modal fade" id="addLessonModal{{ $module->id }}" tabindex="-1"
@@ -151,13 +166,13 @@
                                             <div class="modal-body">
                                                 <div class="mb-3">
                                                     <label for="title" class="form-label">Lesson Title</label>
-                                                    <input type="text" class="form-control" id="title" name="title"
-                                                        required>
+                                                    <input type="text" class="form-control" id="title"
+                                                        name="title" required>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="content" class="form-label">Upload PDF</label>
-                                                    <input type="file" class="form-control" id="content" name="content"
-                                                        accept="application/pdf" required>
+                                                    <input type="file" class="form-control" id="content"
+                                                        name="content" accept="application/pdf" required>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="visible" class="form-label">Visible</label>
@@ -177,10 +192,25 @@
                                 </div>
                             </div>
 
-                            <!-- Create Quiz Button -->
-                            <a href="{{ route('teacher.quizzes.create', $module->id) }}"
-                                class="btn btn-primary mt-3">Create Quiz</a>
 
+                            <!-- Link to Discussion -->
+                            @if ($module->discussion)
+                                <div class="mb-4 text-end">
+                                    <!-- Add Lesson Button -->
+                                    <button class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#addLessonModal{{ $module->id }}">
+                                        <i class="bi bi-plus-circle"></i> Add Lesson
+                                    </button>
+                                    <!-- Create Quiz Button -->
+                                    <a href="{{ route('teacher.quizzes.create', $module->id) }}" class="btn btn-primary">
+                                        <i class="bi bi-file-earmark-text"></i> Create Quiz
+                                    </a>
+                                    <a href="{{ route('discussions.show', $module->discussion->id) }}"
+                                        class="btn btn-outline-primary">
+                                        <i class="bi bi-chat-text"></i> Go to Discussion
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -189,7 +219,7 @@
 
 
         <!-- Add Module Button -->
-        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addModuleModal">Add Module</button>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModuleModal">Add Module</button>
 
         <!-- Add Module Modal -->
         <div class="modal fade" id="addModuleModal" tabindex="-1" aria-labelledby="addModuleModalLabel"
