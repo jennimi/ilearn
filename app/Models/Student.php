@@ -64,4 +64,9 @@ class Student extends Model
     {
         return $this->hasMany(ReportCard::class);
     }
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class, 'student_id', 'id');
+    }
 }

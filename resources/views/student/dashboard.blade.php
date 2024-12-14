@@ -33,7 +33,6 @@
             </div>
 
             <!-- Modal for Week's Schedule -->
-            <!-- Modal for Weekly Schedule -->
             <div class="modal fade" id="weeklyScheduleModal" tabindex="-1" aria-labelledby="weeklyScheduleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-lg">
@@ -136,7 +135,40 @@
                         <p>NIK: {{ $student->nik }}</p>
                     </div>
                 </div>
+
+                @if ($classroom)
+                    <div>
+                        <h3>Classroom: {{ $classroom->name }}</h3>
+                        <a href="{{ route('student.ranking', $classroom->id) }}" class="btn btn-primary">
+                            View Class Ranking
+                        </a>
+                    </div>
+                @else
+                    <p>No classroom assigned yet.</p>
+                @endif
+
             </div>
+
+            <div class="tw-flex tw-flex-col tw-bg-red-600 tw-p-4 tw-rounded-lg tw-min-h-8 tw-mt-6">
+                <h2 class="tw-text-white tw-font-bold">Closest Deadlines</h2>
+                @if ($deadlines->isEmpty())
+                    <p class="tw-text-white">No upcoming deadlines.</p>
+                @else
+                    <ul class="tw-text-white">
+                        @foreach ($deadlines as $deadline)
+                            <li class="tw-mb-2">
+                                <strong>{{ $deadline['type'] }}:</strong> {{ $deadline['title'] }}
+                                <br>
+                                <span class="tw-text-sm">Deadline:
+                                    {{ \Carbon\Carbon::parse($deadline['deadline'])->format('Y-m-d H:i') }}</span>
+                                <br>
+                                <a href="{{ $deadline['link'] }}" class="btn btn-light btn-sm tw-mt-1">View Details</a>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+
 
             <div class="tw-flex tw-flex-col tw-bg-indigo-600 tw-p-4 tw-rounded-lg">
                 <h2 class="tw-text-white tw-font-bold">Recent Replies</h2>

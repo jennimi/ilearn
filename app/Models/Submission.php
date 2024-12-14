@@ -11,13 +11,18 @@ class Submission extends Model
     /** @use HasFactory<\Database\Factories\SubmissionFactory> */
     use HasFactory;
 
-    protected $guarded = ['id'];
-
+    protected $fillable = [
+        'assignment_id',
+        'student_id',
+        'file_path',
+        'grade',
+        'feedback',
+        'submission_date',
+    ];
     public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'student_id', 'id');
     }
-
 
     public function assignment(): BelongsTo
     {

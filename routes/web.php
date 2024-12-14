@@ -39,6 +39,7 @@ Route::middleware(['auth'])->prefix('student')->group(function () {
     Route::get('quizzes/{quiz}/review', [QuizController::class, 'reviewQuiz'])->name('student.quizzes.review');
     Route::get('assignments/{id}', [AssignmentController::class, 'show'])->name('student.assignments.show');
     Route::post('assignments/{id}/submit', [AssignmentController::class, 'submit'])->name('student.assignments.submit');
+    Route::get('classroom/{id}/ranking', [StudentController::class, 'getClassRanking'])->name('student.ranking');
 });
 
 Route::middleware(['auth'])->prefix('teacher')->group(function () {
