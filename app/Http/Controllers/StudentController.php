@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Carbon;
-use App\Models\Comment;
-use App\Models\Course;
 use App\Models\Quiz;
-use App\Models\Assignment;
+use App\Models\Course;
+use App\Models\Comment;
 use App\Models\Student;
 use App\Models\Classroom;
+use App\Models\Assignment;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class StudentController extends Controller
 {
@@ -98,14 +99,17 @@ class StudentController extends Controller
             ->sortBy('deadline')
             ->take(3);
 
+        $recentCourseId = Cookie::get('recent_course');
+        $recentCourse = $recentCourseId ? Course::find($recentCourseId) : null;
+
         // dd($weekEvents->toArray());
-        return view('student.dashboard', compact('classroom', 'student', 'scheduleOfTheDay', 'weekSchedule', 'allCourses', 'recentReplies', 'deadlines'));
+        return view('student.dashboard', compact('classroom', 'student', 'scheduleOfTheDay', 'weekSchedule', 'allCourses', 'recentReplies', 'deadlines', 'recentCourse'));
     }
 
     public function showCourse($courseId)
     {
         $student = Auth::user()->student;
-
+        Cookie::queue('recent_course', $courseId, 7 * 24 * 60);
         $course = Course::with(['modules.lessons', 'modules.quizzes', 'teacher'])
             ->whereHas('classrooms', function ($query) use ($student) {
                 $query->whereIn('classrooms.id', $student->classrooms->pluck('id')); // Specify 'classrooms.id' explicitly
