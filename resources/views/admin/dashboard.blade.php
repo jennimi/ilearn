@@ -14,21 +14,21 @@
             <div class="col-md-4">
                 <div class="card bg-light p-3">
                     <h5>Enrolled</h5>
-                    <h1 class="text-primary">19</h1>
+                    <h1 class="text-primary">{{ $students }}</h1>
                     <p>Students</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card bg-light p-3">
                     <h5>Enrolled</h5>
-                    <h1 class="text-success">22</h1>
+                    <h1 class="text-success">{{ $teachers }}</h1>
                     <p>Teachers</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card bg-light p-3">
                     <h5>Classrooms</h5>
-                    <h1 class="text-warning">0</h1>
+                    <h1 class="text-warning">{{ $classroomsCount }}</h1>
                     <p>Rooms</p>
                 </div>
             </div>

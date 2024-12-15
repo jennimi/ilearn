@@ -24,7 +24,13 @@ class AdminController extends Controller
 
         $courses = Course::latest()->take(3)->get();
 
-        return view('admin.dashboard', compact('adminDetails', 'classrooms', 'courses'));
+        $classroomsCount = Classroom::count();
+
+        $teachers = Teacher::count();
+
+        $students = Student::count();
+
+        return view('admin.dashboard', compact('adminDetails', 'classrooms', 'courses', 'classroomsCount', 'teachers', 'students'));
     }
 
     // Show Users
