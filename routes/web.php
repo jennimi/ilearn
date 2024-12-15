@@ -70,6 +70,7 @@ Route::middleware(['auth'])->prefix('teacher')->group(function () {
     Route::put('assignments/{id}', [AssignmentController::class, 'update'])->name('teacher.assignments.update');
     Route::get('submissions/{id}', [SubmissionController::class, 'show'])->name('teacher.submissions.show');
     Route::put('submissions/{id}/update', [SubmissionController::class, 'update'])->name('teacher.submissions.update');
+    Route::post('modules/{id}/generate-quiz', [GeminiController::class, 'generateQuiz'])->name('teacher.quizzes.generate');
 });
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {

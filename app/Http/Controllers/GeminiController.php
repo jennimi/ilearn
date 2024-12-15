@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Smalot\PdfParser\Parser;
+use App\Models\Module;
 
 class GeminiController extends Controller
 {
@@ -155,5 +156,84 @@ class GeminiController extends Controller
         }
 
         return $questionArray;
+    }
+
+    public function generateQuiz(Request $request, $id)
+    {
+        $module = Module::findOrFail($id);
+
+        $request->validate([
+            'file' => 'required|mimes:pdf|max:2048',
+            'quizTitle' => 'required|string|max:255',
+        ]);
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileContents = $this->parsePdfFile($file);
+        } elseif ($request->filled('textContext')) {
+            $fileContents = $this->sanitizeUtf8($request->input('textContext'));
+        } else {
+            return redirect()->back()->withErrors('You must provide either a file or text context.');
+        }
+
+        $fileContents = $this->truncateText($this->sanitizeUtf8($fileContents), 30000);
+
+        $preQuery = "Based on the given context above, generate exactly 10 multiple-choice questions. Each question should have at least 4 unique choices, with only one correct answer. Ensure that:
+        1. The correct answer is clearly indicated.
+        2. Choices do not repeat or mean the same thing.
+        3. The questions are diverse and relevant to the given context.
+
+        Format the output as valid Json code, structured as follows:
+
+        \$quiz = [
+            [
+                'question' => 'Question text here',
+                'answer' => 'Correct choice text here',
+                'options' => ['Correct choice', 'Choice 2', 'Choice 3', 'Choice 4'],
+            ],
+            // Add more questions here...
+        ];
+
+        Do not include any comments, explanations, or additional text. Only return the Json code.";
+        $fullQuery = $preQuery . "\n" . $fileContents;
+
+        $quizData = $this->callGeminiApi($fullQuery);
+
+        $processedQuestions = $this->processQuizData($quizData);
+        return view('teacher.quizzes.generated', [
+            'module' => $module,
+            'courseName' => $module->course->title,
+            'moduleName' => $module->title,
+            'preFilledQuiz' => [
+                'title' => $request->input('quizTitle'),
+                'description' => 'Generated with AI',
+                'questions' => $processedQuestions,
+            ],
+        ]);
+    }
+
+    private function processQuizData(array $quizData)
+    {
+        $questions = [];
+
+        foreach ($quizData as $item) {
+            $question = [
+                'question_text' => $item['question'],
+                'points' => 1,
+                'type' => '',
+                'choices' => [],
+            ];
+
+            foreach ($item['options'] as $choice) {
+                $question['choices'][] = [
+                    'choice_text' => $choice,
+                    'is_correct' => $choice === $item['answer'],
+                ];
+            }
+
+            $questions[] = $question;
+        }
+
+        return $questions;
     }
 }
