@@ -3,7 +3,9 @@
 @section('content')
     <div class="container">
         <div>
-            <a href="javascript:void(0);" onclick="window.history.back();" class="btn btn-warning me-2">Back</a>
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-warning me-2"><i
+                    class="bi bi-arrow-left tw-me-2 tw-fs-4 tw-group-hover:tw-text-blue-500"></i>
+                <span class="tw-group-hover:tw-underline">Back</span></a>
         </div>
 
         <h2 class="mb-4">Users</h2>

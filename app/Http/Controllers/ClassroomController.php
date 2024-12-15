@@ -46,7 +46,9 @@ class ClassroomController extends Controller
     {
         $classroom = Classroom::with('teacher', 'students')->findOrFail($id);
 
-        return view('admin.classrooms.show', compact('classroom'));
+        $students = $classroom->students()->paginate(9);
+
+        return view('admin.classrooms.show', compact('classroom', 'students'));
     }
 
     public function edit($id)

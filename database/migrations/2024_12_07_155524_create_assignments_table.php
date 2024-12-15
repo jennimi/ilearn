@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedBigInteger('module_id')->index();
-            $table->foreign('module_id')->references('id')->on('courses')->onDelete('cascade');
+            $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
             $table->string('title');
             $table->longText('description');
             $table->timestamp('deadline')->nullable();
