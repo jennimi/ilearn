@@ -8,7 +8,10 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'iLearn') }}</title>
+    <title>{{ config('iLearn', 'iLearn') }}</title>
+
+    <link rel="icon" type="image/png" href="{{ asset('images/iLearn-logo.png') }}" sizes="32x32">
+    <link rel="apple-touch-icon" href="{{ asset('images/iLearn-logo.png') }}">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">

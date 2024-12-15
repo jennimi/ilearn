@@ -31,15 +31,20 @@ class Course extends Model
             ];
 
             foreach ($defaultModules as $module) {
-                Module::create([
+                $newModule = Module::create([
                     'course_id' => $course->id,
                     'title' => $module['title'],
                     'description' => $module['description'],
                 ]);
+
+                Discussion::create([
+                    'module_id' => $newModule->id,
+                    'title' => "Discussion for {$module['title']}",
+                    'description' => "This is the discussion forum for {$module['title']}. Feel free to ask questions and engage in discussions.",
+                ]);
             }
         });
     }
-
 
     public function teacher(): BelongsTo
     {

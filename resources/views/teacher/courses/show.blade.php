@@ -2,23 +2,29 @@
 
 @section('content')
     <div class="container">
-        <h1 class="mb-4 text-primary">{{ $course->title }}</h1>
-        <p class="text-muted">{{ $course->description }}</p>
+        <h1 class="mb-2 text-primary">{{ $course->title }}</h1>
+        <p class="text-muted mb-3">{{ $course->description }}</p>
 
-        <div class="mb-5">
+        <div class="mb-3">
             <h3 class="text-secondary">Classrooms</h3>
-            <ul class="list-group">
+            <div class="row">
                 @foreach ($course->classrooms as $classroom)
-                    <li class="list-group-item d-flex justify-content-between align-items-center" style="height: 75px">
-                        <div class="d-flex flex-column">
-                            <span>{{ $classroom->name }}</span>
-                            <span class="badge bg-info text-dark mt-2">{{ $classroom->pivot->day }}:
-                                {{ $classroom->pivot->start_time }} - {{ $classroom->pivot->end_time }}</span>
+                    <div class="col-lg-2 col-md-3 col-sm-4 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ $classroom->name }}</h5>
+                                <p class="text-muted small">{{ $classroom->pivot->day }}</p>
+                                <p class="text-muted small">
+                                    {{ $classroom->pivot->start_time }} - {{ $classroom->pivot->end_time }}
+                                </p>
+                                <a href="{{ route('teacher.leaderboard', $classroom->id) }}" class="btn btn-primary btn-sm">
+                                    View Leaderboard
+                                </a>
+                            </div>
                         </div>
-                        <a href="{{ route('teacher.leaderboard') }}" class="btn btn-primary btn-md">View Leaderboard</a>
-                    </li>
+                    </div>
                 @endforeach
-            </ul>
+            </div>
         </div>
 
         <!-- Modules and Lessons Section -->
@@ -231,7 +237,7 @@
                                                         name="quizTitle" required>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="file" class="form-label">Upload PDF or Article</label>
+                                                    <label for="file" class="form-label">Upload PDF</label>
                                                     <input type="file" class="form-control" id="file"
                                                         name="file" accept=".pdf">
                                                 </div>
@@ -322,6 +328,71 @@
                                     @endforeach
                                 </ul>
                             @endif
+                            <!-- Add Assignment Button -->
+                            <div class="d-flex justify-content-end mb-3 tw-mt-5">
+                                <button class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#addAssignmentModal{{ $module->id }}">
+                                    <i class="bi bi-plus-circle"></i> Add Assignment
+                                </button>
+                            </div>
+
+                            <!-- Add Assignment Modal -->
+                            <div class="modal fade" id="addAssignmentModal{{ $module->id }}" tabindex="-1"
+                                aria-labelledby="addAssignmentModalLabel{{ $module->id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form method="POST" action="{{ route('teacher.assignments.store', $module->id) }}">
+                                        @csrf
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="addAssignmentModalLabel{{ $module->id }}">
+                                                    Add Assignment</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- Title Field -->
+                                                <div class="mb-3">
+                                                    <label for="assignmentTitle{{ $module->id }}"
+                                                        class="form-label">Assignment Title</label>
+                                                    <input type="text" class="form-control"
+                                                        id="assignmentTitle{{ $module->id }}" name="title" required>
+                                                </div>
+                                                <!-- Description Field -->
+                                                <div class="mb-3">
+                                                    <label for="assignmentDescription{{ $module->id }}"
+                                                        class="form-label">Assignment Description</label>
+                                                    <textarea class="form-control" id="assignmentDescription{{ $module->id }}" name="description" rows="3"
+                                                        required></textarea>
+                                                </div>
+                                                <!-- Deadline Field -->
+                                                <div class="mb-3">
+                                                    <label for="assignmentDeadline{{ $module->id }}"
+                                                        class="form-label">Deadline</label>
+                                                    <input type="datetime-local" class="form-control"
+                                                        id="assignmentDeadline{{ $module->id }}" name="deadline"
+                                                        required>
+                                                </div>
+                                                <!-- Visibility Field -->
+                                                <div class="mb-3">
+                                                    <label for="assignmentVisible{{ $module->id }}"
+                                                        class="form-label">Visible</label>
+                                                    <select class="form-control"
+                                                        id="assignmentVisible{{ $module->id }}" name="visible">
+                                                        <option value="1">Yes</option>
+                                                        <option value="0">No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Add Assignment</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
 
                             <!-- Add Lesson Modal -->
                             <div class="modal fade" id="addLessonModal{{ $module->id }}" tabindex="-1"

@@ -71,6 +71,7 @@ Route::middleware(['auth'])->prefix('teacher')->group(function () {
     Route::get('submissions/{id}', [SubmissionController::class, 'show'])->name('teacher.submissions.show');
     Route::put('submissions/{id}/update', [SubmissionController::class, 'update'])->name('teacher.submissions.update');
     Route::post('modules/{id}/generate-quiz', [GeminiController::class, 'generateQuiz'])->name('teacher.quizzes.generate');
+    Route::post('/modules/{id}/assignments', [AssignmentController::class, 'store'])->name('teacher.assignments.store');
 });
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {

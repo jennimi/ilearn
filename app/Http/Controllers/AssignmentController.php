@@ -83,4 +83,20 @@ class AssignmentController extends Controller
         return redirect()->route('teacher.assignments.show', $assignment->id)
             ->with('success', 'Assignment updated successfully!');
     }
+
+    public function store(Request $request, $moduleId)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'deadline' => 'required|date',
+            'visible' => 'required|boolean',
+        ]);
+
+        $validated['module_id'] = $moduleId;
+
+        Assignment::create($validated);
+
+        return redirect()->back()->with('success', 'Assignment added successfully.');
+    }
 }
