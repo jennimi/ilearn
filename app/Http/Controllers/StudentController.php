@@ -99,7 +99,7 @@ class StudentController extends Controller
             ->sortBy('deadline')
             ->take(3);
 
-        $recentCourseId = Cookie::get('recent_course');
+        $recentCourseId = Cookie::get('recent_course' . Auth::id());
         $recentCourse = $recentCourseId ? Course::find($recentCourseId) : null;
 
         // dd($weekEvents->toArray());
@@ -109,7 +109,7 @@ class StudentController extends Controller
     public function showCourse($courseId)
     {
         $student = Auth::user()->student;
-        Cookie::queue('recent_course', $courseId, 7 * 24 * 60);
+        Cookie::queue('recent_course' . Auth::id(), $courseId, 7 * 24 * 60);
         $course = Course::with(['modules.lessons', 'modules.quizzes', 'teacher'])
             ->whereHas('classrooms', function ($query) use ($student) {
                 $query->whereIn('classrooms.id', $student->classrooms->pluck('id')); // Specify 'classrooms.id' explicitly
