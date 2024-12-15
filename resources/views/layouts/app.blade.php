@@ -91,9 +91,9 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-sm">
             <div class="container">
-                <a class="navbar-brand text-white" href="{{ url('/') }}">
-                    {{ config('app.name', 'iLearn') }}
-                </a>
+                {{-- <a class="navbar-brand text-white" href="{{ url('/') }}">
+                    {{ config('iLearn', 'iLearn') }}
+                </a> --}}
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -104,15 +104,14 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         @if (auth()->check() && auth()->user()->role === 'admin' && auth()->user()->admin)
-                            <a class="nav-link text-white" href="{{ route('admin.dashboard') }}">Dashboard</a>
+                            <a class="nav-link text-white" href="{{ route('admin.dashboard') }}">iLearn</a>
                         @elseif(auth()->check() && auth()->user()->role === 'teacher' && auth()->user()->teacher)
-                            <a class="nav-link text-white" href="{{ route('teacher.dashboard') }}">Dashboard</a>
+                            <a class="nav-link text-white" href="{{ route('teacher.dashboard') }}">iLearn</a>
                         @elseif(auth()->check() && auth()->user()->role === 'student' && auth()->user()->student)
-                            <a class="nav-link text-white" href="{{ route('student.dashboard') }}">Dashboard</a>
+                            <a class="nav-link text-white" href="{{ route('student.dashboard') }}">iLearn</a>
                         @else
                             <a class="nav-link text-white" href="{{ route('home') }}">Dashboard</a>
                         @endif
-
                     </ul>
 
                     <!-- Right Side Of Navbar -->

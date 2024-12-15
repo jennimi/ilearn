@@ -2,8 +2,10 @@
 
 @section('content')
     <div class="container">
-        <h1 class="mb-4">Create Quiz</h1>
-
+        <h1 class="mb-4">
+            Create Quiz
+            <small class="text-muted">({{ $courseName }} - {{ $moduleName }})</small>
+        </h1>
         <form method="POST" action="{{ route('teacher.quizzes.store', $module->id) }}" id="createQuizForm">
             @csrf
 
@@ -15,6 +17,16 @@
             <div class="mb-4">
                 <label for="description" class="form-label">Quiz Description</label>
                 <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label for="deadline" class="form-label">Quiz Deadline</label>
+                <input type="datetime-local" class="form-control" id="deadline" name="deadline" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="duration" class="form-label">Duration (Minutes)</label>
+                <input type="number" class="form-control" id="duration" name="duration" min="1" required>
             </div>
 
             <!-- Questions Section -->
@@ -32,6 +44,7 @@
 
             <button type="submit" class="btn btn-success">Create Quiz</button>
         </form>
+
     </div>
 
     <!-- Add Question Modal -->
@@ -48,6 +61,12 @@
                             <label for="question_text" class="form-label">Question Text</label>
                             <textarea class="form-control" id="question_text" rows="3" required></textarea>
                         </div>
+                        <div class="mb-3">
+                            <label for="question_points" class="form-label">Points</label>
+                            <input type="number" class="form-control" id="question_points"
+                                placeholder="Points for this question" min="1" required>
+                        </div>
+
                         <div class="mb-3">
                             <label for="question_image" class="form-label">Question Image (Optional)</label>
                             <input type="file" class="form-control" id="question_image" accept="image/*">
@@ -148,18 +167,17 @@
                 const questionText = document.getElementById('question_text').value.trim();
                 const questionType = addQuestionForm.querySelector('#question_type').value;
                 const questionImage = document.getElementById('question_image').files[0];
+                const questionPoints = parseInt(document.getElementById('question_points').value, 10);
 
                 const choices = Array.from(answerFields.querySelectorAll('.choice-text'))
                     .map(input => input.value.trim())
                     .filter(choice => choice !== '');
-                const correctAnswers = questionType === '0' ?
-                    [Array.from(answerFields.querySelectorAll('.correct-choice')).findIndex(input => input
-                        .checked)] :
+                const correctAnswers = questionType === '0' ? [Array.from(answerFields.querySelectorAll(
+                        '.correct-choice')).findIndex(input => input.checked)] :
                     questionType === '1' ?
                     Array.from(answerFields.querySelectorAll('.correct-choice'))
                     .map((input, index) => (input.checked ? index : null))
-                    .filter(index => index !== null) :
-                    [];
+                    .filter(index => index !== null) : [];
                 const shortAnswer = questionType === '2' ? document.getElementById('short_correct_answer')
                     .value.trim() : null;
 
@@ -180,6 +198,10 @@
                     alert('Please provide the correct answer for the Short Answer question.');
                     return;
                 }
+                if (!questionPoints || questionPoints < 1) {
+                    alert('Please provide valid points for the question.');
+                    return;
+                }
 
                 // Prepare image data as Base64
                 let questionImageBase64 = null;
@@ -196,10 +218,9 @@
                     question_text: questionText,
                     question_type: questionType,
                     question_image: questionImageBase64,
-                    points: 1,
+                    points: questionPoints,
                     choices: questionType !== '2' ? choices : [],
-                    correct_answers: questionType === '2' ? [shortAnswer] :
-                    correctAnswers, // Correctly include shortAnswer
+                    correct_answers: questionType === '2' ? [shortAnswer] : correctAnswers,
                 };
 
                 questions.push(question);
@@ -211,6 +232,7 @@
         <div class="card-body">
             <h5>${question.question_text}</h5>
             <p class="text-muted">Type: ${questionType === '0' ? 'Single Choice' : questionType === '1' ? 'Multiple Choice' : 'Short Answer'}</p>
+            <p class="text-muted">Points: ${question.points}</p>
     `;
                 if (questionType !== '2') {
                     const choicesList = document.createElement('ul');
@@ -223,7 +245,7 @@
                     questionDiv.appendChild(choicesList);
                 } else {
                     questionDiv.innerHTML +=
-                        `<p class="px-3"><strong>Correct Answer:</strong> ${question.correct_answers[0]}</p>`;
+                        `<p><strong>Correct Answer:</strong> ${question.correct_answers[0]}</p>`;
                 }
                 questionDiv.innerHTML += '</div>';
                 questionsContainer.appendChild(questionDiv);
@@ -236,6 +258,7 @@
                 answerFields.innerHTML = '';
                 bootstrap.Modal.getInstance(document.getElementById('addQuestionModal')).hide();
             });
+
 
             function renderAnswerInputs(type) {
                 Array.from(answerFields.children).forEach(choiceDiv => {
