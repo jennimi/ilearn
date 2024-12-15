@@ -62,7 +62,7 @@
                     <!-- Quiz Content -->
                     <div class="col-md-9">
                         <button type="button" id="startQuizButton" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#startQuizModal">Start Quiz</button>
+                            data-bs-target="#startQuizModal">Start Quiz</button>
                         <form id="quizForm" action="{{ route('student.quizzes.submit', $quiz->id) }}" method="POST">
                             @csrf
                             <div id="questionsContainer">
@@ -81,11 +81,12 @@
                                         @if ($question->getTypeLabel() === 'Single Choice')
                                             <div class="choices">
                                                 @foreach ($question->choices as $choice)
-                                                    <div class="form-check">
+                                                    <div class="form-check fancy-input">
                                                         <input class="form-check-input" type="radio"
                                                             name="answers[{{ $question->id }}]"
                                                             value="{{ $choice->id }}" id="choice{{ $choice->id }}">
-                                                        <label class="form-check-label" for="choice{{ $choice->id }}">
+                                                        <label class="form-check-label radio"
+                                                            for="choice{{ $choice->id }}">
                                                             {{ $choice->choice_text }}
                                                         </label>
                                                     </div>
@@ -94,11 +95,12 @@
                                         @elseif ($question->getTypeLabel() === 'Multiple Choice')
                                             <div class="choices">
                                                 @foreach ($question->choices as $choice)
-                                                    <div class="form-check">
+                                                    <div class="form-check fancy-input">
                                                         <input class="form-check-input" type="checkbox"
                                                             name="answers[{{ $question->id }}][]"
                                                             value="{{ $choice->id }}" id="choice{{ $choice->id }}">
-                                                        <label class="form-check-label" for="choice{{ $choice->id }}">
+                                                        <label class="form-check-label checkbox"
+                                                            for="choice{{ $choice->id }}">
                                                             {{ $choice->choice_text }}
                                                         </label>
                                                     </div>
@@ -189,8 +191,8 @@
 
                 // Hide start button, show quiz UI
                 startButton.style.display = 'none';
-                questionList.classList.remove('d-md-none'); 
-                questionList.classList.add('d-md-block'); 
+                questionList.classList.remove('d-md-none');
+                questionList.classList.add('d-md-block');
                 showQuestion(currentQuestionIndex);
 
                 @if ($quiz->duration)
