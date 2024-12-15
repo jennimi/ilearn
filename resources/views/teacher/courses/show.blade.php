@@ -122,6 +122,12 @@
                                     @endforeach
                                 </ul>
                             @endif
+                            <div class="d-flex justify-content-end mb-3">
+                                <button class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#addLessonModal{{ $module->id }}">
+                                    <i class="bi bi-plus-circle"></i> Add Lesson
+                                </button>
+                            </div>
 
                             <!-- Quizzes Section -->
                             <h5 class="text-secondary mt-4">Quizzes</h5>
@@ -153,7 +159,8 @@
                                             </div>
                                         </li>
 
-                                        <div class="modal fade" id="toggleVisibilityModalQuiz{{ $quiz->id }}" tabindex="-1"
+                                        <div class="modal fade" id="toggleVisibilityModalQuiz{{ $quiz->id }}"
+                                            tabindex="-1"
                                             aria-labelledby="toggleVisibilityModalLabelQuiz{{ $quiz->id }}"
                                             aria-hidden="true">
                                             <div class="modal-dialog">
@@ -167,12 +174,13 @@
                                                                 id="toggleVisibilityModalLabelQuiz{{ $quiz->id }}">
                                                                 Update Quiz Visibility
                                                             </h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             Are you sure you want to
-                                                            <strong>{{ $quiz->visible ? 'hide' : 'show' }}</strong> this quiz to
+                                                            <strong>{{ $quiz->visible ? 'hide' : 'show' }}</strong> this
+                                                            quiz to
                                                             students?
                                                         </div>
                                                         <input type="hidden" name="visible"
@@ -180,7 +188,8 @@
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
                                                                 data-bs-dismiss="modal">Cancel</button>
-                                                            <button type="submit" class="btn btn-primary">Confirm</button>
+                                                            <button type="submit"
+                                                                class="btn btn-primary">Confirm</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -190,6 +199,59 @@
                                 </ul>
                             @endif
 
+                            <!-- Generate Quiz with AI -->
+                            <div class="d-flex justify-content-end mb-3">
+                                <button type="button" class="btn btn-outline-primary tw-me-1" data-bs-toggle="modal"
+                                    data-bs-target="#generateQuizModal{{ $module->id }}">
+                                    <i class="bi bi-lightbulb"></i> Generate Quiz with AI
+                                </button>
+                                <a href="{{ route('teacher.quizzes.create', $module->id) }}" class="btn btn-primary">
+                                    <i class="bi bi-file-earmark-text"></i> Create Quiz
+                                </a>
+                            </div>
+
+                            <!-- Generate Quiz Modal -->
+                            <div class="modal fade" id="generateQuizModal{{ $module->id }}" tabindex="-1"
+                                aria-labelledby="generateQuizModalLabel{{ $module->id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form action="{{ route('teacher.quizzes.generate', $module->id) }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="generateQuizModalLabel{{ $module->id }}">
+                                                    Generate Quiz with AI</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="quizTitle" class="form-label">Quiz Title</label>
+                                                    <input type="text" class="form-control" id="quizTitle"
+                                                        name="quizTitle" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="file" class="form-label">Upload PDF or Article</label>
+                                                    <input type="file" class="form-control" id="file"
+                                                        name="file" accept=".pdf">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="textContext" class="form-label">Or Paste Text
+                                                        Context</label>
+                                                    <textarea class="form-control" id="textContext" name="textContext" rows="4"></textarea>
+                                                    <small class="text-muted">You can upload a PDF or paste text to
+                                                        generate a quiz.</small>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-primary">Generate Quiz</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
 
                             <!-- Assignments Section -->
                             <h5 class="text-secondary mt-4">Assignments</h5>
@@ -236,12 +298,13 @@
                                                                 id="toggleVisibilityModalLabelAssignment{{ $assignment->id }}">
                                                                 Update Assignment Visibility
                                                             </h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             Are you sure you want to
-                                                            <strong>{{ $assignment->visible ? 'hide' : 'show' }}</strong> this
+                                                            <strong>{{ $assignment->visible ? 'hide' : 'show' }}</strong>
+                                                            this
                                                             assignment to students?
                                                         </div>
                                                         <input type="hidden" name="visible"
@@ -249,7 +312,8 @@
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
                                                                 data-bs-dismiss="modal">Cancel</button>
-                                                            <button type="submit" class="btn btn-primary">Confirm</button>
+                                                            <button type="submit"
+                                                                class="btn btn-primary">Confirm</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -258,7 +322,7 @@
                                     @endforeach
                                 </ul>
                             @endif
-                            
+
                             <!-- Add Lesson Modal -->
                             <div class="modal fade" id="addLessonModal{{ $module->id }}" tabindex="-1"
                                 aria-labelledby="addLessonModalLabel{{ $module->id }}" aria-hidden="true">
@@ -304,16 +368,7 @@
 
                             <!-- Link to Discussion -->
                             @if ($module->discussion)
-                                <div class="mb-4 text-end">
-                                    <!-- Add Lesson Button -->
-                                    <button class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#addLessonModal{{ $module->id }}">
-                                        <i class="bi bi-plus-circle"></i> Add Lesson
-                                    </button>
-                                    <!-- Create Quiz Button -->
-                                    <a href="{{ route('teacher.quizzes.create', $module->id) }}" class="btn btn-primary">
-                                        <i class="bi bi-file-earmark-text"></i> Create Quiz
-                                    </a>
+                                <div class="mb-4 text-end tw-mt-10">
                                     <a href="{{ route('discussions.show', $module->discussion->id) }}"
                                         class="btn btn-outline-primary">
                                         <i class="bi bi-chat-text"></i> Go to Discussion
