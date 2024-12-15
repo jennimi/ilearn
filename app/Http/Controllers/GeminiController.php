@@ -9,10 +9,9 @@ use App\Models\Module;
 
 class GeminiController extends Controller
 {
-    public function askGemini(Request $request)
+    private function quizFromPrompt(Request $request)
     {
         $response = null;
-        $query = null;
         $quiz = [];
         $fileName = null;  // Initialize fileName variable
 
@@ -21,20 +20,21 @@ class GeminiController extends Controller
             // Get the file
             $file = $request->file('file');
 
-            // Get the uploaded file name
-            $fileName = $file->getClientOriginalName();
+            // // Get the uploaded file name
+            // $fileName = $file->getClientOriginalName();
 
             // Read the contents of the file (e.g., PDF)
             $fileContents = $this->parsePdfFile($file);
 
-            // Truncate the contents to 30,000 characters
-            $fileContents = $this->truncateText($fileContents, 30000);
+            // Truncate the contents to 40,000 characters
+            $fileContents = $this->truncateText($fileContents, 40000);
 
             // Sanitize file contents to ensure valid UTF-8 encoding
             $fileContents = $this->sanitizeUtf8($fileContents);
 
             // Prepare the query (context + file contents)
-            $preQuery = "Make me an array of 10 multiple choice questions, where the format is \"Question1? | Question2? | Question3?\" like it were a multiple choice quiz from this article, separate with a |, do not comment on it at all:\n";
+            $preQuery =
+            "Generate a single string containing 10 multiple-choice questions formatted as: Question1? | Question2? | Question3?. Derive the questions from the article, making them as educative as possible. Separate each question with a vertical bar (|). Do not include any additional comments, explanations, or array formatting in the output.";
             $fullQuery = $preQuery . "\n" . $fileContents;
 
             // Call the Gemini API with the sanitized content
@@ -43,10 +43,19 @@ class GeminiController extends Controller
             // Process the response into questions
             $questions = $this->splitResponse($response);
             $quiz = $this->makeQuestionsArray($fileContents, $questions);
+
+            return $quiz;
+        } else {
+            return null;
         }
 
-        // Return the view with the response and file name
-        return view('gemini', compact('query', 'response', 'quiz', 'fileName'));
+        // $array = [
+        //     'prompt' => $response,
+        //     'fileName' => $fileName,
+        //     'question' => $quiz
+        // ];
+
+        // return $array;
     }
 
 
@@ -129,7 +138,8 @@ class GeminiController extends Controller
 
     private function makeChoices(string $query, string $question)
     {
-        $makeAnswer = "based on the given context above, give me multiple choice answers, just put the right answer in the front. Give me only 4 choices, 1 choice can have multiple answers, make only one correct, no more, no less, no additional comments, no repeating choices that mean the same, make sure the correct answer is the first choice to come out, separate each choice with a |";
+        $makeAnswer =
+"Based on the given context, generate a multiple-choice question with exactly 4 distinct answer options, ensuring only one correct answer, which must always appear as the first option. Each choice must be unique, concise, and clear, avoiding redundancy or ambiguity. Choices should not be preceded by letters or numbers. Separate the choices with a vertical bar (|). Do not include any additional comments, repeated meanings, or explanations in the output.";
 
         $fullQuery = $query . "\n" . $question . "\n" . $makeAnswer;
         $answers = $this->callGeminiApi($fullQuery);
@@ -163,41 +173,29 @@ class GeminiController extends Controller
         $module = Module::findOrFail($id);
 
         $request->validate([
-            'file' => 'required|mimes:pdf|max:2048',
+            'file' => 'required|mimes:pdf',
             'quizTitle' => 'required|string|max:255',
         ]);
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $fileContents = $this->parsePdfFile($file);
-        } elseif ($request->filled('textContext')) {
-            $fileContents = $this->sanitizeUtf8($request->input('textContext'));
-        } else {
-            return redirect()->back()->withErrors('You must provide either a file or text context.');
-        }
+        $quizData = $this->quizFromPrompt($request);
 
-        $fileContents = $this->truncateText($this->sanitizeUtf8($fileContents), 30000);
+        // $preQuery = "Based on the given context above, generate exactly 10 multiple-choice questions. Each question should have at least 4 unique choices, with only one correct answer. Ensure that:
+        // 1. The correct answer is clearly indicated.
+        // 2. Choices do not repeat or mean the same thing.
+        // 3. The questions are diverse and relevant to the given context.
 
-        $preQuery = "Based on the given context above, generate exactly 10 multiple-choice questions. Each question should have at least 4 unique choices, with only one correct answer. Ensure that:
-        1. The correct answer is clearly indicated.
-        2. Choices do not repeat or mean the same thing.
-        3. The questions are diverse and relevant to the given context.
+        // Format the output as valid Json code, structured as follows:
 
-        Format the output as valid Json code, structured as follows:
+        // \$quiz = [
+        //     [
+        //         'question' => 'Question text here',
+        //         'answer' => 'Correct choice text here',
+        //         'options' => ['Correct choice', 'Choice 2', 'Choice 3', 'Choice 4'],
+        //     ],
+        //     // Add more questions here...
+        // ];
 
-        \$quiz = [
-            [
-                'question' => 'Question text here',
-                'answer' => 'Correct choice text here',
-                'options' => ['Correct choice', 'Choice 2', 'Choice 3', 'Choice 4'],
-            ],
-            // Add more questions here...
-        ];
-
-        Do not include any comments, explanations, or additional text. Only return the Json code.";
-        $fullQuery = $preQuery . "\n" . $fileContents;
-
-        $quizData = $this->callGeminiApi($fullQuery);
+        // Do not include any comments, explanations, or additional text. Only return the Json code.";
 
         $processedQuestions = $this->processQuizData($quizData);
         return view('teacher.quizzes.generated', [
