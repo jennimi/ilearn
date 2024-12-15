@@ -33,7 +33,8 @@
 
 
     <style>
-        body, html {
+        body,
+        html {
             font-family: 'Poppins', sans-serif;
         }
 
@@ -89,6 +90,86 @@
             background: #f1f1f1;
             /* Light track */
         }
+
+        .fancy-input {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        /* Hide the default radio and checkbox input */
+        .form-check-input {
+            opacity: 0;
+            position: absolute;
+            width: 0;
+            /* Ensure it doesn't take up any space */
+            height: 0;
+            /* Ensure it doesn't take up any space */
+        }
+
+        /* Custom label for radio and checkbox */
+        .form-check-label {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border: 2px solid #ddd;
+            border-radius: 0.5rem;
+            background: #f9f9f9;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-left: 0;
+            /* Remove any extra left margin */
+        }
+
+        /* Hover effect for labels */
+        .form-check-label:hover {
+            background: #eaeaea;
+            border-color: #ccc;
+        }
+
+        /* When the radio or checkbox is checked */
+        .form-check-input:checked+.form-check-label {
+            background: #007bff;
+            color: #fff;
+            border-color: #007bff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Custom indicator styling */
+        .form-check-label::before {
+            content: '';
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            margin-right: 1rem;
+            border: 2px solid #ddd;
+            background: white;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Radio buttons remain circular */
+        input[type="radio"]+.form-check-label::before {
+            border-radius: 50%;
+        }
+
+        /* Checkboxes remain square */
+        input[type="checkbox"]+.form-check-label::before {
+            border-radius: 0;
+        }
+
+        /* When radio is checked, change the circle appearance */
+        input[type="radio"]:checked+.form-check-label::before {
+            background: #fff;
+            border-color: #fff;
+            box-shadow: inset 0 0 0 4px #007bff;
+        }
+
+        /* When checkbox is checked, change the square appearance */
+        input[type="checkbox"]:checked+.form-check-label::before {
+            background: #fff;
+            border-color: #fff;
+            box-shadow: inset 0 0 0 4px #007bff;
+        }
     </style>
 
 </head>
@@ -109,7 +190,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        <img src="{{ asset('images/iLearn-logo.png') }}" alt="iLearn Logo" class="tw-w-10 tw-h-10 tw-me-2">
+                        <img src="{{ asset('images/iLearn-logo.png') }}" alt="iLearn Logo"
+                            class="tw-w-10 tw-h-10 tw-me-2">
                         @if (auth()->check() && auth()->user()->role === 'admin' && auth()->user()->admin)
                             <a class="nav-link text-white" href="{{ route('admin.dashboard') }}">iLearn</a>
                         @elseif(auth()->check() && auth()->user()->role === 'teacher' && auth()->user()->teacher)
