@@ -80,18 +80,20 @@
                             @else
                                 <ul class="list-group mb-4">
                                     @foreach ($module->quizzes as $quiz)
-                                        <li class="list-group-item">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <strong>{{ $quiz->title }}</strong>
-                                                    <p class="text-muted">{{ $quiz->description }}</p>
+                                        @if ($quiz->visible)
+                                            <li class="list-group-item">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <strong>{{ $quiz->title }}</strong>
+                                                        <p class="text-muted">{{ $quiz->description }}</p>
+                                                    </div>
+                                                    <a href="{{ route('student.quizzes.take', $quiz->id) }}"
+                                                        class="btn btn-outline-success btn-sm">
+                                                        Take Quiz
+                                                    </a>
                                                 </div>
-                                                <a href="{{ route('student.quizzes.take', $quiz->id) }}"
-                                                    class="btn btn-outline-success btn-sm">
-                                                    Take Quiz
-                                                </a>
-                                            </div>
-                                        </li>
+                                            </li>
+                                        @endif
                                     @endforeach
                                 </ul>
                             @endif
@@ -103,25 +105,27 @@
                             @else
                                 <ul class="list-group mb-4">
                                     @foreach ($module->assignments as $assignment)
-                                        <li class="list-group-item">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <strong>{{ $assignment->title }}</strong>
-                                                    <p class="text-muted">{{ $assignment->description }}</p>
-                                                    <p class="text-muted">
-                                                        Deadline:
-                                                        <span
-                                                            class="{{ now()->greaterThan($assignment->deadline) ? 'text-danger' : 'text-success' }}">
-                                                            {{ $assignment->deadline->format('Y-m-d H:i') }}
-                                                        </span>
-                                                    </p>
+                                        @if ($assignment->visible)
+                                            <li class="list-group-item">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <strong>{{ $assignment->title }}</strong>
+                                                        <p class="text-muted">{{ $assignment->description }}</p>
+                                                        <p class="text-muted">
+                                                            Deadline:
+                                                            <span
+                                                                class="{{ now()->greaterThan($assignment->deadline) ? 'text-danger' : 'text-success' }}">
+                                                                {{ $assignment->deadline->format('Y-m-d H:i') }}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                    <a href="{{ route('student.assignments.show', $assignment->id) }}"
+                                                        class="btn btn-outline-primary btn-sm">
+                                                        View Assignment
+                                                    </a>
                                                 </div>
-                                                <a href="{{ route('student.assignments.show', $assignment->id) }}"
-                                                    class="btn btn-outline-primary btn-sm">
-                                                    View Assignment
-                                                </a>
-                                            </div>
-                                        </li>
+                                            </li>
+                                        @endif
                                     @endforeach
                                 </ul>
                             @endif

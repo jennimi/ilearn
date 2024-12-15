@@ -56,28 +56,32 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-text-center">
-        <div class="tw-bg-image"></div>
+    <div class="tw-relative tw-flex tw-items-center tw-justify-center tw-text-center">
+        <!-- Fullscreen Background Image -->
+        <div class="tw-bg-image tw-fixed tw-inset-0 tw-h-full tw-w-full"></div>
 
-        <!-- Header -->
-        <h1 class="tw-text-6xl tw-font-bold tw-text-gray-800 tw-mb-8">
-            Welcome to iLearn
-        </h1>
+        <div class="tw-mt-10">
 
-        <!-- Container -->
-        <div class="container tw-bg-white tw-shadow-lg tw-rounded-lg tw-p-8 tw-max-w-lg">
-            <p class="tw-text-gray-600 tw-mb-6">
-                Your ultimate Learning Management System for seamless and engaging education experiences.
-            </p>
+            <img src="{{ asset('images/iLearn-logo.png') }}" alt="iLearn Logo" class="tw-w-48 tw-h-auto">
 
-            <!-- Centered Login Button -->
-            <a href="{{ route('login') }}"
-                class="btn btn-primary tw-w-full tw-bg-blue-500 tw-py-3 tw-text-white tw-rounded-lg tw-hover:bg-blue-600">
-                Log In
-            </a>
+            <!-- Header -->
+            <h1 class="tw-text-6xl tw-font-bold tw-text-white tw-mb-8">
+                Welcome to iLearn
+            </h1>
+
+            <!-- Container -->
+            <div class="container tw-bg-white tw-shadow-lg tw-rounded-lg tw-p-8 tw-max-w-lg">
+                <p class="tw-text-gray-600 tw-mb-6">
+                    Your ultimate Learning Management System for seamless and engaging education experiences.
+                </p>
+
+                <!-- Centered Login Button -->
+                <a href="{{ route('login') }}"
+                    class="btn btn-primary tw-w-full tw-bg-blue-500 tw-py-3 tw-text-white tw-rounded-lg tw-hover:bg-blue-600">
+                    Log In
+                </a>
+            </div>
         </div>
-        <a href="{{ route('gemini.ask') }}">
-            <img src="{{ asset('assets/jamir.png') }}" alt="Placeholder">
-        </a>
     </div>
 @endsection
+

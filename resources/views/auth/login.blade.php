@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="tw-flex tw-flex-col tw-items-center tw-justify-center">
+    <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-mt-10">
         <div class="tw-bg-image"></div>
-        <h1 class="tw-text-6xl tw-font-bold tw-text-gray-800 tw-mb-8  tw-text-center">
+        <h1 class="tw-text-6xl tw-font-bold tw-text-gray-800 tw-mb-8  tw-text-center tw-text-white">
             Welcome to iLearn
         </h1>
 
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-8">
+                <div class="col-md-7">
                     <div class="card">
-                        <div class="card-header">{{ __('Login') }}</div>
+                        <div class="card-header tw-text-center tw-font-bold">{{ __('Login') }}</div>
 
                         <div class="card-body">
                             <form method="POST" action="{{ route('login') }}">

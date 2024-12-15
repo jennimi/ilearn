@@ -16,17 +16,19 @@ class QuizController extends Controller
     {
         $module = Module::findOrFail($moduleId);
 
-        // Validate the input
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'duration' => 'nullable|integer|min:1',
+            'deadline' => 'required|date|after:now',
             'questions' => 'nullable|json',
         ]);
 
-        // Create the quiz
         $quiz = $module->quizzes()->create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
+            'duration' => $request->input('duration'),
+            'deadline' => $request->input('deadline'),
         ]);
 
         // Handle questions if provided
@@ -34,11 +36,11 @@ class QuizController extends Controller
             $questions = json_decode($request->input('questions'), true);
 
             foreach ($questions as $questionData) {
-                $choices = $questionData['options'] ?? [];
-                $answerText = $questionData['answer'] ?? null; // Get the correct answer text
+                $choices = $questionData['choices'] ?? [];
+                $correctAnswers = $questionData['correct_answers'] ?? [];
+                $questionPoints = $questionData['points'] ?? 1;
                 $imagePath = null;
 
-                // Handle image if provided
                 if (!empty($questionData['question_image'])) {
                     $imageFile = base64_decode($questionData['question_image']);
                     $imageName = 'question_' . uniqid() . '.png';
@@ -47,19 +49,17 @@ class QuizController extends Controller
                     Storage::disk('public')->put($imagePath, $imageFile);
                 }
 
-                // Create the question
                 $question = $quiz->questions()->create([
-                    'question_text' => $questionData['question'],
-                    'question_type' => 1, // Assume 1 = multiple-choice; adjust if needed
-                    'points' => $questionData['points'] ?? 1,
+                    'question_text' => $questionData['question_text'],
+                    'question_type' => $questionData['question_type'],
+                    'points' => $questionPoints,
                     'image' => $imagePath,
                 ]);
 
-                // Create choices and identify the correct answer
-                foreach ($choices as $choiceText) {
+                foreach ($choices as $index => $choiceText) {
                     $question->choices()->create([
                         'choice_text' => $choiceText,
-                        'is_correct' => $choiceText === $answerText,
+                        'is_correct' => in_array($index, $correctAnswers),
                     ]);
                 }
             }
@@ -69,6 +69,7 @@ class QuizController extends Controller
             ->route('teacher.quizzes.show', $quiz->id)
             ->with('success', 'Quiz created successfully!');
     }
+
 
 
     public function showQuiz($id)
@@ -83,19 +84,30 @@ class QuizController extends Controller
     {
         $module = Module::findOrFail($moduleId);
 
-        return view('teacher.quizzes.create', compact('module'));
+        return view('teacher.quizzes.create', [
+            'module' => $module,
+            'courseName' => $module->course->title,
+            'moduleName' => $module->title,
+        ]);
     }
+
+    public function toggleVisibility($id)
+    {
+        $quiz = Quiz::findOrFail($id);
+        $quiz->update(['visible' => !$quiz->visible]);
+
+        return redirect()->back()->with('success', 'Quiz visibility updated successfully.');
+    }
+
 
     public function takeQuiz($quizId)
     {
         $quiz = Quiz::with(['questions.choices'])->findOrFail($quizId);
         $student = Auth::user()->student;
 
-        // Check if the student has already submitted the quiz
         $quizResult = $student->quizResults()->where('quiz_id', $quizId)->first();
 
         if ($quizResult) {
-            // Redirect to review if the student has already submitted the quiz
             return redirect()->route('student.quizzes.review', $quizId)
                 ->with('info', 'You have already completed this quiz. Here is your review.');
         }

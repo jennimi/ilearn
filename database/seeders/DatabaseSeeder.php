@@ -44,14 +44,14 @@ class DatabaseSeeder extends Seeder
 
         Admin::create([
             'name' => $admin1->name,
-            'profile_picture' => '/images/admin1.jpg',
+            'profile_picture' => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
             'email' => $admin1->email,
             'password' => $admin1->password,
         ]);
 
         Admin::create([
             'name' => $admin2->name,
-            'profile_picture' => '/images/admin2.jpg',
+            'profile_picture' => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
             'email' => $admin2->email,
             'password' => $admin2->password,
         ]);
@@ -73,7 +73,7 @@ class DatabaseSeeder extends Seeder
 
         Teacher::create([
             'name' => $teacher1->name,
-            'profile_picture' => '/images/teacher1.jpg',
+            'profile_picture' => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
             'email' => $teacher1->email,
             'password' => $teacher1->password,
             'phone_number' => '1234567890',
@@ -83,7 +83,7 @@ class DatabaseSeeder extends Seeder
 
         Teacher::create([
             'name' => $teacher2->name,
-            'profile_picture' => '/images/teacher2.jpg',
+            'profile_picture' => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
             'email' => $teacher2->email,
             'password' => $teacher2->password,
             'phone_number' => '0987654321',
@@ -131,7 +131,7 @@ class DatabaseSeeder extends Seeder
         Student::create([
             'name' => $student1->name,
             'nik' => '23455',
-            'profile_picture' => '/images/student1.jpg',
+            'profile_picture' => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
             'email' => $student1->email,
             'password' => $student1->password,
             'phone_number' => '1122334455',
@@ -144,7 +144,7 @@ class DatabaseSeeder extends Seeder
         Student::create([
             'name' => $student2->name,
             'nik' => '2346',
-            'profile_picture' => '/images/student2.jpg',
+            'profile_picture' => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
             'email' => $student2->email,
             'password' => $student2->password,
             'phone_number' => '5566778899',

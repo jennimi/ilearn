@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('description');
             $table->integer('duration')->nullable();
             $table->timestamp('deadline')->nullable();
+            $table->boolean('visible')->default(true);
         });
     }
 

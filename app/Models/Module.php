@@ -53,4 +53,15 @@ class Module extends Model
         return $this->hasMany(Assignment::class, 'module_id', 'id');
     }
 
+    // public function classrooms()
+    // {
+    //     return $this->hasManyThrough(
+    //         Classroom::class, // Final model
+    //         Course::class,    // Intermediate model
+    //         'id',             // Foreign key on the courses table (module_id in modules table)
+    //         'course_id',             // Foreign key on the classrooms table
+    //         'id',      // Local key on the modules table
+    //         'id'    // Local key on the courses table
+    //     );
+    // }
 }

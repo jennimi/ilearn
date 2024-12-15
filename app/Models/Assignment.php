@@ -17,8 +17,8 @@ class Assignment extends Model
     protected $casts = [
         'deadline' => 'datetime',
     ];
-    
-    protected $fillable = ['module_id', 'title', 'description', 'deadline'];
+
+    protected $fillable = ['module_id', 'title', 'description', 'deadline', 'visible'];
 
     public function module(): BelongsTo
     {
@@ -26,7 +26,7 @@ class Assignment extends Model
     }
 
     // Salah
-    public function submission(): HasMany
+    public function submissions(): HasMany
     {
         return $this->hasMany(Submission::class, 'assignment_id', 'id');
     }
@@ -35,4 +35,6 @@ class Assignment extends Model
     {
         return $this->deadline && Carbon::now()->greaterThan($this->deadline);
     }
+
+    
 }

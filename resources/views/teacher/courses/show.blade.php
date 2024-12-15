@@ -15,8 +15,7 @@
                             <span class="badge bg-info text-dark mt-2">{{ $classroom->pivot->day }}:
                                 {{ $classroom->pivot->start_time }} - {{ $classroom->pivot->end_time }}</span>
                         </div>
-                        <a href="{{ route('teacher.leaderboard')}}"
-                            class="btn btn-primary btn-md">View Leaderboard</a>
+                        <a href="{{ route('teacher.leaderboard') }}" class="btn btn-primary btn-md">View Leaderboard</a>
                     </li>
                 @endforeach
             </ul>
@@ -125,7 +124,7 @@
                             @endif
 
                             <!-- Quizzes Section -->
-                            <h5 class="text-secondary">Quizzes</h5>
+                            <h5 class="text-secondary mt-4">Quizzes</h5>
                             @if ($module->quizzes->isEmpty())
                                 <p class="text-danger">No quizzes available for this module.</p>
                             @else
@@ -135,20 +134,131 @@
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div>
                                                     <strong>{{ $quiz->title }}</strong>
-                                                    <p class="text-muted">{{ $quiz->description }}</p>
+                                                    <span
+                                                        class="badge bg-{{ $quiz->visible ? 'success' : 'danger' }} ms-2">
+                                                        {{ $quiz->visible ? 'Visible' : 'Hidden' }}
+                                                    </span>
                                                 </div>
-                                                <a href="{{ route('teacher.quizzes.show', $quiz->id) }}"
-                                                    class="btn btn-outline-success btn-sm">
-                                                    View Quiz
-                                                </a>
+                                                <div>
+                                                    <a href="{{ route('teacher.quizzes.show', $quiz->id) }}"
+                                                        class="btn btn-outline-success btn-sm">
+                                                        View Quiz
+                                                    </a>
+                                                    <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#toggleVisibilityModalQuiz{{ $quiz->id }}">
+                                                        Update Visibility
+                                                    </button>
+                                                </div>
                                             </div>
                                         </li>
+
+                                        <div class="modal fade" id="toggleVisibilityModalQuiz{{ $quiz->id }}" tabindex="-1"
+                                            aria-labelledby="toggleVisibilityModalLabelQuiz{{ $quiz->id }}"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <form method="POST"
+                                                    action="{{ route('teacher.quizzes.toggleVisibility', $quiz->id) }}">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="toggleVisibilityModalLabelQuiz{{ $quiz->id }}">
+                                                                Update Quiz Visibility
+                                                            </h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are you sure you want to
+                                                            <strong>{{ $quiz->visible ? 'hide' : 'show' }}</strong> this quiz to
+                                                            students?
+                                                        </div>
+                                                        <input type="hidden" name="visible"
+                                                            value="{{ $quiz->visible ? 0 : 1 }}">
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Cancel</button>
+                                                            <button type="submit" class="btn btn-primary">Confirm</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
                                     @endforeach
                                 </ul>
                             @endif
 
 
+                            <!-- Assignments Section -->
+                            <h5 class="text-secondary mt-4">Assignments</h5>
+                            @if ($module->assignments->isEmpty())
+                                <p class="text-danger">No assignments available for this module.</p>
+                            @else
+                                <ul class="list-group">
+                                    @foreach ($module->assignments as $assignment)
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <strong>{{ $assignment->title }}</strong>
+                                                    <span
+                                                        class="badge bg-{{ $assignment->visible ? 'success' : 'danger' }} ms-2">
+                                                        {{ $assignment->visible ? 'Visible' : 'Hidden' }}
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <a href="{{ route('teacher.assignments.show', $assignment->id) }}"
+                                                        class="btn btn-outline-success btn-sm">
+                                                        View Assignment
+                                                    </a>
+                                                    <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#toggleVisibilityModalAssignment{{ $assignment->id }}">
+                                                        Update Visibility
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </li>
 
+                                        <div class="modal fade" id="toggleVisibilityModalAssignment{{ $assignment->id }}"
+                                            tabindex="-1"
+                                            aria-labelledby="toggleVisibilityModalLabelAssignment{{ $assignment->id }}"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <form method="POST"
+                                                    action="{{ route('teacher.assignments.toggleVisibility', $assignment->id) }}">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="toggleVisibilityModalLabelAssignment{{ $assignment->id }}">
+                                                                Update Assignment Visibility
+                                                            </h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are you sure you want to
+                                                            <strong>{{ $assignment->visible ? 'hide' : 'show' }}</strong> this
+                                                            assignment to students?
+                                                        </div>
+                                                        <input type="hidden" name="visible"
+                                                            value="{{ $assignment->visible ? 0 : 1 }}">
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Cancel</button>
+                                                            <button type="submit" class="btn btn-primary">Confirm</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </ul>
+                            @endif
+                            
                             <!-- Add Lesson Modal -->
                             <div class="modal fade" id="addLessonModal{{ $module->id }}" tabindex="-1"
                                 aria-labelledby="addLessonModalLabel{{ $module->id }}" aria-hidden="true">
@@ -191,7 +301,6 @@
                                     </form>
                                 </div>
                             </div>
-
 
                             <!-- Link to Discussion -->
                             @if ($module->discussion)

@@ -13,6 +13,8 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -31,6 +33,10 @@
 
 
     <style>
+        body, html {
+            font-family: 'Poppins', sans-serif;
+        }
+
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
             /* For Chrome, Safari, and Opera */
@@ -44,10 +50,10 @@
         }
 
         .tw-bg-image {
-            background-image: url('https://michiganvirtual.org/wp-content/uploads/2019/11/blended-v-student-centered-learning-1024x581.jpg');
+            background-image: url('https://img.freepik.com/premium-vector/texture-background-hd-vector-image_887635-52.jpg');
             background-size: cover;
             background-position: center;
-            filter: blur(8px);
+            filter: blur(5px);
             position: absolute;
             top: 0;
             left: 0;
@@ -103,6 +109,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
+                        <img src="{{ asset('images/iLearn-logo.png') }}" alt="iLearn Logo" class="tw-w-10 tw-h-10 tw-me-2">
                         @if (auth()->check() && auth()->user()->role === 'admin' && auth()->user()->admin)
                             <a class="nav-link text-white" href="{{ route('admin.dashboard') }}">iLearn</a>
                         @elseif(auth()->check() && auth()->user()->role === 'teacher' && auth()->user()->teacher)
@@ -110,7 +117,7 @@
                         @elseif(auth()->check() && auth()->user()->role === 'student' && auth()->user()->student)
                             <a class="nav-link text-white" href="{{ route('student.dashboard') }}">iLearn</a>
                         @else
-                            <a class="nav-link text-white" href="{{ route('home') }}">Dashboard</a>
+                            <a class="nav-link text-white" href="{{ route('home') }}">iLearn</a>
                         @endif
                     </ul>
 

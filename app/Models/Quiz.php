@@ -20,7 +20,8 @@ class Quiz extends Model
         'title',
         'description',
         'deadline',
-        'duration'
+        'duration',
+        'visible'
     ];
 
     public function isDeadlinePassed()

@@ -35,4 +35,52 @@ class AssignmentController extends Controller
         return redirect()->route('student.courses.show', $assignment->module->course->id)
             ->with('success', 'Assignment submitted successfully!');
     }
+
+    public function toggleVisibility($id)
+    {
+        $assignment = Assignment::findOrFail($id);
+        $assignment->update(['visible' => !$assignment->visible]);
+
+        return redirect()->back()->with('success', 'Assignment visibility updated successfully.');
+    }
+
+    public function teacherShow($id)
+    {
+        // Retrieve the assignment and its associated submissions
+        $assignment = Assignment::with(['submissions.student'])->findOrFail($id);
+
+        // Fetch classrooms through the course of the module
+        $classrooms = $assignment->module->course->classrooms()->with('students')->get();
+
+        return view('teacher.assignments.show', compact('assignment', 'classrooms'));
+    }
+
+
+    public function edit($id)
+    {
+        $assignment = Assignment::findOrFail($id);
+        return view('teacher.assignments.edit', compact('assignment'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $assignment = Assignment::findOrFail($id);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'deadline' => 'required|date|after:today',
+            'visible' => 'required|boolean',
+        ]);
+
+        $assignment->update([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'deadline' => $request->input('deadline'),
+            'visible' => $request->input('visible'),
+        ]);
+
+        return redirect()->route('teacher.assignments.show', $assignment->id)
+            ->with('success', 'Assignment updated successfully!');
+    }
 }

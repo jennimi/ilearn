@@ -10,14 +10,20 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\ClassroomController;
+use App\Http\Controllers\SubmissionController;
+
 use App\Http\Controllers\GeminiController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::match(['GET', 'POST'], '/gemini', [GeminiController::class, 'askGemini'])->name('gemini.ask');
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
+});
 
+Route::match(['GET', 'POST'], '/gemini', [GeminiController::class, 'askGemini'])->name('gemini.ask');
 
 Auth::routes();
 
@@ -57,9 +63,14 @@ Route::middleware(['auth'])->prefix('teacher')->group(function () {
     Route::get('modules/{id}/quizzes/create', [QuizController::class, 'createQuiz'])->name('teacher.quizzes.create');
     Route::get('quizzes/{id}', [QuizController::class, 'showQuiz'])->name('teacher.quizzes.show');
     Route::get('leaderboard', [TeacherController::class, 'leaderboard'])->name('teacher.leaderboard');
+    Route::patch('quizzes/{id}/toggle-visibility', [QuizController::class, 'toggleVisibility'])->name('teacher.quizzes.toggleVisibility');
+    Route::patch('assignments/{id}/toggle-visibility', [AssignmentController::class, 'toggleVisibility'])->name('teacher.assignments.toggleVisibility');
+    Route::get('assignments/{id}', [AssignmentController::class, 'teacherShow'])->name('teacher.assignments.show');
+    Route::get('assignments/{id}/edit', [AssignmentController::class, 'edit'])->name('teacher.assignments.edit');
+    Route::put('assignments/{id}', [AssignmentController::class, 'update'])->name('teacher.assignments.update');
+    Route::get('submissions/{id}', [SubmissionController::class, 'show'])->name('teacher.submissions.show');
+    Route::put('submissions/{id}/update', [SubmissionController::class, 'update'])->name('teacher.submissions.update');
 });
-
-use App\Http\Controllers\ClassroomController;
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('users/show', [AdminController::class, 'showUsers'])->name('admin.users.index');

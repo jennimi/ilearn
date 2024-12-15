@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('title');
             $table->longText('description');
             $table->timestamp('deadline')->nullable();
+            $table->boolean('visible')->default(true);
         });
     }
 
