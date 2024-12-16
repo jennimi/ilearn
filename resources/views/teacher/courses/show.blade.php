@@ -362,6 +362,7 @@
                                 </div>
                             </div>
 
+
                             <!-- Assignments Section -->
                             <h5 class="text-secondary mt-4">Assignments</h5>
                             @if ($module->assignments->isEmpty())
@@ -597,7 +598,10 @@
 
     <!-- Add JavaScript -->
     <script>
+        // Function to handle the form submission and show the spinner
         function showLoadingSpinner(event) {
+            console.log('Spinner function triggered'); // Debugging log
+
             // Prevent the default form submission to observe the spinner in action
             event.preventDefault();
 
@@ -605,14 +609,31 @@
             const button = document.getElementById('generateQuizButton');
 
             // Disable the button and change its content to a spinner
-            button.disabled = true;
-            button.innerHTML = `
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Generating...
-        `;
+            if (button) {
+                button.disabled = true;
+                button.innerHTML = `
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Generating...
+                `;
+            }
 
             // Optionally submit the form after showing the spinner
-            event.target.submit();
+            // Uncomment the next line if you want the form to be submitted
+            // after the spinner is displayed.
+            // event.target.submit();
         }
+
+        // Function to reset the button state when the page loads
+        window.onload = function () {
+            console.log('Page loaded, resetting button state'); // Debugging log
+
+            // Reset the submit button to its original state
+            const button = document.getElementById('generateQuizButton');
+            if (button) {
+                button.disabled = false;
+                button.innerHTML = 'Generate Quiz'; // Reset the content
+            }
+        };
     </script>
+
 @endsection
