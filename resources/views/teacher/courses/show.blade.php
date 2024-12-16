@@ -322,7 +322,7 @@
                                 aria-labelledby="generateQuizModalLabel{{ $module->id }}" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <form action="{{ route('teacher.quizzes.generate', $module->id) }}" method="POST"
-                                        enctype="multipart/form-data">
+                                        enctype="multipart/form-data" onsubmit="showLoadingSpinner(event)">
                                         @csrf
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -353,7 +353,9 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Cancel</button>
-                                                <button type="submit" class="btn btn-primary">Generate Quiz</button>
+                                                <button type="submit" id="generateQuizButton" class="btn btn-primary">
+                                                    <i class="bi bi-lightbulb"></i> Generate Quiz
+                                                </button>
                                             </div>
                                         </div>
                                     </form>
@@ -592,4 +594,25 @@
             </div>
         </div>
     </div>
+
+    <!-- Add JavaScript -->
+    <script>
+        function showLoadingSpinner(event) {
+            // Prevent the default form submission to observe the spinner in action
+            event.preventDefault();
+
+            // Get the submit button
+            const button = document.getElementById('generateQuizButton');
+
+            // Disable the button and change its content to a spinner
+            button.disabled = true;
+            button.innerHTML = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Generating...
+        `;
+
+            // Optionally submit the form after showing the spinner
+            event.target.submit();
+        }
+    </script>
 @endsection
