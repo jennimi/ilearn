@@ -142,7 +142,7 @@ class GeminiController extends Controller
     private function makeChoices(string $query, string $question)
     {
         $makeAnswer =
-"Based on the given context, generate a single string multiple-choice question with exactly 4 distinct answer options, ensuring only one correct answer, which must always appear as the first option. Each choice must be unique, concise, and clear, avoiding redundancy or ambiguity. Choices should not be preceded by letters or numbers. Separate the choices with a vertical bar (|). Do not include any additional comments, repeated meanings, or explanations in the output, or array formatting in the output.";
+            "Based on the given context, generate a single string multiple-choice question with exactly 4 distinct answer options, ensuring only one correct answer, which must always appear as the first option. Each choice must be unique, concise, and clear, avoiding redundancy or ambiguity. Choices should not be preceded by letters or numbers. Separate the choices with a vertical bar (|). Do not include any additional comments, repeated meanings, limit each answer to less than 255 characters, or explanations in the output, or array formatting in the output.";
 
         $fullQuery = $query . "\n" . $question . "\n" . $makeAnswer;
         $answers = $this->callGeminiApi($fullQuery);
@@ -161,7 +161,10 @@ class GeminiController extends Controller
             // For demonstration purposes, we will just hardcode answers and options
             $choices = $this->makeChoices($query, $question);
             $choices_shuffled = $choices; // Copy the original array
-            shuffle($choices_shuffled); // Shuffle the copy
+
+            for ($i = 0; $i < 27; $i++) {
+                shuffle($choices_shuffled); // Shuffle the copy
+            }
 
             $questionArray[] = [
                 'question' => $question,
@@ -216,10 +219,10 @@ class GeminiController extends Controller
         // ]);
 
         return view('teacher.quizzes.edit', compact('quiz'));
-
     }
 
-    public function createQuiz(Request $request, $id, $processedQuestions) {
+    public function createQuiz(Request $request, $id, $processedQuestions)
+    {
         $module = Module::findOrFail($id);
 
         $quiz = $module->quizzes()->create([
