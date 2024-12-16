@@ -175,6 +175,7 @@
                             <li class="tw-mb-6">
                                 <p class="tw-font-medium">{{ $reply->user->name }} replied:</p>
                                 <p class="tw-italic tw-text-sm">"{{ Str::limit($reply->comment, 100) }}"</p>
+                                <p class="tw-text-xs text-muted">{{ $reply->discussion->module->course->title }} | {{ $reply->discussion->module->title }} | {{ $reply->discussion->module->lessons->first()->title }}</p>
                                 <a href="{{ route('discussions.show', $reply->discussion->id) }}"
                                     class="tw-text-yellow-300 hover:tw-underline">View Discussion</a>
                                 <hr class="tw-my-2">

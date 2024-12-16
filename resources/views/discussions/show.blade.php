@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1>{{ $discussion->title }}</h1>
+        <h1>{{ $discussion->title }} | {{ $discussion->module->course->title }}</h1>
         <p>Module: {{ $discussion->module->title }}</p>
 
         <h3>Comments</h3>
