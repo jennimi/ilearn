@@ -2,18 +2,30 @@
 
 @section('content')
     <div class="container">
+        <div>
+            <a href="{{ route('student.courses.show', $quiz->module->course->id) }}" class="btn btn-warning me-2"><i
+                    class="bi bi-arrow-left tw-me-2 tw-fs-4 tw-group-hover:tw-text-blue-500"></i>
+                <span class="tw-group-hover:tw-underline">Back</span></a>
+        </div>
         <h1 class="text-primary">{{ $quiz->title }} - Review</h1>
 
         {{-- Fetch the student's quiz result --}}
         @php
             $quizResult = $quiz->quizResults->firstWhere('student_id', Auth::user()->student->id) ?? null;
             $score = $quizResult ? $quizResult->score : null;
-            $badgeClass = $score === null ? 'bg-secondary' : ($score < 50 ? 'bg-danger' : ($score <= 80 ? 'bg-warning text-dark' : 'bg-success'));
+            $badgeClass =
+                $score === null
+                    ? 'bg-secondary'
+                    : ($score < 50
+                        ? 'bg-danger'
+                        : ($score <= 80
+                            ? 'bg-warning text-dark'
+                            : 'bg-success'));
         @endphp
 
         {{-- Display score in a badge or fallback message --}}
         <p>
-            <strong>Your Score:</strong> 
+            <strong>Your Score:</strong>
             @if ($score !== null)
                 <span class="badge {{ $badgeClass }}">{{ $score }}%</span>
             @else
@@ -37,7 +49,7 @@
                     @foreach ($question->choices as $choice)
                         <div class="mb-2">
                             <span>{{ $choice->choice_text }}</span>
-                            
+
                             {{-- Check if the student selected this choice --}}
                             @php
                                 $selectedAnswer = $question->answers
@@ -54,9 +66,7 @@
                 @elseif ($question->question_type == 'short_answer')
                     {{-- Handle short answer --}}
                     @php
-                        $studentAnswer = $question->answers
-                            ->where('student_id', Auth::user()->student->id)
-                            ->first();
+                        $studentAnswer = $question->answers->where('student_id', Auth::user()->student->id)->first();
                     @endphp
                     <p>
                         <strong>Your Answer:</strong> {{ $studentAnswer->answer_text ?? 'Not Answered' }}

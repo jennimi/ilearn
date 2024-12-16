@@ -2,6 +2,12 @@
 
 @section('content')
     <div class="container">
+        <div>
+            <button onclick="window.history.back()" class="btn btn-warning me-2">
+                <i class="bi bi-arrow-left tw-me-2 tw-fs-4 tw-group-hover:tw-text-blue-500"></i>
+                <span class="tw-group-hover:tw-underline">Back</span>
+            </button>
+        </div>        
         <h1>{{ $quiz->title }}</h1>
         <p>{{ $quiz->description }}</p>
 
