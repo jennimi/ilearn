@@ -5,6 +5,12 @@
         <h1>{{ $quiz->title }}</h1>
         <p>{{ $quiz->description }}</p>
 
+        <div class="d-flex justify-content-end mb-4">
+            <a href="{{ route('teacher.quizzes.edit', $quiz->id) }}" class="btn btn-outline-primary">
+                <i class="bi bi-pencil"></i> Edit Quiz
+            </a>
+        </div>
+
         <h3>Questions</h3>
         @if ($quiz->questions->isEmpty())
             <p>No questions added yet.</p>

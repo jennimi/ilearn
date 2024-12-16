@@ -70,6 +70,130 @@ class QuizController extends Controller
             ->with('success', 'Quiz created successfully!');
     }
 
+    public function edit($id)
+    {
+        $quiz = Quiz::with('questions.choices')->findOrFail($id);
+        return view('teacher.quizzes.edit', compact('quiz'));
+    }
+
+    public function updateQuiz(Request $request, $quizId)
+    {
+        $quiz = Quiz::with('questions.choices')->findOrFail($quizId);
+
+        // Validate the request
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'duration' => 'nullable|integer|min:1',
+            'deadline' => 'required|date|after:now',
+            'questions' => 'nullable|json',
+        ]);
+
+        // Update quiz details
+        $quiz->update([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'duration' => $request->input('duration'),
+            'deadline' => $request->input('deadline'),
+        ]);
+
+        // Handle questions if provided
+        if ($request->has('questions')) {
+            $questions = json_decode($request->input('questions'), true);
+
+            // Keep track of processed question IDs to delete others later
+            $processedQuestionIds = [];
+
+            foreach ($questions as $questionData) {
+                $questionId = $questionData['id'] ?? null; // Check if it's an existing question
+                $choices = $questionData['choices'] ?? [];
+                $correctAnswers = $questionData['correct_answers'] ?? [];
+                $questionPoints = $questionData['points'] ?? 1;
+                $imagePath = null;
+
+                if (!empty($questionData['question_image'])) {
+                    $imageFile = base64_decode($questionData['question_image']);
+                    $imageName = 'question_' . uniqid() . '.png';
+                    $imagePath = 'question_images/' . $imageName;
+
+                    Storage::disk('public')->put($imagePath, $imageFile);
+                }
+
+                if ($questionId) {
+                    // Update existing question
+                    $question = $quiz->questions()->findOrFail($questionId);
+                    $question->update([
+                        'question_text' => $questionData['question_text'],
+                        'question_type' => $questionData['question_type'],
+                        'points' => $questionPoints,
+                        'image' => $imagePath ?? $question->image,
+                    ]);
+
+                    // Update choices
+                    $processedChoiceIds = [];
+                    foreach ($choices as $index => $choiceText) {
+                        $choice = $question->choices()->updateOrCreate(
+                            ['id' => $choiceText['id'] ?? null], // Match by ID if available
+                            [
+                                'choice_text' => $choiceText,
+                                'is_correct' => in_array($index, $correctAnswers),
+                            ]
+                        );
+                        $processedChoiceIds[] = $choice->id;
+                    }
+
+                    // Delete removed choices
+                    $question->choices()->whereNotIn('id', $processedChoiceIds)->delete();
+                } else {
+                    // Create new question
+                    $question = $quiz->questions()->create([
+                        'question_text' => $questionData['question_text'],
+                        'question_type' => $questionData['question_type'],
+                        'points' => $questionPoints,
+                        'image' => $imagePath,
+                    ]);
+
+                    foreach ($choices as $index => $choiceText) {
+                        $question->choices()->create([
+                            'choice_text' => $choiceText,
+                            'is_correct' => in_array($index, $correctAnswers),
+                        ]);
+                    }
+                }
+
+                $processedQuestionIds[] = $question->id;
+            }
+
+            // Delete questions not included in the update
+            $quiz->questions()->whereNotIn('id', $processedQuestionIds)->delete();
+        }
+
+        return redirect()
+            ->route('teacher.quizzes.show', $quiz->id)
+            ->with('success', 'Quiz updated successfully!');
+    }
+
+    public function destroyQuiz($id)
+    {
+        // Find the quiz by ID
+        $quiz = Quiz::with('questions.choices')->findOrFail($id);
+
+        // Delete all associated questions and choices
+        foreach ($quiz->questions as $question) {
+            // Delete all choices associated with the question
+            $question->choices()->delete();
+
+            // Delete the question itself
+            $question->delete();
+        }
+
+        // Delete the quiz
+        $quiz->delete();
+
+        return redirect()
+            ->route('teacher.quizzes.index')
+            ->with('success', 'Quiz and all associated questions have been deleted successfully.');
+    }
 
 
     public function showQuiz($id)

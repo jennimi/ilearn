@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Module;
+use App\Models\Comment;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,8 +31,21 @@ class TeacherController extends Controller
 
         $recentCourseId = request()->cookie('recent_course_id' . Auth::id());
         $recentCourse = $recentCourseId ? Course::find($recentCourseId) : null;
+        $recentComments = Comment::with(['discussion', 'user.student'])
+            ->whereIn('discussion_id', function ($query) use ($teacher) {
+                $query->select('id')
+                    ->from('discussions')
+                    ->whereIn('module_id', function ($subquery) use ($teacher) {
+                        $subquery->select('id')
+                            ->from('modules')
+                            ->whereIn('course_id', $teacher->courses->pluck('id'));
+                    });
+            })
+            ->latest()
+            ->take(5) // Limit to recent 5 comments
+            ->get();
 
-        return view('teacher.dashboard', compact('teacher', 'todaySchedules', 'allCourses', 'recentCourse'));
+        return view('teacher.dashboard', compact('teacher', 'todaySchedules', 'allCourses', 'recentCourse', 'recentComments'));
     }
 
     public function showCourse($id)
@@ -62,14 +76,14 @@ class TeacherController extends Controller
     public function storeLesson(Request $request, $moduleId)
     {
         $module = Module::findOrFail($moduleId);
-    
+
         // Validate input data
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|file|mimes:pdf|max:2048', // Ensure it's a PDF file
             'visible' => 'required|boolean',
         ]);
-    
+
         // Handle file upload
         $filePath = $request->file('content')->store('lessons', 'public');
         // Create the lesson with the file path
@@ -78,19 +92,20 @@ class TeacherController extends Controller
             'content' => $filePath, // Save the file path in the database
             'visible' => $request->input('visible'),
         ]);
-    
+
         // Automatically create a discussion for the lesson
         $lesson->discussion()->create([
             'teacher_id' => Auth::user()->teacher->id,
             'title' => "Discussion for {$lesson->title}",
             'description' => "Discuss the content of {$lesson->title} here.",
         ]);
-    
+
         return redirect()->route('teacher.courses.show', $module->course->id)
             ->with('success', 'Lesson added successfully!');
     }
 
-    public function leaderboard(){
+    public function leaderboard()
+    {
         return view('teacher.courses.leaderboard');
     }
 }

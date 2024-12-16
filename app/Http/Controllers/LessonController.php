@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Module;
 use App\Models\Lesson;
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Http\Request;
 
@@ -37,10 +38,30 @@ class LessonController extends Controller
     {
         $lesson = Lesson::findOrFail($id);
 
+        if ($request->hasFile('content')) {
+            if ($lesson->content) {
+                Storage::delete($lesson->content);
+            }
+            $validated['content'] = $request->file('content')->store('lessons');
+        }
+
         $lesson->update([
-            'visible' => $request->input('visible'),
+            'title' => $request['title'],
+            'visible' => $request['visible'],
+            'content' => $validated['content'] ?? $lesson->content,
         ]);
 
-        return redirect()->back()->with('success', 'Lesson visibility updated successfully.');
+        return redirect()->back()->with('success', 'Lesson updated successfully.');
+    }
+
+
+    public function destroy($id)
+    {
+        $lesson = Lesson::findOrFail($id);
+        if ($lesson->content) {
+            Storage::delete($lesson->content);
+        }
+        $lesson->delete();
+        return redirect()->back()->with('success', 'Lesson deleted successfully.');
     }
 }

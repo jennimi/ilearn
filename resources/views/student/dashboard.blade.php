@@ -111,7 +111,7 @@
                 <div class="tw-flex tw-flex-wrap tw-gap-6 tw-justify-center tw-mt-4">
                     @forelse ($allCourses as $course)
                         <a href="{{ route('student.courses.show', $course->id) }}" class="tw-no-underline">
-                            <x-course_card :course-name="$course->title" :course-description="$course->description" />
+                            <x-course_card :course-name="$course->title" :course-description="$course->description" :course-image="$course->image ?? 'images/course/default.jpeg'"/>
                         </a>
                     @empty
                         <p class="tw-text-gray-700">No courses available.</p>
@@ -126,7 +126,7 @@
             <div class="tw-bg-blue-500 tw-p-6 tw-rounded-lg tw-shadow-lg">
                 <h2 class="tw-font-semibold tw-text-white tw-text-lg">Personal Info</h2>
                 <div class="tw-flex tw-items-center tw-gap-6 tw-mt-4">
-                    <img src="{{ $student->profile_picture ? asset('storage/' . $student->profile_picture) : 'https://via.placeholder.com/200x150' }}"
+                    <img src="{{ "$student->profile_picture" ? asset($student->profile_picture) : 'https://via.placeholder.com/200x150' }}"
                         alt="Profile Picture" class="tw-w-24 tw-h-24 tw-object-cover tw-rounded-full">
                     <div class="tw-text-white">
                         <h3 class="tw-text-xl">{{ $student->name }}</h3>

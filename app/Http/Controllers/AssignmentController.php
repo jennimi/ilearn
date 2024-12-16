@@ -99,4 +99,15 @@ class AssignmentController extends Controller
 
         return redirect()->back()->with('success', 'Assignment added successfully.');
     }
+
+    public function destroy($id)
+    {
+        $assignment = Assignment::findOrFail($id);
+
+        $assignment->submissions()->delete();
+
+        $assignment->delete();
+
+        return redirect()->back()->with('success', 'Assignment and all related submissions deleted successfully.');
+    }
 }

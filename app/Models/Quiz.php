@@ -15,6 +15,10 @@ class Quiz extends Model
     /** @use HasFactory<\Database\Factories\QuizFactory> */
     use HasFactory;
 
+    protected $casts = [
+        'deadline' => 'datetime',
+    ];
+
     protected $fillable = [
         'module_id',
         'title',

@@ -12,6 +12,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\SubmissionController;
+use App\Http\Controllers\QuestionController;
 
 use App\Http\Controllers\GeminiController;
 
@@ -59,12 +60,15 @@ Route::middleware(['auth'])->prefix('teacher')->group(function () {
     Route::post('comments/{id}/reply', [CommentController::class, 'reply'])->name('teacher.comments.reply');
     Route::post('modules/{module}/lessons', [LessonController::class, 'store'])->name('teacher.lessons.store');
     Route::put('lessons/{id}/update', [LessonController::class, 'update'])->name('teacher.lessons.update');
+    Route::delete('lessons/{id}', [LessonController::class, 'destroy'])->name('teacher.lessons.destroy');
     Route::post('modules/{id}/quizzes', [QuizController::class, 'storeQuiz'])->name('teacher.quizzes.store');
     Route::get('modules/{id}/quizzes/create', [QuizController::class, 'createQuiz'])->name('teacher.quizzes.create');
     Route::get('quizzes/{id}', [QuizController::class, 'showQuiz'])->name('teacher.quizzes.show');
     Route::get('leaderboard', [TeacherController::class, 'leaderboard'])->name('teacher.leaderboard');
     Route::patch('quizzes/{id}/toggle-visibility', [QuizController::class, 'toggleVisibility'])->name('teacher.quizzes.toggleVisibility');
     Route::patch('assignments/{id}/toggle-visibility', [AssignmentController::class, 'toggleVisibility'])->name('teacher.assignments.toggleVisibility');
+    Route::put('assignments/{id}', [AssignmentController::class, 'update'])->name('teacher.assignments.update');
+    Route::delete('assignments/{id}', [AssignmentController::class, 'destroy'])->name('teacher.assignments.destroy');
     Route::get('assignments/{id}', [AssignmentController::class, 'teacherShow'])->name('teacher.assignments.show');
     Route::get('assignments/{id}/edit', [AssignmentController::class, 'edit'])->name('teacher.assignments.edit');
     Route::put('assignments/{id}', [AssignmentController::class, 'update'])->name('teacher.assignments.update');
@@ -72,6 +76,11 @@ Route::middleware(['auth'])->prefix('teacher')->group(function () {
     Route::put('submissions/{id}/update', [SubmissionController::class, 'update'])->name('teacher.submissions.update');
     Route::post('modules/{id}/generate-quiz', [GeminiController::class, 'generateQuiz'])->name('teacher.quizzes.generate');
     Route::post('/modules/{id}/assignments', [AssignmentController::class, 'store'])->name('teacher.assignments.store');
+    Route::get('quizzes/{id}/edit', [QuizController::class, 'edit'])->name('teacher.quizzes.edit');
+    Route::put('quizzes/{id}', [QuizController::class, 'update'])->name('teacher.quizzes.update');
+    Route::delete('quizzes/{id}', [QuizController::class, 'destroyQuiz'])->name('teacher.quizzes.destroy');
+    Route::delete('questions/{id}', [QuestionController::class, 'destroy'])->name('teacher.questions.destroy');
+    Route::put('questions/{id}', [QuestionController::class, 'update'])->name('teacher.questions.update');
 });
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {

@@ -38,7 +38,7 @@ class AdminController extends Controller
     {
         // Get the 'type' parameter from the request
         $type = $request->input('type', 'students'); // Default to 'students'
-    
+
         // Fetch users based on the type
         if ($type === 'students') {
             $users = Student::paginate(6);
@@ -47,11 +47,11 @@ class AdminController extends Controller
         } else {
             $users = collect(); // Empty collection if type is invalid
         }
-    
+
         // Pass the data to the view
         return view('admin.users_index', compact('users', 'type'));
     }
-    
+
     // Create Users
     public function showUserCreationForm()
     {
@@ -152,12 +152,27 @@ class AdminController extends Controller
             ]);
         }
 
+        $images = [
+            'images/course/image1.jpeg',
+            'images/course/image2.jpeg',
+            'images/course/image3.jpeg',
+            'images/course/image4.jpeg',
+            'images/course/image5.jpeg',
+            'images/course/image6.jpeg',
+            'images/course/image7.jpeg',
+            'images/course/image8.jpeg',
+            'images/course/image9.jpeg',
+        ];
+
+        $randomImage = $images[array_rand($images)];
+
         $course = Course::create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'start_date' => $request->input('start_date'),
             'end_date' => $request->input('end_date'),
             'teacher_id' => $request->input('teacher_id'),
+            'image' => $randomImage
         ]);
 
         foreach ($request->input('classrooms') as $classroomId) {

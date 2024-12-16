@@ -19,6 +19,7 @@ class Course extends Model
         'description',
         'start_date',
         'end_date',
+        'image'
     ];
 
     protected static function booted()
@@ -40,7 +41,7 @@ class Course extends Model
                 Discussion::create([
                     'module_id' => $newModule->id,
                     'title' => "Discussion for {$module['title']}",
-                    'description' => "This is the discussion forum for {$module['title']}. Feel free to ask questions and engage in discussions.",
+                    // 'description' => "This is the discussion forum for {$module['title']}. Feel free to ask questions and engage in discussions.",
                 ]);
             }
         });

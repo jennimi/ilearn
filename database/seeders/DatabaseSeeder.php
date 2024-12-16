@@ -339,6 +339,7 @@ class DatabaseSeeder extends Seeder
             'description' => 'Advanced mathematics for senior high school.',
             'start_date' => '2024-01-01',
             'end_date' => '2025-06-30',
+            'image' => 'images/course/image1.jpeg',
         ]);
 
         $course2 = Course::create([
@@ -347,6 +348,7 @@ class DatabaseSeeder extends Seeder
             'description' => 'Fundamentals of physics with practical examples.',
             'start_date' => '2024-01-01',
             'end_date' => '2025-06-30',
+            'image' => 'images/course/image2.jpeg',
         ]);
 
         $course3 = Course::create([
@@ -355,6 +357,7 @@ class DatabaseSeeder extends Seeder
             'description' => 'Introduction to organic and inorganic chemistry.',
             'start_date' => '2024-01-01',
             'end_date' => '2025-06-30',
+            'image' => 'images/course/image3.jpeg',
         ]);
 
         // Assign Courses to Classrooms with Schedules
@@ -364,13 +367,13 @@ class DatabaseSeeder extends Seeder
             'end_time' => '09:30:00',
         ]);
 
-        $classroom2->courses()->attach($course2->id, [
+        $classroom1->courses()->attach($course2->id, [
             'day' => 'Thursday',
             'start_time' => '10:00:00',
             'end_time' => '11:30:00',
         ]);
 
-        $classroom3->courses()->attach($course3->id, [
+        $classroom1->courses()->attach($course3->id, [
             'day' => 'Wednesday',
             'start_time' => '09:00:00',
             'end_time' => '10:30:00',
@@ -434,26 +437,26 @@ class DatabaseSeeder extends Seeder
             'teacher_id' => 2, // Teacher ID for the Physics course
             'title' => 'Discussion for Module 1',
         ]);
-        
+
         // Add Comments to the Discussion
         $comment4 = Comment::create([
             'user_id' => $student3->id, // Student Three
             'discussion_id' => $discussion2->id,
             'comment' => 'I didn’t quite understand the concept of force and motion. Could you explain it again?',
         ]);
-        
+
         $comment5 = Comment::create([
             'user_id' => $student4->id, // Student Four
             'discussion_id' => $discussion2->id,
             'comment' => 'I also had some trouble with this topic. Can anyone provide additional resources?',
         ]);
-        
+
         $comment6 = Comment::create([
             'user_id' => $student5->id, // Student Five
             'discussion_id' => $discussion2->id,
             'comment' => 'I think I understand it, but I’m not sure how to apply it in practical situations.',
         ]);
-        
+
         // Replies to Comments by Teacher
         Comment::create([
             'user_id' => $teacher2->id, // Teacher Two for Physics
@@ -461,46 +464,46 @@ class DatabaseSeeder extends Seeder
             'comment' => 'No problem! I will go over the topic in the next lecture and provide more detailed examples.',
             'parent_id' => $comment4->id, // Reply to comment4
         ]);
-        
+
         Comment::create([
             'user_id' => $teacher2->id, // Teacher Two for Physics
             'discussion_id' => $discussion2->id,
             'comment' => 'I’ll share additional reading materials and videos for this topic to help you.',
             'parent_id' => $comment5->id, // Reply to comment5
         ]);
-        
+
         Comment::create([
             'user_id' => $teacher2->id, // Teacher Two for Physics
             'discussion_id' => $discussion2->id,
             'comment' => 'Great! I’ll demonstrate some real-life examples during the next class to help clarify things.',
             'parent_id' => $comment6->id, // Reply to comment6
         ]);
-        
+
         $discussion3 = Discussion::create([
             'module_id' => 7, // Module 7 for the Chemistry course
             'teacher_id' => 3, // Teacher ID for the Chemistry course
             'title' => 'Discussion for Module 1',
         ]);
-        
+
         // Add Comments to the Discussion
         $comment7 = Comment::create([
             'user_id' => $student6->id, // Student Six
             'discussion_id' => $discussion3->id,
             'comment' => 'I’m having trouble understanding the reaction mechanisms. Could someone clarify?',
         ]);
-        
+
         $comment8 = Comment::create([
             'user_id' => $student7->id, // Student Seven
             'discussion_id' => $discussion3->id,
             'comment' => 'The topic is a bit confusing to me as well. Any suggested reading to get a better grasp?',
         ]);
-        
+
         $comment9 = Comment::create([
             'user_id' => $student8->id, // Student Eight
             'discussion_id' => $discussion3->id,
             'comment' => 'Can anyone explain how the principles of organic chemistry apply to everyday life?',
         ]);
-        
+
         // Replies to Comments by Teacher
         Comment::create([
             'user_id' => $teacher3->id, // Teacher Three for Chemistry
@@ -508,21 +511,21 @@ class DatabaseSeeder extends Seeder
             'comment' => 'Absolutely! I will explain the reaction mechanisms more thoroughly in the next class and provide examples.',
             'parent_id' => $comment7->id, // Reply to comment7
         ]);
-        
+
         Comment::create([
             'user_id' => $teacher3->id, // Teacher Three for Chemistry
             'discussion_id' => $discussion3->id,
             'comment' => 'I’ll upload additional readings and videos on reaction mechanisms to help you understand better.',
             'parent_id' => $comment8->id, // Reply to comment8
         ]);
-        
+
         Comment::create([
             'user_id' => $teacher3->id, // Teacher Three for Chemistry
             'discussion_id' => $discussion3->id,
             'comment' => 'That’s a great question! I will discuss real-world applications of organic chemistry in the next lecture.',
             'parent_id' => $comment9->id, // Reply to comment9
         ]);
-        
+
 
         $lesson1 = Lesson::create([
             'title' => 'Introduction to Mathematics',
