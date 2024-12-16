@@ -82,7 +82,7 @@
                                             <div class="choices">
                                                 @foreach ($question->choices as $choice)
                                                     <div class="form-check fancy-input">
-                                                        <input class="form-check-input" type="radio"
+                                                        <input class="form-check-input-take" type="radio"
                                                             name="answers[{{ $question->id }}]"
                                                             value="{{ $choice->id }}" id="choice{{ $choice->id }}">
                                                         <label class="form-check-label radio"
@@ -96,7 +96,7 @@
                                             <div class="choices">
                                                 @foreach ($question->choices as $choice)
                                                     <div class="form-check fancy-input">
-                                                        <input class="form-check-input" type="checkbox"
+                                                        <input class="form-check-input-take" type="checkbox"
                                                             name="answers[{{ $question->id }}][]"
                                                             value="{{ $choice->id }}" id="choice{{ $choice->id }}">
                                                         <label class="form-check-label checkbox"
