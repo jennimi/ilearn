@@ -34,7 +34,7 @@ class GeminiController extends Controller
 
             // Prepare the query (context + file contents)
             $preQuery =
-            "Generate a single string containing 10 multiple-choice questions formatted as: Question1? | Question2? | Question3?. Derive the questions from the article, making them as educative as possible. Separate each question with a vertical bar (|). Do not include any additional comments, explanations, or array formatting in the output.";
+                "Generate a single string containing 10 multiple-choice questions formatted as: Question1? | Question2? | Question3?. Derive the questions from the article, making them as educative as possible. Separate each question with a vertical bar (|). Do not include any additional comments, explanations, or array formatting in the output.";
             $fullQuery = $preQuery . "\n" . $fileContents;
 
             // Call the Gemini API with the sanitized content
@@ -139,7 +139,7 @@ class GeminiController extends Controller
     private function makeChoices(string $query, string $question)
     {
         $makeAnswer =
-"Based on the given context, generate a multiple-choice question with exactly 4 distinct answer options, ensuring only one correct answer, which must always appear as the first option. Each choice must be unique, concise, and clear, avoiding redundancy or ambiguity. Choices should not be preceded by letters or numbers. Separate the choices with a vertical bar (|). Do not include any additional comments, repeated meanings, or explanations in the output.";
+            "Based on the given context, generate a single string multiple-choice question with exactly 4 distinct answer options, ensuring only one correct answer, which must always appear as the first option. Each choice must be unique, concise, and clear, avoiding redundancy or ambiguity. Choices should not be preceded by letters or numbers. Separate the choices with a vertical bar (|). Do not include any additional comments, repeated meanings, or explanations in the output.";
 
         $fullQuery = $query . "\n" . $question . "\n" . $makeAnswer;
         $answers = $this->callGeminiApi($fullQuery);
@@ -157,11 +157,13 @@ class GeminiController extends Controller
             // Here, you would add logic to dynamically determine the answers and options
             // For demonstration purposes, we will just hardcode answers and options
             $choices = $this->makeChoices($query, $question);
+            $choices_shuffled = $choices; // Copy the original array
+            shuffle($choices_shuffled); // Shuffle the copy
 
             $questionArray[] = [
                 'question' => $question,
                 'answer' => $choices[0],
-                'options' => $choices
+                'options' => $choices_shuffled
             ];
         }
 

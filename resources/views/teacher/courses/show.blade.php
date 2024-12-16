@@ -353,7 +353,8 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Cancel</button>
-                                                <button type="submit" id="generateQuizButton" class="btn btn-primary">
+                                                <button type="submit" id="generateQuizButton{{ $module->id }}"
+                                                    class="btn btn-primary">
                                                     <i class="bi bi-lightbulb"></i> Generate Quiz
                                                 </button>
                                             </div>
@@ -598,18 +599,18 @@
 
     <!-- Add JavaScript -->
     <script>
-        // Function to handle the form submission and show the spinner
+        // Function to show the spinner
         function showLoadingSpinner(event) {
             console.log('Spinner function triggered'); // Debugging log
 
-            // Prevent the default form submission to observe the spinner in action
+            // Prevent the default form submission
             event.preventDefault();
 
-            // Get the submit button
-            const button = document.getElementById('generateQuizButton');
+            // Get the clicked button
+            const button = event.submitter || event.target.querySelector('button[type="submit"]');
 
-            // Disable the button and change its content to a spinner
             if (button) {
+                // Disable the button and show spinner
                 button.disabled = true;
                 button.innerHTML = `
                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -617,22 +618,22 @@
                 `;
             }
 
-            // Optionally submit the form after showing the spinner
-            // Uncomment the next line if you want the form to be submitted
-            // after the spinner is displayed.
-            // event.target.submit();
+            // Optionally submit the form here
+            // Uncomment the line below if submitting is required
+            event.target.submit();
         }
 
-        // Function to reset the button state when the page loads
+        // Reset all buttons when the page loads
         window.onload = function () {
-            console.log('Page loaded, resetting button state'); // Debugging log
+            console.log('Resetting button states'); // Debugging log
 
-            // Reset the submit button to its original state
-            const button = document.getElementById('generateQuizButton');
-            if (button) {
-                button.disabled = false;
-                button.innerHTML = 'Generate Quiz'; // Reset the content
-            }
+            // Select all submit buttons inside modals
+            const buttons = document.querySelectorAll('button[id^="generateQuizButton"]');
+
+            buttons.forEach((button) => {
+                button.disabled = false; // Reset the disabled state
+                button.innerHTML = '<i class="bi bi-lightbulb"></i> Generate Quiz'; // Reset the content
+            });
         };
     </script>
 
