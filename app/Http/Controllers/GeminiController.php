@@ -226,7 +226,7 @@ class GeminiController extends Controller
         $module = Module::findOrFail($id);
 
         $quiz = $module->quizzes()->create([
-            'title' => $module->course->title,
+            'title' => $request->input('quizTitle'),
             'description' => "AI Generated Quiz",
             'duration' => null,
             'deadline' => null,
