@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Smalot\PdfParser\Parser;
 use App\Models\Module;
+use Ramsey\Uuid\Type\Integer;
 
 class GeminiController extends Controller
 {
@@ -121,6 +122,8 @@ class GeminiController extends Controller
 
     private function splitResponse($questions)
     {
+        // dd($questions);
+
         // Split the questions into an array based on the question mark (?)
         $questionsArray = explode("|", $questions);
 
@@ -139,7 +142,7 @@ class GeminiController extends Controller
     private function makeChoices(string $query, string $question)
     {
         $makeAnswer =
-            "Based on the given context, generate a single string multiple-choice question with exactly 4 distinct answer options, ensuring only one correct answer, which must always appear as the first option. Each choice must be unique, concise, and clear, avoiding redundancy or ambiguity. Choices should not be preceded by letters or numbers. Separate the choices with a vertical bar (|). Do not include any additional comments, repeated meanings, or explanations in the output.";
+"Based on the given context, generate a single string multiple-choice question with exactly 4 distinct answer options, ensuring only one correct answer, which must always appear as the first option. Each choice must be unique, concise, and clear, avoiding redundancy or ambiguity. Choices should not be preceded by letters or numbers. Separate the choices with a vertical bar (|). Do not include any additional comments, repeated meanings, or explanations in the output, or array formatting in the output.";
 
         $fullQuery = $query . "\n" . $question . "\n" . $makeAnswer;
         $answers = $this->callGeminiApi($fullQuery);
@@ -200,16 +203,57 @@ class GeminiController extends Controller
         // Do not include any comments, explanations, or additional text. Only return the Json code.";
 
         $processedQuestions = $this->processQuizData($quizData);
-        return view('teacher.quizzes.generated', [
-            'module' => $module,
-            'courseName' => $module->course->title,
-            'moduleName' => $module->title,
-            'preFilledQuiz' => [
-                'title' => $request->input('quizTitle'),
-                'description' => 'Generated with AI',
-                'questions' => $processedQuestions,
-            ],
+        $quiz = $this->createQuiz($request, $id, $processedQuestions);
+        // return view('teacher.quizzes.generated', [
+        //     'module' => $module,
+        //     'courseName' => $module->course->title,
+        //     'moduleName' => $module->title,
+        //     'preFilledQuiz' => [
+        //         'title' => $request->input('quizTitle'),
+        //         'description' => 'Generated with AI',
+        //         'questions' => $processedQuestions,
+        //     ],
+        // ]);
+
+        return view('teacher.quizzes.edit', compact('quiz'));
+
+    }
+
+    public function createQuiz(Request $request, $id, $processedQuestions) {
+        $module = Module::findOrFail($id);
+
+        $quiz = $module->quizzes()->create([
+            'title' => $module->course->title,
+            'description' => "AI Generated Quiz",
+            'duration' => null,
+            'deadline' => null,
         ]);
+
+        foreach ($processedQuestions as $questionData) {
+            $choices = $questionData['choices'] ?? [];
+            $correctAnswers = array_keys(array_filter($choices, fn($choice) => $choice['is_correct'] ?? false));
+            $questionPoints = $questionData['points'] ?? 1;
+            $questionType = $questionData['question_type'] ?? "0";
+
+            if (empty($questionType)) {
+                $questionType = '0';
+            }
+
+            $question = $quiz->questions()->create([
+                'question_text' => $questionData['question_text'],
+                'question_type' => $questionType,
+                'points' => $questionPoints,
+                'image' => null, // No images in the data
+            ]);
+
+            foreach ($choices as $index => $choiceData) {
+                $question->choices()->create([
+                    'choice_text' => $choiceData['choice_text'],
+                    'is_correct' => in_array($index, $correctAnswers),
+                ]);
+            }
+        }
+        return $quiz;
     }
 
     private function processQuizData(array $quizData)
@@ -220,7 +264,7 @@ class GeminiController extends Controller
             $question = [
                 'question_text' => $item['question'],
                 'points' => 1,
-                'type' => '',
+                'question_type' => '',
                 'choices' => [],
             ];
 

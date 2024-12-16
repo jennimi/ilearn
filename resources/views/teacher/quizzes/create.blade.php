@@ -21,12 +21,12 @@
 
             <div class="mb-4">
                 <label for="deadline" class="form-label">Quiz Deadline</label>
-                <input type="datetime-local" class="form-control" id="deadline" name="deadline" required>
+                <input type="datetime-local" class="form-control" id="deadline" name="deadline">
             </div>
 
             <div class="mb-4">
                 <label for="duration" class="form-label">Duration (Minutes)</label>
-                <input type="number" class="form-control" id="duration" name="duration" min="1" required>
+                <input type="number" class="form-control" id="duration" name="duration" min="1">
             </div>
 
             <!-- Questions Section -->
@@ -44,7 +44,6 @@
 
             <button type="submit" class="btn btn-success">Create Quiz</button>
         </form>
-
     </div>
 
     <!-- Add Question Modal -->
@@ -105,6 +104,62 @@
         </div>
     </div>
 
+    <!-- Edit Question Modal -->
+    <div class="modal fade" id="editQuestionModal" tabindex="-1" aria-labelledby="editQuestionModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="editQuestionForm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editQuestionModalLabel">Edit Question</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="edit_question_text" class="form-label">Question Text</label>
+                            <textarea class="form-control" id="edit_question_text" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_question_points" class="form-label">Points</label>
+                            <input type="number" class="form-control" id="edit_question_points"
+                                placeholder="Points for this question" min="1" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edit_question_type" class="form-label">Question Type</label>
+                            <select class="form-select" id="edit_question_type" required>
+                                <option value="0">Single Choice</option>
+                                <option value="1">Multiple Choice</option>
+                                <option value="2">Short Answer</option>
+                            </select>
+                        </div>
+
+                        <!-- Answer Options Section -->
+                        <div id="edit_answerOptions" class="d-none">
+                            <h6 class="mb-3">Answer Choices</h6>
+                            <div id="edit_answerFields"></div>
+                            <button type="button" class="btn btn-outline-secondary add-answer"><i
+                                    class="bi bi-plus-circle"></i> Add Another Answer</button>
+                        </div>
+
+                        <!-- Correct Answer for Short Answer -->
+                        <div id="edit_correctAnswerField" class="d-none">
+                            <label for="edit_short_correct_answer" class="form-label">Correct Answer (Short
+                                Answer)</label>
+                            <input type="text" class="form-control" id="edit_short_correct_answer"
+                                placeholder="Enter the correct answer">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveEditedQuestionButton">Save
+                            Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const addQuestionForm = document.getElementById('addQuestionForm');
@@ -115,6 +170,8 @@
             const answerFields = document.getElementById('answerFields');
             const answerOptions = document.getElementById('answerOptions');
             const correctAnswerField = document.getElementById('correctAnswerField');
+            const editQuestionForm = document.getElementById('editQuestionForm');
+            const saveEditedQuestionButton = document.getElementById('saveEditedQuestionButton');
             let questions = [];
 
             // Reset modal when opened
@@ -151,7 +208,8 @@
                     choiceDiv.classList.add('input-group', 'mb-3');
                     choiceDiv.innerHTML = `
                         <input type="text" class="form-control choice-text" placeholder="Answer Option" required>
-                        <input type="${type}" name="correct_answer" class="form-check-input correct-choice" value="${choiceIndex}" style="margin: 0 10px;">
+                        <input type="${type}" name="correct_answer" class="form-check-input correct-choice" value="${choiceIndex}">
+
                         <button type="button" class="btn btn-danger remove-answer"><i class="bi bi-x-circle"></i> Remove</button>
                     `;
                     answerFields.appendChild(choiceDiv);
@@ -163,10 +221,10 @@
                 }
             });
 
+            // Save Question
             saveQuestionButton.addEventListener('click', function() {
                 const questionText = document.getElementById('question_text').value.trim();
-                const questionType = addQuestionForm.querySelector('#question_type').value;
-                const questionImage = document.getElementById('question_image').files[0];
+                const questionType = questionTypeDropdown.value;
                 const questionPoints = parseInt(document.getElementById('question_points').value, 10);
 
                 const choices = Array.from(answerFields.querySelectorAll('.choice-text'))
@@ -203,52 +261,17 @@
                     return;
                 }
 
-                // Prepare image data as Base64
-                let questionImageBase64 = null;
-                if (questionImage) {
-                    const reader = new FileReader();
-                    reader.onloadend = function() {
-                        questionImageBase64 = reader.result.split(',')[1];
-                    };
-                    reader.readAsDataURL(questionImage);
-                }
-
                 // Create question object
                 const question = {
                     question_text: questionText,
                     question_type: questionType,
-                    question_image: questionImageBase64,
                     points: questionPoints,
                     choices: questionType !== '2' ? choices : [],
                     correct_answers: questionType === '2' ? [shortAnswer] : correctAnswers,
                 };
 
                 questions.push(question);
-
-                // Display the question in the list
-                const questionDiv = document.createElement('div');
-                questionDiv.classList.add('card', 'mb-3');
-                questionDiv.innerHTML = `
-        <div class="card-body">
-            <h5>${question.question_text}</h5>
-            <p class="text-muted">Type: ${questionType === '0' ? 'Single Choice' : questionType === '1' ? 'Multiple Choice' : 'Short Answer'}</p>
-            <p class="text-muted">Points: ${question.points}</p>
-    `;
-                if (questionType !== '2') {
-                    const choicesList = document.createElement('ul');
-                    question.choices.forEach((choice, index) => {
-                        const li = document.createElement('li');
-                        li.innerHTML =
-                            `${choice} ${question.correct_answers.includes(index) ? '<span class="badge bg-success ms-2">Correct</span>' : ''}`;
-                        choicesList.appendChild(li);
-                    });
-                    questionDiv.appendChild(choicesList);
-                } else {
-                    questionDiv.innerHTML +=
-                        `<p><strong>Correct Answer:</strong> ${question.correct_answers[0]}</p>`;
-                }
-                questionDiv.innerHTML += '</div>';
-                questionsContainer.appendChild(questionDiv);
+                renderQuestions();
 
                 // Save questions as JSON in hidden input
                 questionsDataInput.value = JSON.stringify(questions);
@@ -259,13 +282,110 @@
                 bootstrap.Modal.getInstance(document.getElementById('addQuestionModal')).hide();
             });
 
+            // Render Questions
+            function renderQuestions() {
+                questionsContainer.innerHTML = ''; // Clear existing questions
 
-            function renderAnswerInputs(type) {
-                Array.from(answerFields.children).forEach(choiceDiv => {
-                    const input = choiceDiv.querySelector('.correct-choice');
-                    input.setAttribute('type', type);
+                questions.forEach((question, index) => {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.classList.add('card', 'mb-3');
+                    questionDiv.innerHTML = `
+                        <div class="card-body">
+                            <h5>${question.question_text}</h5>
+                            <p class="text-muted">Type: ${question.question_type === '0' ? 'Single Choice' : question.question_type === '1' ? 'Multiple Choice' : 'Short Answer'}</p>
+                            <p class="text-muted">Points: ${question.points}</p>
+                            <ul>
+                                ${question.choices.map((choice, i) => `
+                                        <li>
+                                            ${choice} ${question.correct_answers.includes(i) ? '<span class="badge bg-success ms-2">Correct</span>' : ''}
+                                        </li>`).join('')}
+                            </ul>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-primary btn-sm edit-question-button" data-bs-toggle="modal" data-bs-target="#editQuestionModal" data-index="${index}">Edit</button>
+                                <button type="button" class="btn btn-outline-danger btn-sm delete-question-button" data-index="${index}">Delete</button>
+                            </div>
+                        </div>
+                    `;
+
+                    // Add event listeners
+                    questionDiv.querySelector('.edit-question-button').addEventListener('click',
+                function() {
+                        editQuestion(this.dataset.index);
+                    });
+
+                    questionDiv.querySelector('.delete-question-button').addEventListener('click',
+                    function() {
+                        deleteQuestion(this.dataset.index);
+                    });
+
+                    questionsContainer.appendChild(questionDiv);
                 });
+
+                // Update questions in the hidden input
+                questionsDataInput.value = JSON.stringify(questions);
+            }
+
+            // Edit Question Function
+            function editQuestion(index) {
+                const question = questions[index];
+
+                // Populate the Edit Modal with the question's data
+                document.getElementById('edit_question_text').value = question.question_text;
+                document.getElementById('edit_question_points').value = question.points;
+                document.getElementById('edit_question_type').value = question.question_type;
+
+                const editAnswerFields = document.getElementById('edit_answerFields');
+                const editAnswerOptions = document.getElementById('edit_answerOptions');
+                const editCorrectAnswerField = document.getElementById('edit_correctAnswerField');
+
+                // Reset fields
+                editAnswerFields.innerHTML = '';
+                editAnswerOptions.classList.add('d-none');
+                editCorrectAnswerField.classList.add('d-none');
+
+                // Show or hide fields based on question type
+                if (question.question_type === '0' || question.question_type === '1') {
+                    editAnswerOptions.classList.remove('d-none');
+                    question.choices.forEach((choice, i) => {
+                        const choiceDiv = document.createElement('div');
+                        choiceDiv.classList.add('input-group', 'mb-3');
+                        const type = question.question_type === '0' ? 'radio' : 'checkbox';
+                        choiceDiv.innerHTML = `
+                            <input type="text" class="form-control choice-text" value="${choice}" required>
+                            <input type="${type}" name="edit_correct_answer" class="form-check-input correct-choice" ${question.correct_answers.includes(i) ? 'checked' : ''}>
+                            <button type="button" class="btn btn-danger remove-answer"><i class="bi bi-x-circle"></i> Remove</button>
+                        `;
+                        editAnswerFields.appendChild(choiceDiv);
+                    });
+                } else if (question.question_type === '2') {
+                    editCorrectAnswerField.classList.remove('d-none');
+                    document.getElementById('edit_short_correct_answer').value = question.correct_answers[0];
+                }
+
+                saveEditedQuestionButton.dataset.index = index;
+            }
+
+            // Delete Question
+            function deleteQuestion(index) {
+                if (confirm('Are you sure you want to delete this question?')) {
+                    questions.splice(index, 1);
+                    renderQuestions();
+                }
             }
         });
+
+        function addChoiceField(questionId) {
+            const container = document.getElementById(`newChoicesContainer_${questionId}`);
+            const newField = document.createElement('div');
+            newField.classList.add('mb-3', 'd-flex', 'align-items-center');
+            newField.innerHTML = `
+        <input type="text" class="form-control me-2" name="new_choices[${questionId}][]" placeholder="Enter choice text" required>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" class="form-check-input" name="new_choices_correct[${questionId}][]" value="1">
+            <label class="form-check-label">Correct</label>
+        </div>
+    `;
+            container.appendChild(newField);
+        }
     </script>
 @endsection

@@ -100,7 +100,7 @@
         }
 
         /* Hide the default radio and checkbox input */
-        .form-check-input {
+        .form-check-input-take {
             opacity: 0;
             position: absolute;
             width: 0;

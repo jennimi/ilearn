@@ -15,14 +15,16 @@ class QuizController extends Controller
     public function storeQuiz(Request $request, $moduleId)
     {
         $module = Module::findOrFail($moduleId);
+        // dd($request->all());
 
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'duration' => 'nullable|integer|min:1',
-            'deadline' => 'required|date|after:now',
+            'deadline' => 'nullable|date|after:now',
             'questions' => 'nullable|json',
         ]);
+        // dd($request->input('questions'));
 
         $quiz = $module->quizzes()->create([
             'title' => $request->input('title'),
@@ -39,6 +41,11 @@ class QuizController extends Controller
                 $choices = $questionData['choices'] ?? [];
                 $correctAnswers = $questionData['correct_answers'] ?? [];
                 $questionPoints = $questionData['points'] ?? 1;
+                $questionType = $questionData['question_type'] ?? "0";
+
+                if (empty($questionType)) {
+                    $questionType = '0';
+                }
                 $imagePath = null;
 
                 if (!empty($questionData['question_image'])) {
@@ -51,7 +58,7 @@ class QuizController extends Controller
 
                 $question = $quiz->questions()->create([
                     'question_text' => $questionData['question_text'],
-                    'question_type' => $questionData['question_type'],
+                    'question_type' => $questionType,
                     'points' => $questionPoints,
                     'image' => $imagePath,
                 ]);

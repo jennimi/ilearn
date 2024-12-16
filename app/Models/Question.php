@@ -24,6 +24,7 @@ class Question extends Model
     {
         $labels = [
             '' => 'Single Choice',
+            ' ' => 'Single Choice',
             'single_choice' => 'Multiple Choice',
             'multiple_choice' => 'Short Answer',
         ];
