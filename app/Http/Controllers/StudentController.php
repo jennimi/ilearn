@@ -8,6 +8,9 @@ use App\Models\Comment;
 use App\Models\Student;
 use App\Models\Classroom;
 use App\Models\Assignment;
+use App\Models\QuizResult;
+use App\Models\Submission;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -110,14 +113,58 @@ class StudentController extends Controller
     {
         $student = Auth::user()->student;
         Cookie::queue('recent_course' . Auth::id(), $courseId, 7 * 24 * 60);
-        $course = Course::with(['modules.lessons', 'modules.quizzes', 'teacher'])
+
+        $course = Course::with([
+            'modules.lessons',
+            'modules.quizzes.quizResults', // Eager load quiz results
+            'modules.assignments.submissions', // Eager load assignment submissions
+            'teacher'
+        ])
             ->whereHas('classrooms', function ($query) use ($student) {
-                $query->whereIn('classrooms.id', $student->classrooms->pluck('id')); // Specify 'classrooms.id' explicitly
+                $query->whereIn('classrooms.id', $student->classrooms->pluck('id'));
             })
-            ->where('courses.id', $courseId) // Explicitly specify 'courses.id'
+            ->where('courses.id', $courseId)
             ->firstOrFail();
 
-        return view('student.courses.show', compact('course'));
+        // Total quizzes and assignments for the course
+        $totalQuizzes = Quiz::whereHas('module', function ($query) use ($courseId) {
+            $query->where('course_id', $courseId);
+        })->count();
+
+        $totalAssignments = Assignment::whereHas('module', function ($query) use ($courseId) {
+            $query->where('course_id', $courseId);
+        })->count();
+
+        $totalTasks = $totalQuizzes + $totalAssignments;
+
+        // Calculate student's progress
+        $completedQuizzes = QuizResult::where('student_id', $student->id)
+            ->whereHas('quiz', function ($query) use ($courseId) {
+                $query->whereHas('module', function ($query) use ($courseId) {
+                    $query->where('course_id', $courseId);
+                });
+            })->count();
+
+        $gradedAssignments = Submission::where('student_id', $student->id)
+            ->whereHas('assignment', function ($query) use ($courseId) {
+                $query->whereHas('module', function ($query) use ($courseId) {
+                    $query->where('course_id', $courseId);
+                });
+            })->count();
+
+        $completedTasks = $completedQuizzes + $gradedAssignments;
+
+        $progressPercentage = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 100;
+
+        return view('student.courses.show', compact(
+            'course',
+            'totalQuizzes',
+            'completedQuizzes',
+            'totalAssignments',
+            'gradedAssignments',
+            'completedTasks',
+            'progressPercentage'
+        ));
     }
 
     public function getClassRanking($classroomId)

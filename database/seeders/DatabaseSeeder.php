@@ -529,7 +529,7 @@ class DatabaseSeeder extends Seeder
 
         $lesson1 = Lesson::create([
             'title' => 'Introduction to Mathematics',
-            'content' => 'math_intro.pdf', // Make sure to upload this PDF to your storage
+            'content' => 'lessons\mathematics.pdf', // Make sure to upload this PDF to your storage
             'module_id' => 1, // Module 1
             'visible' => true,
         ]);
@@ -757,7 +757,7 @@ class DatabaseSeeder extends Seeder
 
         $lesson5 = Lesson::create([
             'title' => 'Introduction to Organic Chemistry',
-            'content' => 'organic_chem_intro.pdf', // Make sure to upload this PDF to your storage
+            'content' => 'lessons\chemistry.pdf', // Make sure to upload this PDF to your storage
             'module_id' => 7, // Assuming Module 1 is for Organic Chemistry
             'visible' => true,
         ]);
