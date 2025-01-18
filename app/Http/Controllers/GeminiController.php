@@ -84,7 +84,7 @@ class GeminiController extends Controller
     private function callGeminiApi(string $query)
     {
         // $apiKey = env('GEMINI_API_KEY');
-        $apiKey = 'AIzaSyCqx8FXlQWb1FA6HdFMg7e5xbdLhUQeBdM';
+        $apiKey = env('GEMINI_API_KEY');
         $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent';
 
         $response = Http::withHeaders([
