@@ -525,7 +525,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $lesson1 = Lesson::create([
             'title' => 'Pendahuluan ke Matematika',
-            'content' => 'lessons\matematika.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
+            'content' => 'lessons\mathematics.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
             'module_id' => 1, // Modul 1
             'visible' => true,
         ]);
@@ -746,7 +746,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $lesson5 = Lesson::create([
             'title' => 'Pendahuluan ke Kimia Organik',
-            'content' => 'lessons\kimia.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
+            'content' => 'lessons\chemistry.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
             'module_id' => 7, // Asumsi Modul 1 adalah untuk Kimia Organik
             'visible' => true,
         ]);
