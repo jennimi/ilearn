@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1>Create Course</h1>
+        <h1>Buat Kursus</h1>
 
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -18,29 +18,29 @@
             @csrf
 
             <div class="mb-3">
-                <label for="title" class="form-label">Course Title</label>
+                <label for="title" class="form-label">Judul Kursus</label>
                 <input type="text" class="form-control" id="title" name="title" required>
             </div>
 
             <div class="mb-3">
-                <label for="description" class="form-label">Course Description</label>
+                <label for="description" class="form-label">Deskripsi Kursus</label>
                 <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
             </div>
 
             <div class="mb-3">
-                <label for="start_date" class="form-label">Start Date</label>
+                <label for="start_date" class="form-label">Tanggal Mulai</label>
                 <input type="date" class="form-control" id="start_date" name="start_date" required>
             </div>
 
             <div class="mb-3">
-                <label for="end_date" class="form-label">End Date</label>
+                <label for="end_date" class="form-label">Tanggal Selesai</label>
                 <input type="date" class="form-control" id="end_date" name="end_date" required>
             </div>
 
             <div class="mb-3">
-                <label for="teacher_id" class="form-label">Assign Teacher</label>
+                <label for="teacher_id" class="form-label">Pilih Guru</label>
                 <select class="form-control" id="teacher_id" name="teacher_id" required>
-                    <option value="">-- Select Teacher --</option>
+                    <option value="">-- Pilih Guru --</option>
                     @foreach ($teachers as $teacher)
                         <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
                     @endforeach
@@ -48,7 +48,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="classrooms" class="form-label">Assign Classrooms</label>
+                <label for="classrooms" class="form-label">Pilih Kelas</label>
                 <div id="classroom-assignments">
                     @foreach ($classrooms as $classroom)
                         <div class="form-check mb-2">
@@ -60,22 +60,22 @@
 
                             <!-- Schedule Inputs -->
                             <div class="schedule-fields mt-2" style="display: none;">
-                                <label>Day:</label>
+                                <label>Hari:</label>
                                 <select name="schedule[{{ $classroom->id }}][day]" class="form-control">
-                                    <option value="Monday">Monday</option>
-                                    <option value="Tuesday">Tuesday</option>
-                                    <option value="Wednesday">Wednesday</option>
-                                    <option value="Thursday">Thursday</option>
-                                    <option value="Friday">Friday</option>
-                                    <option value="Saturday">Saturday</option>
-                                    <option value="Sunday">Sunday</option>
+                                    <option value="Monday">Senin</option>
+                                    <option value="Tuesday">Selasa</option>
+                                    <option value="Wednesday">Rabu</option>
+                                    <option value="Thursday">Kamis</option>
+                                    <option value="Friday">Jumat</option>
+                                    <option value="Saturday">Sabtu</option>
+                                    <option value="Sunday">Minggu</option>
                                 </select>
 
-                                <label>Start Time:</label>
+                                <label>Waktu Mulai:</label>
                                 <input type="time" name="schedule[{{ $classroom->id }}][start_time]"
                                     class="form-control">
 
-                                <label>End Time:</label>
+                                <label>Waktu Selesai:</label>
                                 <input type="time" name="schedule[{{ $classroom->id }}][end_time]" class="form-control">
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-success">Create Course</button>
+            <button type="submit" class="btn btn-success">Buat Kursus</button>
         </form>
     </div>
 

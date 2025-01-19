@@ -43,14 +43,11 @@
 
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
-            /* For Chrome, Safari, and Opera */
         }
 
         .scrollbar-hide {
             -ms-overflow-style: none;
-            /* For Internet Explorer and Edge */
             scrollbar-width: none;
-            /* For Firefox */
         }
 
         .tw-bg-image {
@@ -68,30 +65,22 @@
 
         .schedule-scroll-horizontal {
             max-width: 100%;
-            /* Ensures it doesn’t overflow the container */
             overflow-x: auto;
-            /* Horizontal scrolling */
             scroll-behavior: smooth;
-            /* Smooth scrolling */
             padding-bottom: 10px;
-            /* Space for better appearance */
         }
 
         .schedule-scroll-horizontal::-webkit-scrollbar {
             height: 8px;
-            /* Thin horizontal scrollbar */
         }
 
         .schedule-scroll-horizontal::-webkit-scrollbar-thumb {
             background: #007bff;
-            /* Match primary color */
             border-radius: 10px;
-            /* Rounded scrollbar */
         }
 
         .schedule-scroll-horizontal::-webkit-scrollbar-track {
             background: #f1f1f1;
-            /* Light track */
         }
 
         .fancy-input {
@@ -99,17 +88,13 @@
             margin-bottom: 1rem;
         }
 
-        /* Hide the default radio and checkbox input */
         .form-check-input-take {
             opacity: 0;
             position: absolute;
             width: 0;
-            /* Ensure it doesn't take up any space */
             height: 0;
-            /* Ensure it doesn't take up any space */
         }
 
-        /* Custom label for radio and checkbox */
         .form-check-label {
             display: flex;
             align-items: center;
@@ -121,16 +106,13 @@
             transition: all 0.3s ease-in-out;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-left: 0;
-            /* Remove any extra left margin */
         }
 
-        /* Hover effect for labels */
         .form-check-label:hover {
             background: #eaeaea;
             border-color: #ccc;
         }
 
-        /* When the radio or checkbox is checked */
         .form-check-input:checked+.form-check-label {
             background: #007bff;
             color: #fff;
@@ -138,7 +120,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* Custom indicator styling */
         .form-check-label::before {
             content: '';
             display: inline-block;
@@ -150,28 +131,28 @@
             transition: all 0.3s ease-in-out;
         }
 
-        /* Radio buttons remain circular */
         input[type="radio"]+.form-check-label::before {
             border-radius: 50%;
         }
 
-        /* Checkboxes remain square */
         input[type="checkbox"]+.form-check-label::before {
             border-radius: 0;
         }
 
-        /* When radio is checked, change the circle appearance */
         input[type="radio"]:checked+.form-check-label::before {
             background: #fff;
             border-color: #fff;
             box-shadow: inset 0 0 0 4px #007bff;
         }
 
-        /* When checkbox is checked, change the square appearance */
         input[type="checkbox"]:checked+.form-check-label::before {
             background: #fff;
             border-color: #fff;
             box-shadow: inset 0 0 0 4px #007bff;
+        }
+
+        .notranslate {
+            unicode-bidi: isolate;
         }
     </style>
 
@@ -181,9 +162,6 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-sm">
             <div class="container">
-                {{-- <a class="navbar-brand text-white" href="{{ url('/') }}">
-                    {{ config('iLearn', 'iLearn') }}
-                </a> --}}
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -191,35 +169,37 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <img src="{{ asset('images/iLearn-logo.png') }}" alt="iLearn Logo"
                             class="tw-w-10 tw-h-10 tw-me-2">
                         @if (auth()->check() && auth()->user()->role === 'admin' && auth()->user()->admin)
-                            <a class="nav-link text-white" href="{{ route('admin.dashboard') }}">iLearn</a>
+                            <a class="nav-link text-white" href="{{ route('admin.dashboard') }}"><span
+                                    class="notranslate">iLearn</span></a>
                         @elseif(auth()->check() && auth()->user()->role === 'teacher' && auth()->user()->teacher)
-                            <a class="nav-link text-white" href="{{ route('teacher.dashboard') }}">iLearn</a>
+                            <a class="nav-link text-white" href="{{ route('teacher.dashboard') }}"><span
+                                    class="notranslate">iLearn</span></a>
                         @elseif(auth()->check() && auth()->user()->role === 'student' && auth()->user()->student)
-                            <a class="nav-link text-white" href="{{ route('student.dashboard') }}">iLearn</a>
+                            <a class="nav-link text-white" href="{{ route('student.dashboard') }}"><span
+                                    class="notranslate">iLearn</span></a>
                         @else
                             <a class="nav-link text-white" href="{{ route('home') }}">iLearn</a>
                         @endif
                     </ul>
 
-                    <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
+                        <div id="language-select" class="d-flex align-items-center">
+                            <label for="languageDropdown" class="text-white me-2">Language:</label>
+                            <select id="languageDropdown" class="form-select form-select-sm bg-light border-0 shadow-sm" style="width: auto;" onchange="translateLanguage(this.value)">
+                                <option value="id">Bahasa Indonesia</option>
+                                <option value="en">English</option>
+                            </select>
+                        </div>
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
                                     <a class="nav-link text-white" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
-                            {{--
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif --}}
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#"
@@ -270,6 +250,26 @@
             }
         }
     </script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                    pageLanguage: 'id',
+                    includedLanguages: 'en,id',
+                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                },
+                'google_translate_element'
+            );
+        }
+
+        function translateLanguage(lang) {
+            var googleTranslateCookie = `googtrans=/id/${lang}; domain=.${location.hostname}; path=/`;
+            document.cookie = googleTranslateCookie;
+            document.cookie = googleTranslateCookie.replace("googtrans", "googtrans");
+            location.reload();
+        }
+    </script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </body>
 
 </html>

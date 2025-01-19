@@ -7,18 +7,18 @@
         <div class="col-md-4">
             <h1 class="mb-4 text-primary">{{ $course->title }}</h1>
             <p class="text-muted">{{ $course->description }}</p>
-            <p><strong>Teacher:</strong> {{ $course->teacher->name }}</p>
+            <p><strong>Guru:</strong> {{ $course->teacher->name }}</p>
 
             <!-- Course Progress -->
             <div class="mb-4 text-center">
-                <h4 class="text-secondary">Your Progress</h4>
+                <h4 class="text-secondary">Progres Anda</h4>
                 <div class="progress" style="height: 30px; width: 100%; max-width: 300px; margin: 0 auto;">
                     <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
                         role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                         0%
                     </div>
                 </div>
-                <p class="mt-2"><strong id="progressPercentage">0%</strong> Completed</p>
+                <p class="mt-2"><strong id="progressPercentage">0%</strong> Selesai</p>
             </div>
         </div>
 
@@ -26,7 +26,7 @@
         <div class="col-md-8">
             <!-- Modules and Lessons Section -->
             <div class="accordion" id="modulesAccordion">
-                <h3 class="text-secondary">Modules</h3>
+                <h3 class="text-secondary">Modul</h3>
                 @foreach ($course->modules as $module)
                     <div class="accordion-item mb-3 shadow-sm border">
                         <h2 class="accordion-header" id="heading{{ $module->id }}">
@@ -42,9 +42,9 @@
                             <div class="accordion-body">
 
                                 <!-- Lessons Section -->
-                                <h5 class="text-secondary">Lessons</h5>
+                                <h5 class="text-secondary">Pelajaran</h5>
                                 @if ($module->lessons->isEmpty())
-                                    <p class="text-danger">No lessons available for this module.</p>
+                                    <p class="text-danger">Tidak ada pelajaran untuk modul ini.</p>
                                 @else
                                     <ul class="list-group mb-4">
                                         @foreach ($module->lessons as $lesson)
@@ -56,14 +56,14 @@
                                                             <div>
                                                                 <span
                                                                     class="badge bg-{{ $lesson->visible ? 'success' : 'danger' }}">
-                                                                    {{ $lesson->visible ? 'Visible' : 'Hidden' }}
+                                                                    {{ $lesson->visible ? 'Terlihat' : 'Tersembunyi' }}
                                                                 </span>
                                                             </div>
                                                         </div>
                                                         <div>
                                                             <a href="{{ asset('storage/' . $lesson->content) }}"
                                                                 target="_blank" class="btn btn-success btn-sm">
-                                                                View Full PDF
+                                                                Lihat PDF Lengkap
                                                             </a>
                                                         </div>
                                                     </div>
@@ -79,7 +79,7 @@
                                                                 <div class="mt-3">
                                                                     <a href="{{ asset('storage/' . $lesson->content) }}"
                                                                         target="_blank" class="btn btn-primary btn-sm">
-                                                                        Open in Full View
+                                                                        Buka Tampilan Penuh
                                                                     </a>
                                                                 </div>
                                                             </div>
@@ -93,9 +93,9 @@
 
 
                                 <!-- Quizzes Section -->
-                                <h5 class="text-secondary">Quizzes</h5>
+                                <h5 class="text-secondary">Kuis</h5>
                                 @if ($module->quizzes->isEmpty())
-                                    <p class="text-danger">No quizzes available for this module.</p>
+                                    <p class="text-danger">Tidak ada kuis untuk modul ini.</p>
                                 @else
                                     <ul class="list-group mb-4">
                                         @foreach ($module->quizzes as $quiz)
@@ -108,7 +108,7 @@
                                                         </div>
                                                         <a href="{{ route('student.quizzes.take', $quiz->id) }}"
                                                             class="btn btn-outline-success btn-sm">
-                                                            Take Quiz
+                                                            Ambil Kuis
                                                         </a>
                                                     </div>
                                                 </li>
@@ -118,9 +118,9 @@
                                 @endif
 
                                 <!-- Assignments Section -->
-                                <h5 class="text-secondary">Assignments</h5>
+                                <h5 class="text-secondary">Tugas</h5>
                                 @if ($module->assignments->isEmpty())
-                                    <p class="text-danger">No assignments available for this module.</p>
+                                    <p class="text-danger">Tidak ada tugas untuk modul ini.</p>
                                 @else
                                     <ul class="list-group mb-4">
                                         @foreach ($module->assignments as $assignment)
@@ -131,7 +131,7 @@
                                                             <strong>{{ $assignment->title }}</strong>
                                                             <p class="text-muted">{{ $assignment->description }}</p>
                                                             <p class="text-muted">
-                                                                Deadline:
+                                                                Batas Waktu:
                                                                 <span
                                                                     class="{{ now()->greaterThan($assignment->deadline) ? 'text-danger' : 'text-success' }}">
                                                                     {{ $assignment->deadline->format('Y-m-d H:i') }}
@@ -140,7 +140,7 @@
                                                         </div>
                                                         <a href="{{ route('student.assignments.show', $assignment->id) }}"
                                                             class="btn btn-outline-primary btn-sm">
-                                                            View Assignment
+                                                            Lihat Tugas
                                                         </a>
                                                     </div>
                                                 </li>
@@ -155,7 +155,7 @@
                                     <div class="mt-4 text-end">
                                         <a href="{{ route('discussions.show', $module->discussion->id) }}"
                                             class="btn btn-outline-primary">
-                                            <i class="bi bi-chat-text"></i> Go to Discussion
+                                            <i class="bi bi-chat-text"></i> Pergi ke Diskusi
                                         </a>
                                     </div>
                                 @endif

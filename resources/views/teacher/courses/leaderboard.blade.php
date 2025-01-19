@@ -2,27 +2,27 @@
 
 @section('content')
     <div class="container py-5 position-relative">
-        <!-- Back to Course Button -->
+        <!-- Tombol Kembali ke Kursus -->
         <a href="javascript:void(0);" onclick="window.history.back();" class="btn btn-outline-primary position-absolute top-0 start-0 z-index-10 px-4 py-2 shadow-sm hover:bg-primary-200 transition-all duration-200">
-            Back to Course
+            Kembali ke Kursus
         </a>
 
-        <!-- Leaderboard Title -->
-        <h1 class="text-center mb-5 text-primary fw-bold">Leaderboard</h1>
+        <!-- Judul Papan Peringkat -->
+        <h1 class="text-center mb-5 text-primary fw-bold">Papan Peringkat</h1>
 
-        <!-- Leaderboard Table -->
+        <!-- Tabel Papan Peringkat -->
         <div class="tw-table-responsive tw-shadow-sm tw-rounded-lg tw-bg-white">
             <table class="tw-w-full tw-table-auto tw-border tw-border-gray-200">
                 <thead class="tw-bg-gray-100">
                     <tr>
                         <th class="tw-py-3 tw-px-4 tw-text-left tw-text-sm tw-font-medium tw-text-gray-600 tw-border-b tw-border-gray-200">NIK</th>
-                        <th class="tw-py-3 tw-px-4 tw-text-left tw-text-sm tw-font-medium tw-text-gray-600 tw-border-b tw-border-gray-200">Student Name</th>
-                        <th class="tw-py-3 tw-px-4 tw-text-center tw-text-sm tw-font-medium tw-text-gray-600 tw-border-b tw-border-gray-200">Score</th>
-                        <th class="tw-py-3 tw-px-4 tw-text-center tw-text-sm tw-font-medium tw-text-gray-600 tw-border-b tw-border-gray-200">Rank</th>
+                        <th class="tw-py-3 tw-px-4 tw-text-left tw-text-sm tw-font-medium tw-text-gray-600 tw-border-b tw-border-gray-200">Nama Siswa</th>
+                        <th class="tw-py-3 tw-px-4 tw-text-center tw-text-sm tw-font-medium tw-text-gray-600 tw-border-b tw-border-gray-200">Nilai</th>
+                        <th class="tw-py-3 tw-px-4 tw-text-center tw-text-sm tw-font-medium tw-text-gray-600 tw-border-b tw-border-gray-200">Peringkat</th>
                     </tr>
                 </thead>
                 <tbody class="tw-divide-y tw-divide-gray-200">
-                    <!-- Row 1 -->
+                    <!-- Baris 1 -->
                     <tr class="tw-hover:bg-gray-50">
                         <td class="tw-py-3 tw-px-4 tw-text-gray-800">1</td>
                         <td class="tw-py-3 tw-px-4 tw-text-gray-800">John Doe</td>
@@ -31,7 +31,7 @@
                             <span class="tw-inline-block tw-px-3 tw-py-1 tw-text-xs tw-font-semibold tw-text-white tw-bg-green-500 tw-rounded-full">1st</span>
                         </td>
                     </tr>
-                    <!-- Row 2 -->
+                    <!-- Baris 2 -->
                     <tr class="tw-hover:bg-gray-50">
                         <td class="tw-py-3 tw-px-4 tw-text-gray-800">2</td>
                         <td class="tw-py-3 tw-px-4 tw-text-gray-800">Jane Smith</td>
@@ -40,7 +40,7 @@
                             <span class="tw-inline-block tw-px-3 tw-py-1 tw-text-xs tw-font-semibold tw-text-white tw-bg-green-500 tw-rounded-full">2nd</span>
                         </td>
                     </tr>
-                    <!-- Row 3 -->
+                    <!-- Baris 3 -->
                     <tr class="tw-hover:bg-gray-50">
                         <td class="tw-py-3 tw-px-4 tw-text-gray-800">3</td>
                         <td class="tw-py-3 tw-px-4 tw-text-gray-800">Emily Johnson</td>
@@ -49,7 +49,7 @@
                             <span class="tw-inline-block tw-px-3 tw-py-1 tw-text-xs tw-font-semibold tw-text-gray-800 tw-bg-yellow-400 tw-rounded-full">3rd</span>
                         </td>
                     </tr>
-                    <!-- Row 4 -->
+                    <!-- Baris 4 -->
                     <tr class="tw-hover:bg-gray-50">
                         <td class="tw-py-3 tw-px-4 tw-text-gray-800">4</td>
                         <td class="tw-py-3 tw-px-4 tw-text-gray-800">Michael Brown</td>
@@ -58,7 +58,7 @@
                             <span class="tw-inline-block tw-px-3 tw-py-1 tw-text-xs tw-font-semibold tw-text-gray-800 tw-bg-blue-400 tw-rounded-full">4th</span>
                         </td>
                     </tr>
-                    <!-- Row 5 -->
+                    <!-- Baris 5 -->
                     <tr class="tw-hover:bg-gray-50">
                         <td class="tw-py-3 tw-px-4 tw-text-gray-800">5</td>
                         <td class="tw-py-3 tw-px-4 tw-text-gray-800">Olivia Davis</td>
@@ -70,6 +70,6 @@
                 </tbody>
             </table>
         </div>
-        
+
     </div>
 @endsection

@@ -26,9 +26,9 @@ class Course extends Model
     {
         static::created(function ($course) {
             $defaultModules = [
-                ['title' => 'Module 1', 'description' => 'Introduction to the course.'],
-                ['title' => 'Module 2', 'description' => 'Core topics and concepts.'],
-                ['title' => 'Module 3', 'description' => 'Advanced topics and wrap-up.'],
+                ['title' => 'Modul 1', 'description' => 'Pengenalan terhadap kursus.'],
+                ['title' => 'Modul 2', 'description' => 'Topik dan konsep inti.'],
+                ['title' => 'Modul 3', 'description' => 'Topik lanjutan dan penutup.'],
             ];
 
             foreach ($defaultModules as $module) {

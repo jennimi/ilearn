@@ -10,7 +10,7 @@
             <div class="card-body">
                 @if ($quiz->duration)
                     <div class="alert alert-warning">
-                        <strong>Time Remaining:</strong>
+                        <strong>Waktu Tersisa:</strong>
                         <span id="timeRemaining">{{ $quiz->duration }}:00</span>
                     </div>
                 @endif
@@ -21,17 +21,17 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="startQuizModalLabel">Confirm Start</h5>
+                                <h5 class="modal-title" id="startQuizModalLabel">Konfirmasi Mulai</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
+                                    aria-label="Tutup"></button>
                             </div>
                             <div class="modal-body">
-                                Are you sure you want to start the quiz? Once started, the timer will begin.
+                                Apakah Anda yakin ingin memulai kuis? Setelah dimulai, pengatur waktu akan berjalan.
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-primary" id="confirmStartQuizButton">Start
-                                    Quiz</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="button" class="btn btn-primary" id="confirmStartQuizButton">Mulai
+                                    Kuis</button>
                             </div>
                         </div>
                     </div>
@@ -62,7 +62,7 @@
                     <!-- Quiz Content -->
                     <div class="col-md-9">
                         <button type="button" id="startQuizButton" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#startQuizModal">Start Quiz</button>
+                            data-bs-target="#startQuizModal">Mulai Kuis</button>
                         <form id="quizForm" action="{{ route('student.quizzes.submit', $quiz->id) }}" method="POST">
                             @csrf
                             <div id="questionsContainer">
@@ -72,13 +72,13 @@
                                         <div class="mb-4">
                                             <h5 class="fw-bold">{{ $question->question_text }}</h5>
                                             @if ($question->image)
-                                                <img src="{{ asset('storage/' . $question->image) }}" alt="Question Image"
+                                                <img src="{{ asset('storage/' . $question->image) }}" alt="Gambar Pertanyaan"
                                                     class="img-fluid mb-3">
                                             @endif
-                                            <p><strong>Type:</strong> {{ $question->getTypeLabel() }}</p>
+                                            <p><strong>Jenis:</strong> {{ $question->getTypeLabel() }}</p>
                                         </div>
 
-                                        @if ($question->getTypeLabel() === 'Single Choice')
+                                        @if ($question->getTypeLabel() === 'Pilihan Tunggal')
                                             <div class="choices">
                                                 @foreach ($question->choices as $choice)
                                                     <div class="form-check fancy-input">
@@ -92,7 +92,7 @@
                                                     </div>
                                                 @endforeach
                                             </div>
-                                        @elseif ($question->getTypeLabel() === 'Multiple Choice')
+                                        @elseif ($question->getTypeLabel() === 'Pilihan Ganda')
                                             <div class="choices">
                                                 @foreach ($question->choices as $choice)
                                                     <div class="form-check fancy-input">
@@ -106,10 +106,10 @@
                                                     </div>
                                                 @endforeach
                                             </div>
-                                        @elseif ($question->getTypeLabel() === 'Short Answer')
+                                        @elseif ($question->getTypeLabel() === 'Jawaban Singkat')
                                             <div class="choices">
                                                 <input type="text" name="answers[{{ $question->id }}]"
-                                                    class="form-control" placeholder="Type your answer here">
+                                                    class="form-control" placeholder="Ketik jawaban Anda di sini">
                                             </div>
                                         @endif
                                     </div>
@@ -120,14 +120,13 @@
 
                                 <div class="btn-group" role="group">
                                     <button type="button" id="previousQuestionButton" class="btn btn-outline-secondary"
-                                        style="display: none;">Previous</button>
+                                        style="display: none;">Sebelumnya</button>
                                     <button type="button" id="nextQuestionButton" class="btn btn-outline-secondary"
-                                        style="display: none;">Next</button>
+                                        style="display: none;">Berikutnya</button>
                                 </div>
 
                                 <button type="submit" id="submitQuizButton" class="btn btn-success"
-                                    style="display: none;">Submit
-                                    Quiz</button>
+                                    style="display: none;">Kirim Kuis</button>
                             </div>
                         </form>
                     </div>
@@ -161,7 +160,7 @@
 
                     if (timeRemaining <= 0) {
                         clearInterval(timerInterval);
-                        alert('Time is up! Your quiz will now be submitted.');
+                        alert('Waktu habis! Kuis Anda akan dikirim sekarang.');
                         quizForm.submit(); // Automatically submit the quiz
                     }
 

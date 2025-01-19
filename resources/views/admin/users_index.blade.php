@@ -5,20 +5,20 @@
         <div>
             <a href="{{ route('admin.dashboard') }}" class="btn btn-warning me-2"><i
                     class="bi bi-arrow-left tw-me-2 tw-fs-4 tw-group-hover:tw-text-blue-500"></i>
-                <span class="tw-group-hover:tw-underline">Back</span></a>
+                <span class="tw-group-hover:tw-underline">Kembali</span></a>
         </div>
 
-        <h2 class="mb-4">Users</h2>
+        <h2 class="mb-4">Pengguna</h2>
 
         <!-- Toggle Buttons -->
         <div class="mb-4">
             <a href="{{ route('admin.users.index', ['type' => 'students']) }}"
                 class="btn {{ request('type') === 'students' ? 'btn-primary' : 'btn-outline-primary' }}">
-                Students
+                Siswa
             </a>
             <a href="{{ route('admin.users.index', ['type' => 'teachers']) }}"
                 class="btn {{ request('type') === 'teachers' ? 'btn-primary' : 'btn-outline-primary' }}">
-                Teachers
+                Guru
             </a>
         </div>
 
@@ -32,9 +32,9 @@
                                 <h5 class="card-title text-primary">{{ $student->name }}</h5>
                                 <p class="card-text">NIK : {{ $student->nik }}</p>
                                 <p class="card-text">Email : {{ $student->email }}</p>
-                                <p class="card-text">Date of Birth :{{ $student->date_of_birth }}</p>
-                                <p class="card-text">Phone Number : {{ $student->phone_number }}</p>
-                                <p class="card-text">Enrollment Date : {{ $student->enrollment_date }}</p>
+                                <p class="card-text">Tanggal Lahir : {{ $student->date_of_birth }}</p>
+                                <p class="card-text">Nomor Telepon : {{ $student->phone_number }}</p>
+                                <p class="card-text">Tanggal Pendaftaran : {{ $student->enrollment_date }}</p>
                                 <p class="card-text">
                                     <span class="badge bg-success">{{ ucfirst($student->role) }}</span>
                                 </p>
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                 @empty
-                    <p class="text-muted">No students found.</p>
+                    <p class="text-muted">Tidak ada siswa ditemukan.</p>
                 @endforelse
             </div>
         @elseif ($type === 'teachers')
@@ -54,10 +54,10 @@
                                 <h5 class="card-title text-primary">{{ $teacher->name }}</h5>
                                 <p class="card-text">Email : {{ $teacher->email }}</p>
                                 <p class="card-text">
-                                    Date of Birth : {{ $teacher->date_of_birth }}
+                                    Tanggal Lahir : {{ $teacher->date_of_birth }}
                                 </p>
                                 <p class="card-text">
-                                    Phone Number : {{ $teacher->phone_number }}
+                                    Nomor Telepon : {{ $teacher->phone_number }}
                                 </p>
                                 <p class="card-text">
                                     <span class="badge bg-info">{{ ucfirst($teacher->role) }}</span>
@@ -66,11 +66,11 @@
                         </div>
                     </div>
                 @empty
-                    <p class="text-muted">No teachers found.</p>
+                    <p class="text-muted">Tidak ada guru ditemukan.</p>
                 @endforelse
             </div>
         @else
-            <p class="text-muted">Please select a user type to view.</p>
+            <p class="text-muted">Silakan pilih jenis pengguna untuk melihat.</p>
         @endif
 
         <!-- Pagination -->
@@ -78,10 +78,10 @@
             <nav>
                 <ul class="pagination justify-content-center">
                     @if ($users->onFirstPage())
-                        <li class="page-item disabled"><span class="page-link">&laquo; Previous</span></li>
+                        <li class="page-item disabled"><span class="page-link">&laquo; Sebelumnya</span></li>
                     @else
                         <li class="page-item"><a class="page-link"
-                                href="{{ $users->previousPageUrl() }}&type={{ $type }}">&laquo; Previous</a></li>
+                                href="{{ $users->previousPageUrl() }}&type={{ $type }}">&laquo; Sebelumnya</a></li>
                     @endif
 
                     @foreach ($users->links()->elements[0] as $page => $url)
@@ -93,9 +93,9 @@
 
                     @if ($users->hasMorePages())
                         <li class="page-item"><a class="page-link"
-                                href="{{ $users->nextPageUrl() }}&type={{ $type }}">Next &raquo;</a></li>
+                                href="{{ $users->nextPageUrl() }}&type={{ $type }}">Berikutnya &raquo;</a></li>
                     @else
-                        <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
+                        <li class="page-item disabled"><span class="page-link">Berikutnya &raquo;</span></li>
                     @endif
                 </ul>
             </nav>

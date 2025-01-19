@@ -330,13 +330,11 @@ class DatabaseSeeder extends Seeder
             'enrollment_date' => '2022-08-22',
             'admin_id' => 2,
         ]);
-
-
-        // Create Courses
+        // Membuat Kursus
         $course1 = Course::create([
             'teacher_id' => 1,
-            'title' => 'Mathematics',
-            'description' => 'Advanced mathematics for senior high school.',
+            'title' => 'Matematika',
+            'description' => 'Matematika tingkat lanjut untuk SMA.',
             'start_date' => '2024-01-01',
             'end_date' => '2025-06-30',
             'image' => 'images/course/image1.jpeg',
@@ -344,8 +342,8 @@ class DatabaseSeeder extends Seeder
 
         $course2 = Course::create([
             'teacher_id' => 2,
-            'title' => 'Physics',
-            'description' => 'Fundamentals of physics with practical examples.',
+            'title' => 'Fisika',
+            'description' => 'Dasar-dasar fisika dengan contoh praktis.',
             'start_date' => '2024-01-01',
             'end_date' => '2025-06-30',
             'image' => 'images/course/image2.jpeg',
@@ -353,28 +351,28 @@ class DatabaseSeeder extends Seeder
 
         $course3 = Course::create([
             'teacher_id' => 3,
-            'title' => 'Chemistry',
-            'description' => 'Introduction to organic and inorganic chemistry.',
+            'title' => 'Kimia',
+            'description' => 'Pengantar kimia organik dan anorganik.',
             'start_date' => '2024-01-01',
             'end_date' => '2025-06-30',
             'image' => 'images/course/image3.jpeg',
         ]);
 
-        // Assign Courses to Classrooms with Schedules
+        // Menugaskan Kursus ke Kelas dengan Jadwal
         $classroom1->courses()->attach($course1->id, [
-            'day' => 'Monday',
+            'day' => 'Senin',
             'start_time' => '08:00:00',
             'end_time' => '09:30:00',
         ]);
 
         $classroom1->courses()->attach($course2->id, [
-            'day' => 'Thursday',
+            'day' => 'Kamis',
             'start_time' => '10:00:00',
             'end_time' => '11:30:00',
         ]);
 
         $classroom1->courses()->attach($course3->id, [
-            'day' => 'Wednesday',
+            'day' => 'Rabu',
             'start_time' => '09:00:00',
             'end_time' => '10:30:00',
         ]);
@@ -386,175 +384,173 @@ class DatabaseSeeder extends Seeder
         $classroom3->students()->attach(array_slice($students, 7, 3));
 
         $discussion1 = Discussion::create([
-            'module_id' => 1, // Module ID
-            'teacher_id' => 1, // Use valid teacher ID
-            'title' => 'Discussion for Module 1',
+            'module_id' => 1,
+            'teacher_id' => 1,
+            'title' => 'Diskusi untuk Modul 1',
         ]);
 
-        // Add Comments to Discussions
+        // Menambahkan Komentar ke Diskusi
         $comment1 = Comment::create([
-            'user_id' => $student1->id, // Student One
+            'user_id' => $student1->id,
             'discussion_id' => $discussion1->id,
-            'comment' => 'Can you explain this topic in more detail?',
+            'comment' => 'Bisakah Anda menjelaskan topik ini lebih detail?',
         ]);
 
         $comment2 = Comment::create([
-            'user_id' => $student2->id, // Student Two
+            'user_id' => $student2->id,
             'discussion_id' => $discussion1->id,
-            'comment' => 'I found this part confusing as well!',
+            'comment' => 'Bagian ini juga cukup membingungkan bagi saya!',
         ]);
 
         $comment3 = Comment::create([
-            'user_id' => $student1->id, // Student One
+            'user_id' => $student1->id,
             'discussion_id' => $discussion1->id,
-            'comment' => 'Can you provide more examples for this topic?',
+            'comment' => 'Dapatkah Anda memberikan lebih banyak contoh untuk topik ini?',
         ]);
 
-        // Replies to Comments by Teacher
+        // Balasan dari Guru
         Comment::create([
-            'user_id' => $teacher1->id, // Teacher One
+            'user_id' => $teacher1->id,
             'discussion_id' => $discussion1->id,
-            'comment' => 'Sure, I will provide more details in tomorrow\'s lecture.',
-            'parent_id' => $comment1->id, // Reply to comment1
-        ]);
-
-        Comment::create([
-            'user_id' => $teacher1->id, // Teacher One
-            'discussion_id' => $discussion1->id,
-            'comment' => 'Good point! Let me explain further in the discussion board.',
-            'parent_id' => $comment2->id, // Reply to comment2
+            'comment' => 'Tentu, saya akan memberikan penjelasan lebih rinci di kelas besok.',
+            'parent_id' => $comment1->id,
         ]);
 
         Comment::create([
-            'user_id' => $teacher1->id, // Teacher Two
+            'user_id' => $teacher1->id,
             'discussion_id' => $discussion1->id,
-            'comment' => 'I\'ll add more examples in the notes. Thanks for the suggestion!',
-            'parent_id' => $comment3->id, // Reply to comment3
+            'comment' => 'Poin yang bagus! Saya akan membahasnya lebih lanjut di diskusi.',
+            'parent_id' => $comment2->id,
+        ]);
+
+        Comment::create([
+            'user_id' => $teacher1->id,
+            'discussion_id' => $discussion1->id,
+            'comment' => 'Saya akan menambahkan lebih banyak contoh di materi. Terima kasih atas sarannya!',
+            'parent_id' => $comment3->id,
         ]);
 
         $discussion2 = Discussion::create([
-            'module_id' => 4, // Module 4
-            'teacher_id' => 2, // Teacher ID for the Physics course
-            'title' => 'Discussion for Module 1',
+            'module_id' => 4,
+            'teacher_id' => 2,
+            'title' => 'Diskusi untuk Modul 1',
         ]);
 
-        // Add Comments to the Discussion
+        // Komentar di Diskusi
         $comment4 = Comment::create([
-            'user_id' => $student3->id, // Student Three
+            'user_id' => $student3->id,
             'discussion_id' => $discussion2->id,
-            'comment' => 'I didn’t quite understand the concept of force and motion. Could you explain it again?',
+            'comment' => 'Saya kurang memahami konsep gaya dan gerak. Bisakah Anda menjelaskannya lagi?',
         ]);
 
         $comment5 = Comment::create([
-            'user_id' => $student4->id, // Student Four
+            'user_id' => $student4->id,
             'discussion_id' => $discussion2->id,
-            'comment' => 'I also had some trouble with this topic. Can anyone provide additional resources?',
+            'comment' => 'Saya juga merasa kesulitan dengan topik ini. Adakah referensi tambahan yang bisa diberikan?',
         ]);
 
         $comment6 = Comment::create([
-            'user_id' => $student5->id, // Student Five
+            'user_id' => $student5->id,
             'discussion_id' => $discussion2->id,
-            'comment' => 'I think I understand it, but I’m not sure how to apply it in practical situations.',
+            'comment' => 'Saya pikir saya mengerti, tetapi saya tidak yakin bagaimana menerapkannya di kehidupan nyata.',
         ]);
 
-        // Replies to Comments by Teacher
+        // Balasan dari Guru
         Comment::create([
-            'user_id' => $teacher2->id, // Teacher Two for Physics
+            'user_id' => $teacher2->id,
             'discussion_id' => $discussion2->id,
-            'comment' => 'No problem! I will go over the topic in the next lecture and provide more detailed examples.',
-            'parent_id' => $comment4->id, // Reply to comment4
-        ]);
-
-        Comment::create([
-            'user_id' => $teacher2->id, // Teacher Two for Physics
-            'discussion_id' => $discussion2->id,
-            'comment' => 'I’ll share additional reading materials and videos for this topic to help you.',
-            'parent_id' => $comment5->id, // Reply to comment5
+            'comment' => 'Tentu saja! Saya akan membahasnya lagi di kelas berikutnya dengan contoh yang lebih rinci.',
+            'parent_id' => $comment4->id,
         ]);
 
         Comment::create([
-            'user_id' => $teacher2->id, // Teacher Two for Physics
+            'user_id' => $teacher2->id,
             'discussion_id' => $discussion2->id,
-            'comment' => 'Great! I’ll demonstrate some real-life examples during the next class to help clarify things.',
-            'parent_id' => $comment6->id, // Reply to comment6
+            'comment' => 'Saya akan membagikan materi tambahan dan video untuk membantu Anda.',
+            'parent_id' => $comment5->id,
+        ]);
+
+        Comment::create([
+            'user_id' => $teacher2->id,
+            'discussion_id' => $discussion2->id,
+            'comment' => 'Bagus! Saya akan menunjukkan beberapa contoh nyata di kelas berikutnya.',
+            'parent_id' => $comment6->id,
         ]);
 
         $discussion3 = Discussion::create([
-            'module_id' => 7, // Module 7 for the Chemistry course
-            'teacher_id' => 3, // Teacher ID for the Chemistry course
-            'title' => 'Discussion for Module 1',
+            'module_id' => 7,
+            'teacher_id' => 3,
+            'title' => 'Diskusi untuk Modul 1',
         ]);
 
-        // Add Comments to the Discussion
+        // Komentar di Diskusi
         $comment7 = Comment::create([
-            'user_id' => $student6->id, // Student Six
+            'user_id' => $student6->id,
             'discussion_id' => $discussion3->id,
-            'comment' => 'I’m having trouble understanding the reaction mechanisms. Could someone clarify?',
+            'comment' => 'Saya kesulitan memahami mekanisme reaksi. Bisa dijelaskan lebih rinci?',
         ]);
 
         $comment8 = Comment::create([
-            'user_id' => $student7->id, // Student Seven
+            'user_id' => $student7->id,
             'discussion_id' => $discussion3->id,
-            'comment' => 'The topic is a bit confusing to me as well. Any suggested reading to get a better grasp?',
+            'comment' => 'Topik ini cukup membingungkan bagi saya. Adakah referensi tambahan?',
         ]);
 
         $comment9 = Comment::create([
-            'user_id' => $student8->id, // Student Eight
+            'user_id' => $student8->id,
             'discussion_id' => $discussion3->id,
-            'comment' => 'Can anyone explain how the principles of organic chemistry apply to everyday life?',
+            'comment' => 'Bagaimana penerapan kimia organik dalam kehidupan sehari-hari?',
         ]);
 
-        // Replies to Comments by Teacher
+        // Balasan dari Guru
         Comment::create([
-            'user_id' => $teacher3->id, // Teacher Three for Chemistry
+            'user_id' => $teacher3->id,
             'discussion_id' => $discussion3->id,
-            'comment' => 'Absolutely! I will explain the reaction mechanisms more thoroughly in the next class and provide examples.',
-            'parent_id' => $comment7->id, // Reply to comment7
-        ]);
-
-        Comment::create([
-            'user_id' => $teacher3->id, // Teacher Three for Chemistry
-            'discussion_id' => $discussion3->id,
-            'comment' => 'I’ll upload additional readings and videos on reaction mechanisms to help you understand better.',
-            'parent_id' => $comment8->id, // Reply to comment8
+            'comment' => 'Tentu saja! Saya akan menjelaskan mekanisme reaksi lebih rinci di kelas berikutnya.',
+            'parent_id' => $comment7->id,
         ]);
 
         Comment::create([
-            'user_id' => $teacher3->id, // Teacher Three for Chemistry
+            'user_id' => $teacher3->id,
             'discussion_id' => $discussion3->id,
-            'comment' => 'That’s a great question! I will discuss real-world applications of organic chemistry in the next lecture.',
-            'parent_id' => $comment9->id, // Reply to comment9
+            'comment' => 'Saya akan unggah materi tambahan tentang mekanisme reaksi untuk membantu Anda.',
+            'parent_id' => $comment8->id,
         ]);
 
-
+        Comment::create([
+            'user_id' => $teacher3->id,
+            'discussion_id' => $discussion3->id,
+            'comment' => 'Pertanyaan bagus! Saya akan membahas penerapan kimia organik dalam kehidupan sehari-hari.',
+            'parent_id' => $comment9->id,
+        ]);
         $lesson1 = Lesson::create([
-            'title' => 'Introduction to Mathematics',
-            'content' => 'lessons\mathematics.pdf', // Make sure to upload this PDF to your storage
-            'module_id' => 1, // Module 1
+            'title' => 'Pendahuluan ke Matematika',
+            'content' => 'lessons\matematika.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
+            'module_id' => 1, // Modul 1
             'visible' => true,
         ]);
 
         $lesson2 = Lesson::create([
-            'title' => 'Advanced Calculus',
-            'content' => 'advanced_calculus.pdf', // Make sure to upload this PDF to your storage
-            'module_id' => 2, // Module 1
+            'title' => 'Kalkulus Tingkat Lanjut',
+            'content' => 'kalkulus_tingkat_lanjut.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
+            'module_id' => 2, // Modul 1
             'visible' => false,
         ]);
 
-        // Add a Quiz to Module 1
+        // Tambahkan Kuis ke Modul 1
         $quiz1 = Quiz::create([
-            'title' => 'Mathematics Basics Quiz',
-            'description' => 'Test your knowledge of basic mathematics concepts.',
-            'module_id' => 1, // Module 1
+            'title' => 'Kuis Dasar Matematika',
+            'description' => 'Uji pengetahuan Anda tentang konsep dasar matematika.',
+            'module_id' => 1, // Modul 1
             'deadline' => Carbon::now()->addDays(7),
             'duration' => 10
         ]);
 
-        // Add Questions to the Quiz
+        // Tambahkan Pertanyaan ke Kuis
         $question1 = Question::create([
             'quiz_id' => $quiz1->id,
-            'question_text' => 'What is 2 + 2?',
-            'question_type' => '0', // Single Choice
+            'question_text' => 'Berapa hasil dari 2 + 2?',
+            'question_type' => '0', // Pilihan Tunggal
             'points' => 5,
         ]);
 
@@ -578,8 +574,8 @@ class DatabaseSeeder extends Seeder
 
         $question2 = Question::create([
             'quiz_id' => $quiz1->id,
-            'question_text' => 'Which of the following are prime numbers?',
-            'question_type' => '1', // Multiple Choice
+            'question_text' => 'Manakah dari berikut ini yang merupakan bilangan prima?',
+            'question_type' => '1', // Pilihan Ganda
             'points' => 10,
         ]);
 
@@ -603,8 +599,8 @@ class DatabaseSeeder extends Seeder
 
         $question3 = Question::create([
             'quiz_id' => $quiz1->id,
-            'question_text' => 'What is the square root of 4?',
-            'question_type' => '2', // Short Answer
+            'question_text' => 'Berapa akar kuadrat dari 4?',
+            'question_type' => '2', // Jawaban Pendek
             'points' => 20,
         ]);
 
@@ -616,8 +612,8 @@ class DatabaseSeeder extends Seeder
 
         $question4 = Question::create([
             'quiz_id' => $quiz1->id,
-            'question_text' => 'What is the result of square of 5?',
-            'question_type' => '2', // Short Answer
+            'question_text' => 'Berapa hasil kuadrat dari 5?',
+            'question_type' => '2', // Jawaban Pendek
             'points' => 20,
         ]);
 
@@ -629,159 +625,152 @@ class DatabaseSeeder extends Seeder
 
         $question5 = Question::create([
             'quiz_id' => $quiz1->id,
-            'question_text' => 'Which of the following is a branch of Mathematic?',
-            'question_type' => '0', // Single Choice
+            'question_text' => 'Manakah dari berikut ini yang merupakan cabang matematika?',
+            'question_type' => '0', // Pilihan Tunggal
             'points' => 20,
         ]);
 
         QuestionChoice::create([
             'question_id' => $question5->id,
-            'choice_text' => 'Inertia',
+            'choice_text' => 'Inersia',
             'is_correct' => false,
         ]);
 
         QuestionChoice::create([
             'question_id' => $question5->id,
-            'choice_text' => 'Calculus',
+            'choice_text' => 'Kalkulus',
             'is_correct' => true,
         ]);
 
         QuestionChoice::create([
             'question_id' => $question5->id,
-            'choice_text' => 'Atoms',
+            'choice_text' => 'Atom',
             'is_correct' => false,
         ]);
 
-        // Add Lessons to Module 2
+        // Tambahkan Pelajaran ke Modul 2
         $lesson3 = Lesson::create([
-            'title' => 'Introduction to Physics',
-            'content' => 'physics_intro.pdf', // Make sure to upload this PDF to your storage
-            'module_id' => 4, // Module 2
+            'title' => 'Pendahuluan ke Fisika',
+            'content' => 'fisika_pendahuluan.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
+            'module_id' => 4, // Modul 2
             'visible' => true,
         ]);
 
         $lesson4 = Lesson::create([
-            'title' => 'Fundamentals of Motion',
-            'content' => 'motion_basics.pdf', // Make sure to upload this PDF to your storage
-            'module_id' => 5, // Module 2
+            'title' => 'Dasar-Dasar Gerak',
+            'content' => 'gerak_dasar.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
+            'module_id' => 5, // Modul 2
             'visible' => false,
         ]);
 
-        // Add a Quiz to Module 2
+        // Tambahkan Kuis ke Modul 2
         $quiz2 = Quiz::create([
-            'title' => 'Physics Fundamentals Quiz',
-            'description' => 'Test your knowledge of basic physics concepts.',
-            'module_id' => 4, // Module 2
+            'title' => 'Kuis Dasar Fisika',
+            'description' => 'Uji pengetahuan Anda tentang konsep dasar fisika.',
+            'module_id' => 4, // Modul 2
             'deadline' => Carbon::now()->addDays(1),
             'duration' => 10
         ]);
 
-        // Add Questions to the Quiz
-        $question4 = Question::create([
+        // Tambahkan Pertanyaan ke Kuis
+        $question6 = Question::create([
             'quiz_id' => $quiz2->id,
-            'question_text' => 'What is the speed of light in a vacuum?',
-            'question_type' => '0', // Single Choice
+            'question_text' => 'Berapa kecepatan cahaya di ruang hampa?',
+            'question_type' => '0', // Pilihan Tunggal
             'points' => 5,
         ]);
 
         QuestionChoice::create([
-            'question_id' => $question4->id,
-            'choice_text' => '300,000 km/s',
+            'question_id' => $question6->id,
+            'choice_text' => '300.000 km/s',
             'is_correct' => true,
-        ]);
-
-        QuestionChoice::create([
-            'question_id' => $question4->id,
-            'choice_text' => '150,000 km/s',
-            'is_correct' => false,
-        ]);
-
-        QuestionChoice::create([
-            'question_id' => $question4->id,
-            'choice_text' => '450,000 km/s',
-            'is_correct' => false,
-        ]);
-
-        $question5 = Question::create([
-            'quiz_id' => $quiz2->id,
-            'question_text' => 'Which of the following are laws of motion?',
-            'question_type' => '1', // Multiple Choice
-            'points' => 10,
-        ]);
-
-        QuestionChoice::create([
-            'question_id' => $question5->id,
-            'choice_text' => 'Newton\'s First Law',
-            'is_correct' => true,
-        ]);
-
-        QuestionChoice::create([
-            'question_id' => $question5->id,
-            'choice_text' => 'Ohm\'s Law',
-            'is_correct' => false,
-        ]);
-
-        QuestionChoice::create([
-            'question_id' => $question5->id,
-            'choice_text' => 'Newton\'s Second Law',
-            'is_correct' => true,
-        ]);
-
-        $question6 = Question::create([
-            'quiz_id' => $quiz2->id,
-            'question_text' => 'Explain the concept of inertia.',
-            'question_type' => '2', // Short Answer
-            'points' => 20,
         ]);
 
         QuestionChoice::create([
             'question_id' => $question6->id,
-            'choice_text' => 'I dont want to',
+            'choice_text' => '150.000 km/s',
+            'is_correct' => false,
+        ]);
+
+        QuestionChoice::create([
+            'question_id' => $question6->id,
+            'choice_text' => '450.000 km/s',
+            'is_correct' => false,
+        ]);
+
+        $question7 = Question::create([
+            'quiz_id' => $quiz2->id,
+            'question_text' => 'Manakah dari berikut ini yang merupakan hukum gerak?',
+            'question_type' => '1', // Pilihan Ganda
+            'points' => 10,
+        ]);
+
+        QuestionChoice::create([
+            'question_id' => $question7->id,
+            'choice_text' => 'Hukum Pertama Newton',
             'is_correct' => true,
         ]);
 
-        // Add assignments for Module 1
+        QuestionChoice::create([
+            'question_id' => $question7->id,
+            'choice_text' => 'Hukum Ohm',
+            'is_correct' => false,
+        ]);
+
+        QuestionChoice::create([
+            'question_id' => $question7->id,
+            'choice_text' => 'Hukum Kedua Newton',
+            'is_correct' => true,
+        ]);
+
+        $question8 = Question::create([
+            'quiz_id' => $quiz2->id,
+            'question_text' => 'Jelaskan konsep inersia.',
+            'question_type' => '2', // Jawaban Pendek
+            'points' => 20,
+        ]);
+
+        // Tambahkan Tugas untuk Modul 1
         $assignment1 = Assignment::create([
             'module_id' => 1,
-            'title' => 'Linear Equations Assignment',
-            'description' => 'Solve the given set of linear equations.',
-            'deadline' => Carbon::now()->addDays(7), // Deadline 7 days from now
+            'title' => 'Tugas Persamaan Linear',
+            'description' => 'Selesaikan serangkaian persamaan linear yang diberikan.',
+            'deadline' => Carbon::now()->addDays(7),
         ]);
 
         $assignment2 = Assignment::create([
             'module_id' => 2,
-            'title' => 'Quadratic Equations Assignment',
-            'description' => 'Complete the questions on quadratic equations.',
-            'deadline' => Carbon::now()->addDays(10), // Deadline 10 days from now
+            'title' => 'Tugas Persamaan Kuadrat',
+            'description' => 'Lengkapi soal-soal tentang persamaan kuadrat.',
+            'deadline' => Carbon::now()->addDays(10),
         ]);
-
         $lesson5 = Lesson::create([
-            'title' => 'Introduction to Organic Chemistry',
-            'content' => 'lessons\chemistry.pdf', // Make sure to upload this PDF to your storage
-            'module_id' => 7, // Assuming Module 1 is for Organic Chemistry
+            'title' => 'Pendahuluan ke Kimia Organik',
+            'content' => 'lessons\kimia.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
+            'module_id' => 7, // Asumsi Modul 1 adalah untuk Kimia Organik
             'visible' => true,
         ]);
 
         $lesson6 = Lesson::create([
-            'title' => 'Basics of Inorganic Chemistry',
-            'content' => 'inorganic_chem_basics.pdf', // Make sure to upload this PDF to your storage
-            'module_id' => 8, // Assuming Module 2 is for Inorganic Chemistry
+            'title' => 'Dasar-Dasar Kimia Anorganik',
+            'content' => 'dasar_kimia_anorganik.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
+            'module_id' => 8, // Asumsi Modul 2 adalah untuk Kimia Anorganik
             'visible' => true,
         ]);
 
         $quiz3 = Quiz::create([
-            'title' => 'Introduction to Organic Chemistry Quiz',
-            'description' => 'Test your knowledge of Organic Chemistry concepts.',
-            'module_id' => 7, // Module 1 (Organic Chemistry)
+            'title' => 'Kuis Pendahuluan ke Kimia Organik',
+            'description' => 'Uji pengetahuan Anda tentang konsep Kimia Organik.',
+            'module_id' => 7, // Modul 1 (Kimia Organik)
             'deadline' => Carbon::now()->addDays(1),
             'duration' => 10,
         ]);
 
-        // Add Questions to the Quiz
+        // Tambahkan Pertanyaan ke Kuis
         $question7 = Question::create([
             'quiz_id' => $quiz3->id,
-            'question_text' => 'What is the general formula for alkanes?',
-            'question_type' => '0', // Single Choice
+            'question_text' => 'Apa rumus umum untuk alkana?',
+            'question_type' => '0', // Pilihan Tunggal
             'points' => 5,
         ]);
 
@@ -805,87 +794,87 @@ class DatabaseSeeder extends Seeder
 
         $question8 = Question::create([
             'quiz_id' => $quiz3->id,
-            'question_text' => 'What type of bond is formed between two carbon atoms in an alkene?',
-            'question_type' => '0', // Single Choice
+            'question_text' => 'Jenis ikatan apa yang terbentuk antara dua atom karbon dalam alkena?',
+            'question_type' => '0', // Pilihan Tunggal
             'points' => 5,
         ]);
 
         QuestionChoice::create([
             'question_id' => $question8->id,
-            'choice_text' => 'Double bond',
+            'choice_text' => 'Ikatan rangkap dua',
             'is_correct' => true,
         ]);
 
         QuestionChoice::create([
             'question_id' => $question8->id,
-            'choice_text' => 'Triple bond',
+            'choice_text' => 'Ikatan rangkap tiga',
             'is_correct' => false,
         ]);
 
         QuestionChoice::create([
             'question_id' => $question8->id,
-            'choice_text' => 'Quadruple bond',
+            'choice_text' => 'Ikatan rangkap empat',
             'is_correct' => false,
         ]);
 
         $question9 = Question::create([
             'quiz_id' => $quiz3->id,
-            'question_text' => 'Which of the following is a characteristic of an aromatic compound?',
-            'question_type' => '1', // Multiple Choice
+            'question_text' => 'Manakah dari berikut ini yang merupakan karakteristik senyawa aromatik?',
+            'question_type' => '1', // Pilihan Ganda
             'points' => 5,
         ]);
 
         QuestionChoice::create([
             'question_id' => $question9->id,
-            'choice_text' => 'It contains a benzene ring.',
+            'choice_text' => 'Mengandung cincin benzena.',
             'is_correct' => true,
         ]);
 
         QuestionChoice::create([
             'question_id' => $question9->id,
-            'choice_text' => 'It is soluble in water.',
+            'choice_text' => 'Larut dalam air.',
             'is_correct' => false,
         ]);
 
         QuestionChoice::create([
             'question_id' => $question9->id,
-            'choice_text' => 'It is a saturated compound.',
+            'choice_text' => 'Merupakan senyawa jenuh.',
             'is_correct' => false,
         ]);
 
         QuestionChoice::create([
             'question_id' => $question9->id,
-            'choice_text' => 'It undergoes only substitution reactions.',
+            'choice_text' => 'Hanya mengalami reaksi substitusi.',
             'is_correct' => false,
         ]);
 
-        // Add assignments for Module 2
+        // Tambahkan Tugas untuk Modul 2
         $assignment3 = Assignment::create([
             'module_id' => 4,
-            'title' => 'Physics Lab Report',
-            'description' => 'Submit your findings from the recent lab experiment.',
-            'deadline' => Carbon::create(2024, 12, 31, 23, 59, 59), // Specific deadline
+            'title' => 'Laporan Praktikum Fisika',
+            'description' => 'Kumpulkan hasil temuan Anda dari eksperimen laboratorium terbaru.',
+            'deadline' => Carbon::create(2024, 12, 31, 23, 59, 59), // Tanggal batas waktu tertentu
         ]);
 
         $assignment4 = Assignment::create([
             'module_id' => 5,
-            'title' => 'Newton’s Laws Application',
-            'description' => 'Explain real-life examples of Newton’s laws.',
-            'deadline' => Carbon::now()->addDays(14), // Deadline 14 days from now
+            'title' => 'Aplikasi Hukum Newton',
+            'description' => 'Jelaskan contoh nyata penerapan hukum Newton.',
+            'deadline' => Carbon::now()->addDays(14), // Batas waktu 14 hari dari sekarang
         ]);
 
         $assignment5 = Assignment::create([
-            'module_id' => 7, // Module 1 (Organic Chemistry)
-            'title' => 'Organic Chemistry Reaction Mechanisms',
-            'description' => 'Describe the mechanism of nucleophilic substitution reactions.',
-            'deadline' => Carbon::create(2024, 12, 15, 23, 59, 59), // Specific deadline
+            'module_id' => 7, // Modul 1 (Kimia Organik)
+            'title' => 'Mekanisme Reaksi Kimia Organik',
+            'description' => 'Jelaskan mekanisme reaksi substitusi nukleofilik.',
+            'deadline' => Carbon::create(2024, 12, 15, 23, 59, 59), // Tanggal batas waktu tertentu
         ]);
 
         $assignment6 = Assignment::create([
-            'module_id' => 8, // Module 2 (Inorganic Chemistry)
-            'title' => 'Periodic Table Trends',
-            'description' => 'Analyze and explain the trends in atomic radius, ionization energy, and electronegativity across periods and groups.',
-            'deadline' => Carbon::now()->addDays(21), // Deadline 21 days from now
+            'module_id' => 8, // Modul 2 (Kimia Anorganik)
+            'title' => 'Tren Tabel Periodik',
+            'description' => 'Analisis dan jelaskan tren dalam jari-jari atom, energi ionisasi, dan elektronegativitas di seluruh periode dan golongan.',
+            'deadline' => Carbon::now()->addDays(21), // Batas waktu 21 hari dari sekarang
         ]);
     }
 }
