@@ -3,10 +3,10 @@
 @section('content')
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>All Courses</h1>
+            <h1>Semua Kursus</h1>
             @if (!$courses->isEmpty())
                 <div>
-                    <a href="{{ route('admin.courses.create') }}" class="btn btn-primary me-2">Create Course</a>
+                    <a href="{{ route('admin.courses.create') }}" class="btn btn-primary me-2">Buat Kursus</a>
                 </div>
             @endif
         </div>
@@ -17,29 +17,29 @@
         @endif
 
         @if ($courses->isEmpty())
-            <p>No courses available. <a href="{{ route('admin.courses.create') }}">Create a Course</a></p>
+            <p>Tidak ada kursus yang tersedia. <a href="{{ route('admin.courses.create') }}">Buat Kursus</a></p>
         @else
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Teacher</th>
-                        <th>Classrooms</th>
-                        <th>Schedule</th>
-                        <th>Actions</th>
+                        <th>Judul</th>
+                        <th>Guru</th>
+                        <th>Kelas</th>
+                        <th>Jadwal</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($courses as $course)
                         <tr>
-                            <td >{{ $course->title }}</td>
-                            <td >{{ $course->teacher->name }}</td>
-                            <td >
+                            <td>{{ $course->title }}</td>
+                            <td>{{ $course->teacher->name }}</td>
+                            <td>
                                 @foreach ($course->classrooms as $classroom)
                                     <p>{{ $classroom->name }}</p>
                                 @endforeach
                             </td>
-                            <td >
+                            <td>
                                 @foreach ($course->classrooms as $classroom)
                                     <p>
                                         {{ $classroom->pivot->day }}:
@@ -49,12 +49,12 @@
                             </td>
                             <td>
                                 <div class="d-flex justify-content-between">
-                                    <a href="{{ route('admin.courses.show', $course->id) }}" class="btn btn-primary btn-sm flex-fill me-1">View</a>
+                                    <a href="{{ route('admin.courses.show', $course->id) }}" class="btn btn-primary btn-sm flex-fill me-1">Lihat</a>
                                     <a href="{{ route('admin.courses.edit', $course->id) }}" class="btn btn-warning btn-sm flex-fill me-1">Edit</a>
                                     <form action="{{ route('admin.courses.destroy', $course->id) }}" method="POST" class="flex-fill">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm w-100">Delete</button>
+                                        <button type="submit" class="btn btn-danger btn-sm w-100">Hapus</button>
                                     </form>
                                 </div>
                             </td>

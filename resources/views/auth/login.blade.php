@@ -4,14 +4,14 @@
     <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-mt-10">
         <div class="tw-bg-image"></div>
         <h1 class="tw-text-6xl tw-font-bold tw-text-gray-800 tw-mb-8  tw-text-center tw-text-white">
-            Welcome to iLearn
+            Selamat Datang di iLearn
         </h1>
 
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-7">
                     <div class="card">
-                        <div class="card-header tw-text-center tw-font-bold">{{ __('Login') }}</div>
+                        <div class="card-header tw-text-center tw-font-bold">{{ __('Masuk') }}</div>
 
                         <div class="card-body">
                             <form method="POST" action="{{ route('login') }}">
@@ -19,7 +19,7 @@
 
                                 <div class="row mb-3">
                                     <label for="email"
-                                        class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+                                        class="col-md-4 col-form-label text-md-end">{{ __('Alamat Email') }}</label>
 
                                     <div class="col-md-6">
                                         <input id="email" type="email"
@@ -36,7 +36,7 @@
 
                                 <div class="row mb-3">
                                     <label for="password"
-                                        class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+                                        class="col-md-4 col-form-label text-md-end">{{ __('Kata Sandi') }}</label>
 
                                     <div class="col-md-6">
                                         <input id="password" type="password"
@@ -58,7 +58,7 @@
                                                 {{ old('remember') ? 'checked' : '' }}>
 
                                             <label class="form-check-label" for="remember">
-                                                {{ __('Remember Me') }}
+                                                {{ __('Ingat Saya') }}
                                             </label>
                                         </div>
                                     </div>
@@ -67,12 +67,12 @@
                                 <div class="row mb-0">
                                     <div class="col-md-8 offset-md-4">
                                         <button type="submit" class="btn btn-primary">
-                                            {{ __('Login') }}
+                                            {{ __('Masuk') }}
                                         </button>
 
                                         @if (Route::has('password.request'))
                                             <a class="btn btn-link" href="{{ route('password.request') }}">
-                                                {{ __('Forgot Your Password?') }}
+                                                {{ __('Lupa Kata Sandi Anda?') }}
                                             </a>
                                         @endif
                                     </div>

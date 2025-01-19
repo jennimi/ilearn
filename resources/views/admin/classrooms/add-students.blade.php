@@ -3,9 +3,9 @@
 @section('content')
 <div class="container">
     <div>
-        <a href="javascript:void(0);" onclick="window.history.back();" class="btn btn-warning me-2">Back</a>
+        <a href="javascript:void(0);" onclick="window.history.back();" class="btn btn-warning me-2">Kembali</a>
     </div>
-    <h1 class="mb-3">Manage Students for {{ $classroom->name }}</h1>
+    <h1 class="mb-3">Kelola Siswa untuk {{ $classroom->name }}</h1>
 
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -24,10 +24,10 @@
     <div class="row">
         <!-- Current Students Section -->
         <div class="col-md-6">
-            <h3>Current Students</h3>
+            <h3>Siswa Saat Ini</h3>
 
             @if ($classroom->students->isEmpty())
-                <p>No students are currently assigned to this classroom.</p>
+                <p>Tidak ada siswa yang saat ini terdaftar di kelas ini.</p>
             @else
                 <form method="POST" action="{{ route('admin.classrooms.removeStudents', $classroom->id) }}">
                     @csrf
@@ -42,17 +42,17 @@
                         @endforeach
                     </ul>
 
-                    <button type="submit" class="btn btn-danger mt-3">Remove Selected Students</button>
+                    <button type="submit" class="btn btn-danger mt-3">Hapus Siswa yang Dipilih</button>
                 </form>
             @endif
         </div>
 
         <!-- Available Students Section -->
         <div class="col-md-6">
-            <h3>Add Students</h3>
+            <h3>Tambah Siswa</h3>
 
             <div class="mb-3">
-                <input type="text" class="form-control" id="searchInput" placeholder="Search by NIK">
+                <input type="text" class="form-control" id="searchInput" placeholder="Cari berdasarkan NIK">
             </div>
 
             <form method="POST" action="{{ route('admin.classrooms.addStudents', $classroom->id) }}">
@@ -67,7 +67,7 @@
                     @endforeach
                 </ul>
 
-                <button type="submit" class="btn btn-success mt-3">Add Selected Students</button>
+                <button type="submit" class="btn btn-success mt-3">Tambah Siswa yang Dipilih</button>
             </form>
         </div>
     </div>

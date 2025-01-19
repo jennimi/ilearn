@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1 class="mb-4">Class Ranking</h1>
+        <h1 class="mb-4">Peringkat Kelas</h1>
         <p class="text-muted">{{ $classroom->name }} - {{ $classroom->time_period }}</p>
 
         <div class="table-responsive">
@@ -10,9 +10,9 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Score</th>
-                        <th>Progress</th>
+                        <th>Nama</th>
+                        <th>Skor</th>
+                        <th>Progres</th>
                     </tr>
                 </thead>
                 <tbody>

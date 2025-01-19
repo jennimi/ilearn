@@ -6,7 +6,7 @@
         <p class="text-muted mb-3">{{ $course->description }}</p>
 
         <div class="mb-3">
-            <h3 class="text-secondary">Classrooms</h3>
+            <h3 class="text-secondary">Kelas</h3>
             <div class="row">
                 @foreach ($course->classrooms as $classroom)
                     <div class="col-lg-2 col-md-3 col-sm-4 mb-4">
@@ -18,7 +18,7 @@
                                     {{ $classroom->pivot->start_time }} - {{ $classroom->pivot->end_time }}
                                 </p>
                                 <a href="{{ route('teacher.leaderboard', $classroom->id) }}" class="btn btn-primary btn-sm">
-                                    View Leaderboard
+                                    Lihat Peringkat
                                 </a>
                             </div>
                         </div>
@@ -27,9 +27,9 @@
             </div>
         </div>
 
-        <!-- Modules and Lessons Section -->
+        <!-- Bagian Modul dan Pelajaran -->
         <div class="accordion" id="modulesAccordion">
-            <h3 class="text-secondary">Modules</h3>
+            <h3 class="text-secondary">Modul</h3>
             @foreach ($course->modules as $module)
                 <div class="accordion-item mb-3 shadow-sm border">
                     <h2 class="accordion-header" id="heading{{ $module->id }}">
@@ -44,10 +44,10 @@
                         aria-labelledby="heading{{ $module->id }}" data-bs-parent="#modulesAccordion">
                         <div class="accordion-body">
 
-                            <!-- Lessons Section -->
-                            <h5 class="text-secondary">Lessons</h5>
+                            <!-- Bagian Pelajaran -->
+                            <h5 class="text-secondary">Pelajaran</h5>
                             @if ($module->lessons->isEmpty())
-                                <p class="text-danger">No lessons available for this module.</p>
+                                <p class="text-danger">Tidak ada pelajaran untuk modul ini.</p>
                             @else
                                 <ul class="list-group mb-4">
                                     @foreach ($module->lessons as $lesson)
@@ -58,14 +58,14 @@
                                                     <div>
                                                         <span
                                                             class="badge bg-{{ $lesson->visible ? 'success' : 'danger' }}">
-                                                            {{ $lesson->visible ? 'Visible' : 'Hidden' }}
+                                                            {{ $lesson->visible ? 'Terlihat' : 'Tersembunyi' }}
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div>
                                                     <a href="{{ asset('storage/' . $lesson->content) }}" target="_blank"
                                                         class="btn btn-success btn-sm">
-                                                        View Full PDF
+                                                        Lihat PDF Lengkap
                                                     </a>
                                                     <button type="button" class="btn btn-outline-primary btn-sm"
                                                         data-bs-toggle="modal"
@@ -75,12 +75,12 @@
                                                     <button type="button" class="btn btn-outline-secondary btn-sm"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#toggleVisibilityModal{{ $lesson->id }}">
-                                                        Update Visibility
+                                                        Perbarui Visibilitas
                                                     </button>
                                                     <button type="button" class="btn btn-outline-danger btn-sm"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#deleteLessonModal{{ $lesson->id }}">
-                                                        Delete
+                                                        Hapus
                                                     </button>
                                                 </div>
                                             </div>
@@ -109,47 +109,47 @@
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title"
                                                                     id="editLessonModalLabel{{ $lesson->id }}">Edit
-                                                                    Lesson</h5>
+                                                                    Pelajaran</h5>
                                                                 <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    data-bs-dismiss="modal" aria-label="Tutup"></button>
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="mb-3">
                                                                     <label for="editTitle{{ $lesson->id }}"
-                                                                        class="form-label">Lesson Title</label>
+                                                                        class="form-label">Judul Pelajaran</label>
                                                                     <input type="text" class="form-control"
                                                                         id="editTitle{{ $lesson->id }}" name="title"
                                                                         value="{{ $lesson->title }}" required>
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label for="editContent{{ $lesson->id }}"
-                                                                        class="form-label">Replace PDF (Optional)</label>
+                                                                        class="form-label">Ganti PDF (Opsional)</label>
                                                                     <input type="file" class="form-control"
                                                                         id="editContent{{ $lesson->id }}" name="content"
                                                                         accept="application/pdf">
-                                                                    <small class="text-muted">Leave empty to keep the
-                                                                        current file.</small>
+                                                                    <small class="text-muted">Kosongkan jika ingin
+                                                                        menggunakan file saat ini.</small>
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label for="editVisible{{ $lesson->id }}"
-                                                                        class="form-label">Visible</label>
+                                                                        class="form-label">Terlihat</label>
                                                                     <select class="form-control"
                                                                         id="editVisible{{ $lesson->id }}"
                                                                         name="visible">
                                                                         <option value="1"
-                                                                            {{ $lesson->visible ? 'selected' : '' }}>Yes
+                                                                            {{ $lesson->visible ? 'selected' : '' }}>Ya
                                                                         </option>
                                                                         <option value="0"
-                                                                            {{ !$lesson->visible ? 'selected' : '' }}>No
+                                                                            {{ !$lesson->visible ? 'selected' : '' }}>Tidak
                                                                         </option>
                                                                     </select>
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Cancel</button>
-                                                                <button type="submit" class="btn btn-primary">Save
-                                                                    Changes</button>
+                                                                    data-bs-dismiss="modal">Batal</button>
+                                                                <button type="submit" class="btn btn-primary">Simpan
+                                                                    Perubahan</button>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -168,28 +168,28 @@
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title"
-                                                                    id="deleteLessonModalLabel{{ $lesson->id }}">Delete
-                                                                    Lesson</h5>
+                                                                    id="deleteLessonModalLabel{{ $lesson->id }}">Hapus
+                                                                    Pelajaran</h5>
                                                                 <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    data-bs-dismiss="modal" aria-label="Tutup"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                Are you sure you want to delete the lesson
-                                                                <strong>{{ $lesson->title }}</strong>? This action
-                                                                cannot be undone.
+                                                                Apakah Anda yakin ingin menghapus pelajaran
+                                                                <strong>{{ $lesson->title }}</strong>? Tindakan ini
+                                                                tidak dapat dibatalkan.
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Cancel</button>
+                                                                    data-bs-dismiss="modal">Batal</button>
                                                                 <button type="submit"
-                                                                    class="btn btn-danger">Delete</button>
+                                                                    class="btn btn-danger">Hapus</button>
                                                             </div>
                                                         </div>
                                                     </form>
                                                 </div>
                                             </div>
 
-                                            <!-- Toggle Visibility Modal -->
+                                            <!-- Modal Perbarui Visibilitas -->
                                             <div class="modal fade" id="toggleVisibilityModal{{ $lesson->id }}"
                                                 tabindex="-1"
                                                 aria-labelledby="toggleVisibilityModalLabel{{ $lesson->id }}"
@@ -203,23 +203,23 @@
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title"
                                                                     id="toggleVisibilityModalLabel{{ $lesson->id }}">
-                                                                    Update Lesson Visibility
+                                                                    Perbarui Visibilitas Pelajaran
                                                                 </h5>
                                                                 <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    data-bs-dismiss="modal" aria-label="Tutup"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                Are you sure you want to
-                                                                <strong>{{ $lesson->visible ? 'hide' : 'show' }}</strong>
-                                                                this lesson to students?
+                                                                Apakah Anda yakin ingin
+                                                                <strong>{{ $lesson->visible ? 'menyembunyikan' : 'menampilkan' }}</strong>
+                                                                pelajaran ini kepada siswa?
                                                             </div>
                                                             <input type="hidden" name="visible"
                                                                 value="{{ $lesson->visible ? 0 : 1 }}">
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Cancel</button>
+                                                                    data-bs-dismiss="modal">Batal</button>
                                                                 <button type="submit"
-                                                                    class="btn btn-primary">Confirm</button>
+                                                                    class="btn btn-primary">Konfirmasi</button>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -232,14 +232,14 @@
                             <div class="d-flex justify-content-end mb-3">
                                 <button class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#addLessonModal{{ $module->id }}">
-                                    <i class="bi bi-plus-circle"></i> Add Lesson
+                                    <i class="bi bi-plus-circle"></i> Tambah Pelajaran
                                 </button>
                             </div>
 
-                            <!-- Quizzes Section -->
-                            <h5 class="text-secondary mt-4">Quizzes</h5>
+                            <!-- Bagian Kuis -->
+                            <h5 class="text-secondary mt-4">Kuis</h5>
                             @if ($module->quizzes->isEmpty())
-                                <p class="text-danger">No quizzes available for this module.</p>
+                                <p class="text-danger">Tidak ada kuis untuk modul ini.</p>
                             @else
                                 <ul class="list-group mb-4">
                                     @foreach ($module->quizzes as $quiz)
@@ -249,18 +249,18 @@
                                                     <strong>{{ $quiz->title }}</strong>
                                                     <span
                                                         class="badge bg-{{ $quiz->visible ? 'success' : 'danger' }} ms-2">
-                                                        {{ $quiz->visible ? 'Visible' : 'Hidden' }}
+                                                        {{ $quiz->visible ? 'Terlihat' : 'Tersembunyi' }}
                                                     </span>
                                                 </div>
                                                 <div>
                                                     <a href="{{ route('teacher.quizzes.show', $quiz->id) }}"
                                                         class="btn btn-outline-success btn-sm">
-                                                        View Quiz
+                                                        Lihat Kuis
                                                     </a>
                                                     <button type="button" class="btn btn-outline-secondary btn-sm"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#toggleVisibilityModalQuiz{{ $quiz->id }}">
-                                                        Update Visibility
+                                                        Perbarui Visibilitas
                                                     </button>
                                                 </div>
                                             </div>
@@ -279,24 +279,23 @@
                                                         <div class="modal-header">
                                                             <h5 class="modal-title"
                                                                 id="toggleVisibilityModalLabelQuiz{{ $quiz->id }}">
-                                                                Update Quiz Visibility
+                                                                Perbarui Visibilitas Kuis
                                                             </h5>
                                                             <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                data-bs-dismiss="modal" aria-label="Tutup"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            Are you sure you want to
-                                                            <strong>{{ $quiz->visible ? 'hide' : 'show' }}</strong> this
-                                                            quiz to
-                                                            students?
+                                                            Apakah Anda yakin ingin
+                                                            <strong>{{ $quiz->visible ? 'menyembunyikan' : 'menampilkan' }}</strong>
+                                                            kuis ini kepada siswa?
                                                         </div>
                                                         <input type="hidden" name="visible"
                                                             value="{{ $quiz->visible ? 0 : 1 }}">
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Cancel</button>
+                                                                data-bs-dismiss="modal">Batal</button>
                                                             <button type="submit"
-                                                                class="btn btn-primary">Confirm</button>
+                                                                class="btn btn-primary">Konfirmasi</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -306,18 +305,18 @@
                                 </ul>
                             @endif
 
-                            <!-- Generate Quiz with AI -->
+                            <!-- Buat Kuis dengan AI -->
                             <div class="d-flex justify-content-end mb-3">
                                 <button type="button" class="btn btn-outline-primary tw-me-1" data-bs-toggle="modal"
                                     data-bs-target="#generateQuizModal{{ $module->id }}">
-                                    <i class="bi bi-lightbulb"></i> Generate Quiz with AI
+                                    <i class="bi bi-lightbulb"></i> Buat Kuis dengan AI
                                 </button>
                                 <a href="{{ route('teacher.quizzes.create', $module->id) }}" class="btn btn-primary">
-                                    <i class="bi bi-file-earmark-text"></i> Create Quiz
+                                    <i class="bi bi-file-earmark-text"></i> Tambah Kuis
                                 </a>
                             </div>
 
-                            <!-- Generate Quiz Modal -->
+                            <!-- Modal Buat Kuis -->
                             <div class="modal fade" id="generateQuizModal{{ $module->id }}" tabindex="-1"
                                 aria-labelledby="generateQuizModalLabel{{ $module->id }}" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -327,47 +326,45 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="generateQuizModalLabel{{ $module->id }}">
-                                                    Generate Quiz with AI</h5>
+                                                    Buat Kuis dengan AI</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
+                                                    aria-label="Tutup"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="mb-3">
-                                                    <label for="quizTitle" class="form-label">Quiz Title</label>
+                                                    <label for="quizTitle" class="form-label">Judul Kuis</label>
                                                     <input type="text" class="form-control" id="quizTitle"
                                                         name="quizTitle" required>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="file" class="form-label">Upload PDF</label>
+                                                    <label for="file" class="form-label">Unggah PDF</label>
                                                     <input type="file" class="form-control" id="file"
                                                         name="file" accept=".pdf">
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="textContext" class="form-label">Or Paste Text
-                                                        Context</label>
+                                                    <label for="textContext" class="form-label">Atau Tempel Konten
+                                                        Teks</label>
                                                     <textarea class="form-control" id="textContext" name="textContext" rows="4"></textarea>
-                                                    <small class="text-muted">You can upload a PDF or paste text to
-                                                        generate a quiz.</small>
+                                                    <small class="text-muted">Anda dapat mengunggah PDF atau menempelkan
+                                                        teks untuk membuat kuis.</small>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Cancel</button>
+                                                    data-bs-dismiss="modal">Batal</button>
                                                 <button type="submit" id="generateQuizButton{{ $module->id }}"
                                                     class="btn btn-primary">
-                                                    <i class="bi bi-lightbulb"></i> Generate Quiz
+                                                    <i class="bi bi-lightbulb"></i> Buat Kuis
                                                 </button>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-
-
                             <!-- Assignments Section -->
-                            <h5 class="text-secondary mt-4">Assignments</h5>
+                            <h5 class="text-secondary mt-4">Tugas</h5>
                             @if ($module->assignments->isEmpty())
-                                <p class="text-danger">No assignments available for this module.</p>
+                                <p class="text-danger">Tidak ada tugas untuk modul ini.</p>
                             @else
                                 <ul class="list-group">
                                     @foreach ($module->assignments as $assignment)
@@ -377,13 +374,13 @@
                                                     <strong>{{ $assignment->title }}</strong>
                                                     <span
                                                         class="badge bg-{{ $assignment->visible ? 'success' : 'danger' }} ms-2">
-                                                        {{ $assignment->visible ? 'Visible' : 'Hidden' }}
+                                                        {{ $assignment->visible ? 'Terlihat' : 'Tersembunyi' }}
                                                     </span>
                                                 </div>
                                                 <div>
                                                     <a href="{{ route('teacher.assignments.show', $assignment->id) }}"
                                                         class="btn btn-outline-success btn-sm">
-                                                        View Assignment
+                                                        Lihat Tugas
                                                     </a>
                                                     {{-- <button type="button" class="btn btn-outline-primary btn-sm"
                                                         data-bs-toggle="modal"
@@ -393,7 +390,7 @@
                                                     <button type="button" class="btn btn-outline-secondary btn-sm"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#toggleVisibilityModalAssignment{{ $assignment->id }}">
-                                                        Update Visibility
+                                                        Perbarui Visibilitas
                                                     </button>
                                                 </div>
                                             </div>
@@ -412,24 +409,23 @@
                                                         <div class="modal-header">
                                                             <h5 class="modal-title"
                                                                 id="toggleVisibilityModalLabelAssignment{{ $assignment->id }}">
-                                                                Update Assignment Visibility
+                                                                Perbarui Visibilitas Tugas
                                                             </h5>
                                                             <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                data-bs-dismiss="modal" aria-label="Tutup"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            Are you sure you want to
-                                                            <strong>{{ $assignment->visible ? 'hide' : 'show' }}</strong>
-                                                            this
-                                                            assignment to students?
+                                                            Apakah Anda yakin ingin
+                                                            <strong>{{ $assignment->visible ? 'menyembunyikan' : 'menampilkan' }}</strong>
+                                                            tugas ini kepada siswa?
                                                         </div>
                                                         <input type="hidden" name="visible"
                                                             value="{{ $assignment->visible ? 0 : 1 }}">
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Cancel</button>
+                                                                data-bs-dismiss="modal">Batal</button>
                                                             <button type="submit"
-                                                                class="btn btn-primary">Confirm</button>
+                                                                class="btn btn-primary">Konfirmasi</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -437,15 +433,15 @@
                                     @endforeach
                                 </ul>
                             @endif
-                            <!-- Add Assignment Button -->
+                            <!-- Tombol Tambah Tugas -->
                             <div class="d-flex justify-content-end mb-3 tw-mt-5">
                                 <button class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#addAssignmentModal{{ $module->id }}">
-                                    <i class="bi bi-plus-circle"></i> Add Assignment
+                                    <i class="bi bi-plus-circle"></i> Tambah Tugas
                                 </button>
                             </div>
 
-                            <!-- Add Assignment Modal -->
+                            <!-- Modal Tambah Tugas -->
                             <div class="modal fade" id="addAssignmentModal{{ $module->id }}" tabindex="-1"
                                 aria-labelledby="addAssignmentModalLabel{{ $module->id }}" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -454,48 +450,48 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="addAssignmentModalLabel{{ $module->id }}">
-                                                    Add Assignment</h5>
+                                                    Tambah Tugas</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
+                                                    aria-label="Tutup"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <!-- Title Field -->
+                                                <!-- Judul -->
                                                 <div class="mb-3">
                                                     <label for="assignmentTitle{{ $module->id }}"
-                                                        class="form-label">Assignment Title</label>
+                                                        class="form-label">Judul Tugas</label>
                                                     <input type="text" class="form-control"
                                                         id="assignmentTitle{{ $module->id }}" name="title" required>
                                                 </div>
-                                                <!-- Description Field -->
+                                                <!-- Deskripsi -->
                                                 <div class="mb-3">
                                                     <label for="assignmentDescription{{ $module->id }}"
-                                                        class="form-label">Assignment Description</label>
+                                                        class="form-label">Deskripsi Tugas</label>
                                                     <textarea class="form-control" id="assignmentDescription{{ $module->id }}" name="description" rows="3"
                                                         required></textarea>
                                                 </div>
-                                                <!-- Deadline Field -->
+                                                <!-- Tenggat Waktu -->
                                                 <div class="mb-3">
                                                     <label for="assignmentDeadline{{ $module->id }}"
-                                                        class="form-label">Deadline</label>
+                                                        class="form-label">Tenggat Waktu</label>
                                                     <input type="datetime-local" class="form-control"
                                                         id="assignmentDeadline{{ $module->id }}" name="deadline"
                                                         required>
                                                 </div>
-                                                <!-- Visibility Field -->
+                                                <!-- Visibilitas -->
                                                 <div class="mb-3">
                                                     <label for="assignmentVisible{{ $module->id }}"
-                                                        class="form-label">Visible</label>
+                                                        class="form-label">Terlihat</label>
                                                     <select class="form-control"
                                                         id="assignmentVisible{{ $module->id }}" name="visible">
-                                                        <option value="1">Yes</option>
-                                                        <option value="0">No</option>
+                                                        <option value="1">Ya</option>
+                                                        <option value="0">Tidak</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Add Assignment</button>
+                                                    data-bs-dismiss="modal">Tutup</button>
+                                                <button type="submit" class="btn btn-primary">Tambah Tugas</button>
                                             </div>
                                         </div>
                                     </form>
@@ -503,7 +499,7 @@
                             </div>
 
 
-                            <!-- Add Lesson Modal -->
+                            <!-- Modal Tambah Pelajaran -->
                             <div class="modal fade" id="addLessonModal{{ $module->id }}" tabindex="-1"
                                 aria-labelledby="addLessonModalLabel{{ $module->id }}" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -512,46 +508,47 @@
                                         @csrf
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="addLessonModalLabel{{ $module->id }}">Add
-                                                    Lesson</h5>
+                                                <h5 class="modal-title" id="addLessonModalLabel{{ $module->id }}">
+                                                    Tambah
+                                                    Pelajaran</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
+                                                    aria-label="Tutup"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="mb-3">
-                                                    <label for="title" class="form-label">Lesson Title</label>
+                                                    <label for="title" class="form-label">Judul Pelajaran</label>
                                                     <input type="text" class="form-control" id="title"
                                                         name="title" required>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="content" class="form-label">Upload PDF</label>
+                                                    <label for="content" class="form-label">Unggah PDF</label>
                                                     <input type="file" class="form-control" id="content"
                                                         name="content" accept="application/pdf" required>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="visible" class="form-label">Visible</label>
+                                                    <label for="visible" class="form-label">Terlihat</label>
                                                     <select class="form-control" id="visible" name="visible">
-                                                        <option value="1">Yes</option>
-                                                        <option value="0">No</option>
+                                                        <option value="1">Ya</option>
+                                                        <option value="0">Tidak</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Add Lesson</button>
+                                                    data-bs-dismiss="modal">Tutup</button>
+                                                <button type="submit" class="btn btn-primary">Tambah Pelajaran</button>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
 
-                            <!-- Link to Discussion -->
+                            <!-- Tautan ke Diskusi -->
                             @if ($module->discussion)
                                 <div class="mb-4 text-end tw-mt-10">
                                     <a href="{{ route('discussions.show', $module->discussion->id) }}"
                                         class="btn btn-outline-primary">
-                                        <i class="bi bi-chat-text"></i> Go to Discussion
+                                        <i class="bi bi-chat-text"></i> Ke Diskusi
                                     </a>
                                 </div>
                             @endif
@@ -560,12 +557,10 @@
                 </div>
             @endforeach
         </div>
+        <!-- Tombol Tambah Modul -->
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModuleModal">Tambah Modul</button>
 
-
-        <!-- Add Module Button -->
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModuleModal">Add Module</button>
-
-        <!-- Add Module Modal -->
+        <!-- Modal Tambah Modul -->
         <div class="modal fade" id="addModuleModal" tabindex="-1" aria-labelledby="addModuleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
@@ -573,23 +568,23 @@
                     @csrf
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="addModuleModalLabel">Add Module</h5>
+                            <h5 class="modal-title" id="addModuleModalLabel">Tambah Modul</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                                aria-label="Tutup"></button>
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="title" class="form-label">Module Title</label>
+                                <label for="title" class="form-label">Judul Modul</label>
                                 <input type="text" class="form-control" id="title" name="title" required>
                             </div>
                             <div class="mb-3">
-                                <label for="description" class="form-label">Module Description</label>
+                                <label for="description" class="form-label">Deskripsi Modul</label>
                                 <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Add Module</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                            <button type="submit" class="btn btn-primary">Tambah Modul</button>
                         </div>
                     </div>
                 </form>
@@ -597,44 +592,43 @@
         </div>
     </div>
 
-    <!-- Add JavaScript -->
+    <!-- Tambahkan JavaScript -->
     <script>
-        // Function to show the spinner
+        // Fungsi untuk menampilkan spinner
         function showLoadingSpinner(event) {
-            console.log('Spinner function triggered'); // Debugging log
+            console.log('Fungsi spinner dipicu'); // Debugging log
 
-            // Prevent the default form submission
+            // Mencegah pengiriman formulir default
             event.preventDefault();
 
-            // Get the clicked button
+            // Ambil tombol yang diklik
             const button = event.submitter || event.target.querySelector('button[type="submit"]');
 
             if (button) {
-                // Disable the button and show spinner
+                // Nonaktifkan tombol dan tampilkan spinner
                 button.disabled = true;
                 button.innerHTML = `
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Generating...
-                `;
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Sedang Membuat...
+                        `;
             }
 
-            // Optionally submit the form here
-            // Uncomment the line below if submitting is required
+            // Opsional kirim formulir di sini
+            // Batalkan komentar pada baris di bawah jika diperlukan pengiriman
             event.target.submit();
         }
 
-        // Reset all buttons when the page loads
-        window.onload = function () {
-            console.log('Resetting button states'); // Debugging log
+        // Atur ulang semua tombol saat halaman dimuat
+        window.onload = function() {
+            console.log('Mengatur ulang status tombol'); // Debugging log
 
-            // Select all submit buttons inside modals
+            // Pilih semua tombol kirim di dalam modal
             const buttons = document.querySelectorAll('button[id^="generateQuizButton"]');
 
             buttons.forEach((button) => {
-                button.disabled = false; // Reset the disabled state
-                button.innerHTML = '<i class="bi bi-lightbulb"></i> Generate Quiz'; // Reset the content
+                button.disabled = false; // Atur ulang status nonaktif
+                button.innerHTML = '<i class="bi bi-lightbulb"></i> Buat Kuis'; // Atur ulang konten
             });
         };
     </script>
-
 @endsection

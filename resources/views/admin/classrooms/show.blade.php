@@ -5,17 +5,17 @@
         <div class="d-flex justify-content-between align-items-center">
             <h1>{{ $classroom->name }}</h1>
             <div>
-                <a href="{{ route('admin.classrooms.edit', $classroom->id) }}" class="btn btn-warning">Edit Classroom</a>
-                <a href="{{ route('admin.classrooms.addStudents', $classroom->id) }}" class="btn btn-success">Add Students</a>
+                <a href="{{ route('admin.classrooms.edit', $classroom->id) }}" class="btn btn-warning">Edit Kelas</a>
+                <a href="{{ route('admin.classrooms.addStudents', $classroom->id) }}" class="btn btn-success">Tambah Siswa</a>
             </div>
         </div>
-        <p>Time Period: {{ $classroom->time_period }}</p>
-        <p>Homeroom Teacher: {{ $classroom->teacher->name }}</p>
+        <p>Periode Waktu: {{ $classroom->time_period }}</p>
+        <p>Wali Kelas: {{ $classroom->teacher->name }}</p>
 
-        <h3>Students</h3>
+        <h3>Siswa</h3>
         @if ($classroom->students->isEmpty())
             <div class="text-center">
-                <p>No students assigned to this classroom.</p>
+                <p>Tidak ada siswa yang ditugaskan ke kelas ini.</p>
             </div>
         @else
             <div class="row">
