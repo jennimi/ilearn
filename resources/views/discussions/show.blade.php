@@ -3,9 +3,10 @@
 @section('content')
     <div class="container">
         <div>
-            <a href="{{ route('student.courses.show', $discussion->module->course->id) }}" class="btn btn-warning me-2"><i
-                    class="bi bi-arrow-left tw-me-2 tw-fs-4 tw-group-hover:tw-text-blue-500"></i>
+            <a href="{{ Auth::user()->role === 'teacher' ? route('teacher.courses.show', $discussion->module->course->id) : route('student.courses.show', $discussion->module->course->id) }}" class="btn btn-warning me-2">
+                <i class="bi bi-arrow-left tw-me-2 tw-fs-4 tw-group-hover:tw-text-blue-500"></i>
                 <span class="tw-group-hover:tw-underline">Back to Module</span></a>
+            </a>
         </div>
         <h1>{{ $discussion->title }} | {{ $discussion->module->course->title }}</h1>
         <p>Module: {{ $discussion->module->title }}</p>
