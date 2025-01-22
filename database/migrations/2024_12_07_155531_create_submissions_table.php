@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('submission_date');
             $table->integer('grade');
             $table->longText('feedback');
+            $table->longText('file_path');
             $table->string('submitted_file')->nullable();
         });
     }

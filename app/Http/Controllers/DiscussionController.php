@@ -12,26 +12,35 @@ class DiscussionController extends Controller
 {
     public function show($id)
     {
-        $discussion = Discussion::with(['module.course.teacher', 'comments.replies.user', 'comments.user'])
-        ->findOrFail($id);
+        // Load the discussion with the related module, course, teacher, and comments
+        $discussion = Discussion::with([
+            'module.course.teacher',
+            'comments' => function ($query) {
+                // Load only top-level comments
+                $query->whereNull('parent_id')->with('user', 'replies.user');
+            },
+        ])->findOrFail($id);
 
+        // Check if discussion doesn't exist, create one
         if (!$discussion) {
-            // Assuming you want to create a new discussion related to a module
-            $module = Module::findOrFail($discussion->module_id); // Get the related module
-    
+            $module = Module::findOrFail($id);
+
             $discussion = $module->discussion()->create([
                 'teacher_id' => $module->course->teacher_id,
                 'title' => "Discussion for {$module->title}",
             ]);
-    
-            // Reload the relationships after creating the discussion
-            $discussion->load('comments.replies.user', 'comments.user');
-            $discussion = $module->discussion;
-        }
 
+            // Reload the relationships after creating the discussion
+            $discussion->load([
+                'comments' => function ($query) {
+                    $query->whereNull('parent_id')->with('user', 'replies.user');
+                },
+            ]);
+        }
 
         return view('discussions.show', compact('discussion'));
     }
+
 
 
 

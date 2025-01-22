@@ -218,7 +218,7 @@ class GeminiController extends Controller
         //     ],
         // ]);
 
-        return view('teacher.quizzes.edit', compact('quiz'));
+        return view('teacher.quizzes.edit', compact('quiz', 'module'));
     }
 
     public function createQuiz(Request $request, $id, $processedQuestions)

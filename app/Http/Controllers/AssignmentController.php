@@ -12,8 +12,10 @@ class AssignmentController extends Controller
     public function show($id)
     {
         $assignment = Assignment::with('module.course')->findOrFail($id);
+        $student = Auth::user()->student;
+        $submission = $assignment->submission()->where('student_id', $student->id)->first();
 
-        return view('student.assignments.show', compact('assignment'));
+        return view('student.assignments.show', compact('assignment', 'submission'));
     }
     public function submit(Request $request, $id)
     {
@@ -27,13 +29,16 @@ class AssignmentController extends Controller
         $filePath = $request->file('submission_file')->store('submissions', 'public');
 
         $assignment->submission()->create([
+            'assignment_id' => $assignment->id,
             'student_id' => $student->id,
             'file_path' => $filePath,
-            'submitted_at' => now(),
+            'submission_date' => now(),
+            'grade' => 0,
+            'feedback' => ''
         ]);
 
         return redirect()->route('student.courses.show', $assignment->module->course->id)
-            ->with('success', 'Assignment submitted successfully!');
+            ->with('success', 'Tugas berhasil dikumpulkan!');
     }
 
     public function toggleVisibility($id)

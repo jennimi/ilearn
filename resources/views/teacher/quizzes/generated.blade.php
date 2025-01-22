@@ -4,7 +4,7 @@
     <div class="container">
         <h1 class="mb-4">
             Kuis AI-Generated
-            <small class="text-muted">({{ $courseName }} - {{ $moduleName }})</small>
+            <small class="text-muted">({{ $module->course->title }} - {{ $module->title }})</small>
         </h1>
         <form method="POST" action="{{ route('teacher.quizzes.store', $module->id) }}" id="createQuizForm">
             @csrf
@@ -325,9 +325,9 @@
                         <p class="text-muted">Poin: ${question.points}</p>
                         <ul>
                             ${question.choices.map((choice, i) => `
-                                    <li>
-                                        ${choice} ${question.correct_answers.includes(i) ? '<span class="badge bg-success ms-2">Benar</span>' : ''}
-                                    </li>`).join('')}
+                                        <li>
+                                            ${choice} ${question.correct_answers.includes(i) ? '<span class="badge bg-success ms-2">Benar</span>' : ''}
+                                        </li>`).join('')}
                         </ul>
                         <div class="d-flex gap-2">
                             <button type="button" class="btn btn-outline-primary btn-sm edit-question-button" data-bs-toggle="modal" data-bs-target="#editQuestionModal" data-index="${index}">Edit</button>
@@ -350,6 +350,9 @@
 
             // Perbarui input tersembunyi
             questionsDataInput.value = JSON.stringify(questions);
+
+            const quizId = 'YOUR_QUI';
+            window.location.href = `/quizzes/${quizId}`;
         }
 
         // Fungsi Edit Pertanyaan

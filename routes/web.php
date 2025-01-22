@@ -81,6 +81,7 @@ Route::middleware(['auth'])->prefix('teacher')->group(function () {
     Route::delete('quizzes/{id}', [QuizController::class, 'destroyQuiz'])->name('teacher.quizzes.destroy');
     Route::delete('questions/{id}', [QuestionController::class, 'destroy'])->name('teacher.questions.destroy');
     Route::put('questions/{id}', [QuestionController::class, 'update'])->name('teacher.questions.update');
+    Route::post('questions', [QuestionController::class, 'store'])->name('teacher.questions.store');
 });
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {

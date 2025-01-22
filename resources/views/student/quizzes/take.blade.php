@@ -78,7 +78,7 @@
                                             <p><strong>Jenis:</strong> {{ $question->getTypeLabel() }}</p>
                                         </div>
 
-                                        @if ($question->getTypeLabel() === 'Pilihan Tunggal')
+                                        @if ($question->getTypeLabel() === 'Single Choice')
                                             <div class="choices">
                                                 @foreach ($question->choices as $choice)
                                                     <div class="form-check fancy-input">
@@ -92,7 +92,7 @@
                                                     </div>
                                                 @endforeach
                                             </div>
-                                        @elseif ($question->getTypeLabel() === 'Pilihan Ganda')
+                                        @elseif ($question->getTypeLabel() === 'Multiple Choice')
                                             <div class="choices">
                                                 @foreach ($question->choices as $choice)
                                                     <div class="form-check fancy-input">
@@ -106,7 +106,7 @@
                                                     </div>
                                                 @endforeach
                                             </div>
-                                        @elseif ($question->getTypeLabel() === 'Jawaban Singkat')
+                                        @elseif ($question->getTypeLabel() === 'Short Answer')
                                             <div class="choices">
                                                 <input type="text" name="answers[{{ $question->id }}]"
                                                     class="form-control" placeholder="Ketik jawaban Anda di sini">

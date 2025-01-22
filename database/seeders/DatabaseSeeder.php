@@ -16,6 +16,7 @@ use App\Models\Question;
 use App\Models\QuestionChoice;
 use App\Models\Lesson;
 use App\Models\Assignment;
+use App\Models\Submission;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -108,6 +109,93 @@ class DatabaseSeeder extends Seeder
             'admin_id' => 2,
         ]);
 
+        // Create Teachers
+        $teacher4 = User::create([
+            'name' => 'Sophia L.',
+            'email' => 'sophial@gmail.com',
+            'password' => Hash::make('password'),
+            'role' => 'teacher',
+        ]);
+
+        $teacher5 = User::create([
+            'name' => 'Daniel K.',
+            'email' => 'danielk@gmail.com',
+            'password' => Hash::make('password'),
+            'role' => 'teacher',
+        ]);
+
+        $teacher6 = User::create([
+            'name' => 'Emily R.',
+            'email' => 'emilyr@gmail.com',
+            'password' => Hash::make('password'),
+            'role' => 'teacher',
+        ]);
+
+        $teacher7 = User::create([
+            'name' => 'Liam C.',
+            'email' => 'liamc@gmail.com',
+            'password' => Hash::make('password'),
+            'role' => 'teacher',
+        ]);
+
+        $teacher8 = User::create([
+            'name' => 'Charlotte B.',
+            'email' => 'charlotteb@gmail.com',
+            'password' => Hash::make('password'),
+            'role' => 'teacher',
+        ]);
+
+        Teacher::create([
+            'name' => $teacher4->name,
+            'profile_picture' => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+            'email' => $teacher4->email,
+            'password' => $teacher4->password,
+            'phone_number' => '081456123987',
+            'date_of_birth' => '1983-04-12',
+            'admin_id' => 1,
+        ]);
+
+        Teacher::create([
+            'name' => $teacher5->name,
+            'profile_picture' => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+            'email' => $teacher5->email,
+            'password' => $teacher5->password,
+            'phone_number' => '081987654321',
+            'date_of_birth' => '1986-06-10',
+            'admin_id' => 2,
+        ]);
+
+        Teacher::create([
+            'name' => $teacher6->name,
+            'profile_picture' => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+            'email' => $teacher6->email,
+            'password' => $teacher6->password,
+            'phone_number' => '081432156789',
+            'date_of_birth' => '1991-03-25',
+            'admin_id' => 1,
+        ]);
+
+        Teacher::create([
+            'name' => $teacher7->name,
+            'profile_picture' => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+            'email' => $teacher7->email,
+            'password' => $teacher7->password,
+            'phone_number' => '081234567890',
+            'date_of_birth' => '1988-08-18',
+            'admin_id' => 2,
+        ]);
+
+        Teacher::create([
+            'name' => $teacher8->name,
+            'profile_picture' => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+            'email' => $teacher8->email,
+            'password' => $teacher8->password,
+            'phone_number' => '081765432198',
+            'date_of_birth' => '1990-12-01',
+            'admin_id' => 1,
+        ]);
+
+
         // Create Classrooms
         $classroom1 = Classroom::create([
             'name' => 'XIIA1',
@@ -130,7 +218,22 @@ class DatabaseSeeder extends Seeder
             'admin_id' => 2,
         ]);
 
+        $classroom4 = Classroom::create([
+            'name' => 'XIIS1',
+            'time_period' => 2024,
+            'teacher_id' => 4,
+            'admin_id' => 2,
+        ]);
+
+        $classroom5 = Classroom::create([
+            'name' => 'XIIS2',
+            'time_period' => 2024,
+            'teacher_id' => 4,
+            'admin_id' => 2,
+        ]);
+
         // Create Students
+        // XIIA1
         $student1 = User::create(attributes: [
             'name' => 'Jamir G.',
             'email' => 'jamirg@gmail.com',
@@ -330,6 +433,248 @@ class DatabaseSeeder extends Seeder
             'enrollment_date' => '2022-08-22',
             'admin_id' => 2,
         ]);
+
+        $classroom1->students()->attach([
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+        ]);
+
+        $studentNames = [
+            'Alicia M.',
+            'Brian K.',
+            'Catherine T.',
+            'David L.',
+            'Emily S.',
+            'Frank W.',
+            'Grace N.',
+            'Henry B.',
+            'Isabella H.',
+            'Jack C.',
+            'Katherine P.',
+            'Liam J.',
+            'Mia Z.',
+            'Noah E.',
+            'Olivia V.',
+            'Paul F.',
+            'Quinn A.',
+            'Rachel Y.',
+            'Sophia D.',
+            'Thomas G.',
+            'Uma W.',
+            'Victor N.',
+            'Wendy R.',
+            'Xavier K.',
+            'Zoe T.'
+        ];
+
+        foreach ($studentNames as $index => $name) {
+            $user = User::create([
+                'name' => $name,
+                'email' => strtolower(str_replace(' ', '', $name)) . '@gmail.com',
+                'password' => Hash::make('password'),
+                'role' => 'student',
+            ]);
+
+            // Optional: Create a Student profile
+            $student = Student::create([
+                'name' => $user->name,
+                'nik' => '1300' . (10 + $index), // Adjust NIKs for uniqueness
+                'profile_picture' => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                'email' => $user->email,
+                'password' => $user->password,
+                'phone_number' => '0812' . rand(10000000, 99999999),
+                'date_of_birth' => '2006-' . rand(1, 12) . '-' . rand(1, 28), // Random date
+                'address' => 'Jl. Example No. ' . ($index + 1) . ', City, Indonesia',
+                'enrollment_date' => now(),
+                'admin_id' => 1, // Match to the admin of XIIA1
+            ]);
+
+
+            $classroom1->students()->attach([
+                $student->id,
+            ]);
+        }
+
+        // Students for each class
+        $classes = [
+            'XIIA2' => [
+                'classroom' => $classroom2,
+                'students' => [
+                    'Adam S.',
+                    'Bella T.',
+                    'Carlos R.',
+                    'Dana F.',
+                    'Ella V.',
+                    'Frankie H.',
+                    'George P.',
+                    'Hannah M.',
+                    'Isaac C.',
+                    'Julia W.',
+                    'Kevin N.',
+                    'Linda D.',
+                    'Michael B.',
+                    'Nina G.',
+                    'Oscar K.',
+                    'Paula Z.',
+                    'Quincy X.',
+                    'Rachel J.',
+                    'Sam U.',
+                    'Tina L.',
+                    'Ulysses O.',
+                    'Victor Y.',
+                    'Wendy B.',
+                    'Xena P.',
+                    'Yuri T.',
+                    'Zack F.',
+                    'Ava L.',
+                    'Blake Q.',
+                    'Carmen V.',
+                    'Derek J.'
+                ],
+            ],
+            'XIIA3' => [
+                'classroom' => $classroom3,
+                'students' => [
+                    'Alfred J.',
+                    'Barbara T.',
+                    'Cecil L.',
+                    'Doris W.',
+                    'Ethan H.',
+                    'Fiona V.',
+                    'Gavin Y.',
+                    'Hazel K.',
+                    'Ian R.',
+                    'Janet F.',
+                    'Kyle P.',
+                    'Laura Z.',
+                    'Mason U.',
+                    'Nora G.',
+                    'Oliver Q.',
+                    'Patricia T.',
+                    'Quentin D.',
+                    'Ruth S.',
+                    'Steven B.',
+                    'Tara N.',
+                    'Uma G.',
+                    'Vincent R.',
+                    'Whitney J.',
+                    'Xander T.',
+                    'Yasmine M.',
+                    'Zoe L.',
+                    'Arthur C.',
+                    'Bianca D.',
+                    'Claude P.',
+                    'Diana K.'
+                ],
+            ],
+            'XIIS1' => [
+                'classroom' => $classroom4,
+                'students' => [
+                    'Alex F.',
+                    'Brenda Q.',
+                    'Charlie H.',
+                    'Daphne W.',
+                    'Evan T.',
+                    'Felicia G.',
+                    'Grant B.',
+                    'Helena M.',
+                    'Ivan V.',
+                    'Jocelyn C.',
+                    'Kurt D.',
+                    'Lauren Z.',
+                    'Miles X.',
+                    'Natalie S.',
+                    'Oscar Y.',
+                    'Phoebe J.',
+                    'Quinn K.',
+                    'Rose P.',
+                    'Seth O.',
+                    'Tessa F.',
+                    'Umar H.',
+                    'Vera G.',
+                    'Willis J.',
+                    'Ximena V.',
+                    'Yanni Q.',
+                    'Zara L.',
+                    'Alan R.',
+                    'Bianca N.',
+                    'Caleb Y.',
+                    'Darla G.'
+                ],
+            ],
+            'XIIS2' => [
+                'classroom' => $classroom5,
+                'students' => [
+                    'Aiden T.',
+                    'Bethany U.',
+                    'Carter F.',
+                    'Diana R.',
+                    'Edward P.',
+                    'Frances W.',
+                    'Gloria Z.',
+                    'Henry X.',
+                    'Isabel Q.',
+                    'James L.',
+                    'Kelly N.',
+                    'Lucas B.',
+                    'Marissa K.',
+                    'Nathan T.',
+                    'Ophelia H.',
+                    'Patrick R.',
+                    'Quincy W.',
+                    'Rebecca M.',
+                    'Spencer V.',
+                    'Tina O.',
+                    'Ulrich F.',
+                    'Victoria L.',
+                    'Wayne G.',
+                    'Xavier P.',
+                    'Yolanda B.',
+                    'Zane C.',
+                    'Amelia S.',
+                    'Brent D.',
+                    'Cassidy O.',
+                    'Derek F.'
+                ],
+            ],
+        ];
+
+        // Add Students to Each Class
+        foreach ($classes as $class => $data) {
+            $students = [];
+            foreach ($data['students'] as $index => $name) {
+                $user = User::create([
+                    'name' => $name,
+                    'email' => strtolower(str_replace(' ', '', $name)) . '@gmail.com',
+                    'password' => Hash::make('password'),
+                    'role' => 'student',
+                ]);
+
+                // Optional: Create Student profiles
+                $student = Student::create([
+                    'name' => $user->name,
+                    'nik' => '1400' . ($index + 1), // Unique NIKs
+                    'profile_picture' => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                    'email' => $user->email,
+                    'password' => $user->password,
+                    'phone_number' => '0812' . rand(10000000, 99999999),
+                    'date_of_birth' => '2006-' . rand(1, 12) . '-' . rand(1, 28), // Random date
+                    'address' => 'Jl. Example No. ' . ($index + 1) . ', City, Indonesia',
+                    'enrollment_date' => now(),
+                    'admin_id' => $data['classroom']->admin_id,
+                ]);
+                $data['classroom']->students()->attach($student);
+            }
+        }
+
         // Membuat Kursus
         $course1 = Course::create([
             'teacher_id' => 1,
@@ -358,31 +703,280 @@ class DatabaseSeeder extends Seeder
             'image' => 'images/course/image3.jpeg',
         ]);
 
+        $course4 = Course::create([
+            'teacher_id' => 4,
+            'title' => 'Biologi',
+            'description' => 'Mempelajari struktur, fungsi, dan proses biologi pada makhluk hidup.',
+            'start_date' => '2024-01-01',
+            'end_date' => '2025-06-30',
+            'image' => 'images/course/image4.jpeg',
+        ]);
+
+        $course5 = Course::create([
+            'teacher_id' => 5,
+            'title' => 'Sejarah',
+            'description' => 'Menelusuri peristiwa sejarah penting dunia dan Indonesia.',
+            'start_date' => '2024-01-01',
+            'end_date' => '2025-06-30',
+            'image' => 'images/course/image5.jpeg',
+        ]);
+
+        $course6 = Course::create([
+            'teacher_id' => 1,
+            'title' => 'Bahasa Indonesia',
+            'description' => 'Mengembangkan keterampilan berbahasa dan apresiasi sastra.',
+            'start_date' => '2024-01-01',
+            'end_date' => '2025-06-30',
+            'image' => 'images/course/image6.jpeg',
+        ]);
+
+        $course7 = Course::create([
+            'teacher_id' => 2,
+            'title' => 'Bahasa Inggris',
+            'description' => 'Meningkatkan kemampuan berbahasa Inggris dalam berbicara, menulis, dan membaca.',
+            'start_date' => '2024-01-01',
+            'end_date' => '2025-06-30',
+            'image' => 'images/course/image7.jpeg',
+        ]);
+
+        $course8 = Course::create([
+            'teacher_id' => 3,
+            'title' => 'Ekonomi',
+            'description' => 'Memahami konsep dasar ekonomi dan penerapannya dalam kehidupan sehari-hari.',
+            'start_date' => '2024-01-01',
+            'end_date' => '2025-06-30',
+            'image' => 'images/course/image8.jpeg',
+        ]);
+
+        $course9 = Course::create([
+            'teacher_id' => 4,
+            'title' => 'Geografi',
+            'description' => 'Mempelajari lingkungan, peta, dan hubungan manusia dengan alam.',
+            'start_date' => '2024-01-01',
+            'end_date' => '2025-06-30',
+            'image' => 'images/course/image9.jpeg',
+        ]);
+
+        $course10 = Course::create([
+            'teacher_id' => 5,
+            'title' => 'Sosiologi',
+            'description' => 'Menganalisis hubungan sosial dan struktur masyarakat.',
+            'start_date' => '2024-01-01',
+            'end_date' => '2025-06-30',
+            'image' => 'images/course/image1.jpeg',
+        ]);
+
         // Menugaskan Kursus ke Kelas dengan Jadwal
-        $classroom1->courses()->attach($course1->id, [
-            'day' => 'Senin',
-            'start_time' => '08:00:00',
-            'end_time' => '09:30:00',
-        ]);
+        $classroomsWithSchedules = [
+            'XIIA1' => [
+                'classroom' => $classroom1,
+                'schedule' => [
+                    [
+                        'course_id' => $course1->id,
+                        'day' => 'Senin',
+                        'start_time' => '08:00:00',
+                        'end_time' => '09:30:00',
+                    ],
+                    [
+                        'course_id' => $course4->id,
+                        'day' => 'Senin',
+                        'start_time' => '10:00:00',
+                        'end_time' => '11:30:00',
+                    ],
+                    [
+                        'course_id' => $course7->id,
+                        'day' => 'Senin',
+                        'start_time' => '13:00:00',
+                        'end_time' => '14:30:00',
+                    ],
+                    [
+                        'course_id' => $course2->id,
+                        'day' => 'Selasa',
+                        'start_time' => '08:00:00',
+                        'end_time' => '09:30:00',
+                    ],
+                    [
+                        'course_id' => $course5->id,
+                        'day' => 'Rabu',
+                        'start_time' => '09:00:00',
+                        'end_time' => '10:30:00',
+                    ],
+                    [
+                        'course_id' => $course3->id,
+                        'day' => 'Kamis',
+                        'start_time' => '10:00:00',
+                        'end_time' => '11:30:00',
+                    ],
+                    [
+                        'course_id' => $course6->id,
+                        'day' => 'Jumat',
+                        'start_time' => '08:00:00',
+                        'end_time' => '09:30:00',
+                    ],
+                    [
+                        'course_id' => $course8->id,
+                        'day' => 'Jumat',
+                        'start_time' => '10:00:00',
+                        'end_time' => '11:30:00',
+                    ],
+                    [
+                        'course_id' => $course9->id,
+                        'day' => 'Sabtu',
+                        'start_time' => '08:00:00',
+                        'end_time' => '09:30:00',
+                    ],
+                    [
+                        'course_id' => $course10->id,
+                        'day' => 'Sabtu',
+                        'start_time' => '10:00:00',
+                        'end_time' => '11:30:00',
+                    ],
+                ],
+            ],
+            'XIIA2' => [
+                'classroom' => $classroom2,
+                'schedule' => [
+                    [
+                        'course_id' => $course1->id,
+                        'day' => 'Senin',
+                        'start_time' => '09:00:00',
+                        'end_time' => '10:30:00',
+                    ],
+                    [
+                        'course_id' => $course4->id,
+                        'day' => 'Senin',
+                        'start_time' => '11:00:00',
+                        'end_time' => '12:30:00',
+                    ],
+                    [
+                        'course_id' => $course7->id,
+                        'day' => 'Senin',
+                        'start_time' => '14:00:00',
+                        'end_time' => '15:30:00',
+                    ],
+                    [
+                        'course_id' => $course2->id,
+                        'day' => 'Selasa',
+                        'start_time' => '09:00:00',
+                        'end_time' => '10:30:00',
+                    ],
+                    [
+                        'course_id' => $course5->id,
+                        'day' => 'Rabu',
+                        'start_time' => '10:00:00',
+                        'end_time' => '11:30:00',
+                    ],
+                    [
+                        'course_id' => $course3->id,
+                        'day' => 'Kamis',
+                        'start_time' => '11:00:00',
+                        'end_time' => '12:30:00',
+                    ],
+                    [
+                        'course_id' => $course6->id,
+                        'day' => 'Jumat',
+                        'start_time' => '09:00:00',
+                        'end_time' => '10:30:00',
+                    ],
+                    [
+                        'course_id' => $course8->id,
+                        'day' => 'Jumat',
+                        'start_time' => '11:00:00',
+                        'end_time' => '12:30:00',
+                    ],
+                    [
+                        'course_id' => $course9->id,
+                        'day' => 'Sabtu',
+                        'start_time' => '09:00:00',
+                        'end_time' => '10:30:00',
+                    ],
+                    [
+                        'course_id' => $course10->id,
+                        'day' => 'Sabtu',
+                        'start_time' => '11:00:00',
+                        'end_time' => '12:30:00',
+                    ],
+                ],
+            ],
+            'XIIA3' => [
+                'classroom' => $classroom3,
+                'schedule' => [
+                    [
+                        'course_id' => $course1->id,
+                        'day' => 'Senin',
+                        'start_time' => '10:00:00',
+                        'end_time' => '11:30:00',
+                    ],
+                    [
+                        'course_id' => $course4->id,
+                        'day' => 'Senin',
+                        'start_time' => '12:00:00',
+                        'end_time' => '13:30:00',
+                    ],
+                    [
+                        'course_id' => $course7->id,
+                        'day' => 'Senin',
+                        'start_time' => '15:00:00',
+                        'end_time' => '16:30:00',
+                    ],
+                    [
+                        'course_id' => $course2->id,
+                        'day' => 'Selasa',
+                        'start_time' => '10:00:00',
+                        'end_time' => '11:30:00',
+                    ],
+                    [
+                        'course_id' => $course5->id,
+                        'day' => 'Rabu',
+                        'start_time' => '11:00:00',
+                        'end_time' => '12:30:00',
+                    ],
+                    [
+                        'course_id' => $course3->id,
+                        'day' => 'Kamis',
+                        'start_time' => '12:00:00',
+                        'end_time' => '13:30:00',
+                    ],
+                    [
+                        'course_id' => $course6->id,
+                        'day' => 'Jumat',
+                        'start_time' => '10:00:00',
+                        'end_time' => '11:30:00',
+                    ],
+                    [
+                        'course_id' => $course8->id,
+                        'day' => 'Jumat',
+                        'start_time' => '12:00:00',
+                        'end_time' => '13:30:00',
+                    ],
+                    [
+                        'course_id' => $course9->id,
+                        'day' => 'Sabtu',
+                        'start_time' => '10:00:00',
+                        'end_time' => '11:30:00',
+                    ],
+                    [
+                        'course_id' => $course10->id,
+                        'day' => 'Sabtu',
+                        'start_time' => '12:00:00',
+                        'end_time' => '13:30:00',
+                    ],
+                ],
+            ],
+        ];
 
-        $classroom1->courses()->attach($course2->id, [
-            'day' => 'Kamis',
-            'start_time' => '10:00:00',
-            'end_time' => '11:30:00',
-        ]);
+        // Attach Courses with Schedules
+        foreach ($classroomsWithSchedules as $classroomData) {
+            foreach ($classroomData['schedule'] as $schedule) {
+                $classroomData['classroom']->courses()->attach($schedule['course_id'], [
+                    'day' => $schedule['day'],
+                    'start_time' => $schedule['start_time'],
+                    'end_time' => $schedule['end_time'],
+                ]);
+            }
+        }
 
-        $classroom1->courses()->attach($course3->id, [
-            'day' => 'Rabu',
-            'start_time' => '09:00:00',
-            'end_time' => '10:30:00',
-        ]);
-
-        $students = range(1, 10);
-
-        $classroom1->students()->attach(array_slice($students, 0, 3));
-        $classroom2->students()->attach(array_slice($students, 3, 4));
-        $classroom3->students()->attach(array_slice($students, 7, 3));
-
+        //
         $discussion1 = Discussion::create([
             'module_id' => 1,
             'teacher_id' => 1,
@@ -523,6 +1117,58 @@ class DatabaseSeeder extends Seeder
             'comment' => 'Pertanyaan bagus! Saya akan membahas penerapan kimia organik dalam kehidupan sehari-hari.',
             'parent_id' => $comment9->id,
         ]);
+
+        // Generate discussions and comments for the first 5 subjects (3 modules each)
+        $subjects = [
+            ['teacher_id' => 1, 'module_ids' => [1, 2, 3]], // Matematika
+            ['teacher_id' => 2, 'module_ids' => [4, 5, 6]], // Fisika
+            ['teacher_id' => 3, 'module_ids' => [7, 8, 9]], // Kimia
+            ['teacher_id' => 4, 'module_ids' => [10, 11, 12]], // Biologi
+            ['teacher_id' => 5, 'module_ids' => [13, 14, 15]], // Sejarah
+        ];
+
+        $students = [$student1, $student2, $student3, $student4, $student5, $student6, $student7, $student8];
+
+        foreach ($subjects as $subject) {
+            foreach ($subject['module_ids'] as $module_id) {
+                // Create discussion for the module
+                $discussion = Discussion::create([
+                    'module_id' => $module_id,
+                    'teacher_id' => $subject['teacher_id'],
+                    'title' => "Diskusi untuk Modul $module_id",
+                ]);
+
+                // Add student comments to the discussion
+                $comments = [];
+                foreach (array_slice($students, 0, 3) as $index => $student) {
+                    $comments[] = Comment::create([
+                        'user_id' => $student->id,
+                        'discussion_id' => $discussion->id,
+                        'comment' => match ($index) {
+                            0 => 'Bisakah Anda menjelaskan topik ini lebih detail?',
+                            1 => 'Bagian ini juga cukup membingungkan bagi saya!',
+                            2 => 'Dapatkah Anda memberikan lebih banyak contoh untuk topik ini?',
+                        },
+                    ]);
+                }
+
+                // Teacher replies to each student comment
+                foreach ($comments as $index => $comment) {
+                    Comment::create([
+                        'user_id' => $subject['teacher_id'],
+                        'discussion_id' => $discussion->id,
+                        'comment' => match ($index) {
+                            0 => 'Tentu, saya akan memberikan penjelasan lebih rinci di kelas besok.',
+                            1 => 'Poin yang bagus! Saya akan membahasnya lebih lanjut di diskusi.',
+                            2 => 'Saya akan menambahkan lebih banyak contoh di materi. Terima kasih atas sarannya!',
+                        },
+                        'parent_id' => $comment->id,
+                    ]);
+                }
+            }
+        }
+
+        // Create Lessons
         $lesson1 = Lesson::create([
             'title' => 'Pendahuluan ke Matematika',
             'content' => 'lessons\mathematics.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
@@ -532,7 +1178,7 @@ class DatabaseSeeder extends Seeder
 
         $lesson2 = Lesson::create([
             'title' => 'Kalkulus Tingkat Lanjut',
-            'content' => 'kalkulus_tingkat_lanjut.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
+            'content' => 'lessons\calculus.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
             'module_id' => 2, // Modul 1
             'visible' => false,
         ]);
@@ -651,14 +1297,14 @@ class DatabaseSeeder extends Seeder
         // Tambahkan Pelajaran ke Modul 2
         $lesson3 = Lesson::create([
             'title' => 'Pendahuluan ke Fisika',
-            'content' => 'fisika_pendahuluan.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
+            'content' => 'lessons\physics.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
             'module_id' => 4, // Modul 2
             'visible' => true,
         ]);
 
         $lesson4 = Lesson::create([
             'title' => 'Dasar-Dasar Gerak',
-            'content' => 'gerak_dasar.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
+            'content' => 'lessons\motion.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
             'module_id' => 5, // Modul 2
             'visible' => false,
         ]);
@@ -744,17 +1390,12 @@ class DatabaseSeeder extends Seeder
             'description' => 'Lengkapi soal-soal tentang persamaan kuadrat.',
             'deadline' => Carbon::now()->addDays(10),
         ]);
+
+        // CHEMISTRY
         $lesson5 = Lesson::create([
             'title' => 'Pendahuluan ke Kimia Organik',
             'content' => 'lessons\chemistry.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
             'module_id' => 7, // Asumsi Modul 1 adalah untuk Kimia Organik
-            'visible' => true,
-        ]);
-
-        $lesson6 = Lesson::create([
-            'title' => 'Dasar-Dasar Kimia Anorganik',
-            'content' => 'dasar_kimia_anorganik.pdf', // Pastikan untuk mengunggah PDF ini ke penyimpanan Anda
-            'module_id' => 8, // Asumsi Modul 2 adalah untuk Kimia Anorganik
             'visible' => true,
         ]);
 
@@ -875,6 +1516,70 @@ class DatabaseSeeder extends Seeder
             'title' => 'Tren Tabel Periodik',
             'description' => 'Analisis dan jelaskan tren dalam jari-jari atom, energi ionisasi, dan elektronegativitas di seluruh periode dan golongan.',
             'deadline' => Carbon::now()->addDays(21), // Batas waktu 21 hari dari sekarang
+        ]);
+
+        // Quiz Submissions for Quiz ID 1
+        DB::table('quiz_results')->insert([
+            ['quiz_id' => 1, 'student_id' => 1, 'score' => 90, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 1, 'student_id' => 2, 'score' => 85, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 1, 'student_id' => 4, 'score' => 75, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 1, 'student_id' => 5, 'score' => 80, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 1, 'student_id' => 6, 'score' => 70, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 1, 'student_id' => 7, 'score' => 95, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 1, 'student_id' => 8, 'score' => 85, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 1, 'student_id' => 9, 'score' => 75, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 1, 'student_id' => 10, 'score' => 80, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 1, 'student_id' => 11, 'score' => 90, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+        ]);
+
+        // Quiz Submissions for Quiz ID 1
+        DB::table('quiz_results')->insert([
+            ['quiz_id' => 2, 'student_id' => 1, 'score' => 100, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 2, 'student_id' => 2, 'score' => 55, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 2, 'student_id' => 4, 'score' => 35, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 2, 'student_id' => 5, 'score' => 90, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 2, 'student_id' => 6, 'score' => 95, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 2, 'student_id' => 7, 'score' => 20, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 2, 'student_id' => 8, 'score' => 55, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 2, 'student_id' => 9, 'score' => 78, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 2, 'student_id' => 10, 'score' => 32, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 2, 'student_id' => 3, 'score' => 62, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+        ]);
+
+        // Quiz Submissions for Quiz ID 1
+        DB::table('quiz_results')->insert([
+            ['quiz_id' => 3, 'student_id' => 1, 'score' => 80, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 3, 'student_id' => 2, 'score' => 35, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 3, 'student_id' => 5, 'score' => 50, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['quiz_id' => 3, 'student_id' => 6, 'score' => 40, 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+        ]);
+
+        // Assignment Submissions for Assignment ID 1
+        DB::table('submissions')->insert([
+            ['assignment_id' => 1, 'student_id' => 1, 'file_path' => 'submissions/1/assignment1.pdf', 'grade' => 85, 'feedback' => 'Well done.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 1, 'student_id' => 2, 'file_path' => 'submissions/2/assignment1.pdf', 'grade' => 80, 'feedback' => 'Good effort.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 1, 'student_id' => 3, 'file_path' => 'submissions/4/assignment1.pdf', 'grade' => 75, 'feedback' => 'Nice work.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 1, 'student_id' => 5, 'file_path' => 'submissions/5/assignment1.pdf', 'grade' => 88, 'feedback' => 'Great job.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 1, 'student_id' => 6, 'file_path' => 'submissions/6/assignment1.pdf', 'grade' => 90, 'feedback' => 'Excellent!', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 1, 'student_id' => 7, 'file_path' => 'submissions/7/assignment1.pdf', 'grade' => 85, 'feedback' => 'Good improvement.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 1, 'student_id' => 8, 'file_path' => 'submissions/8/assignment1.pdf', 'grade' => 78, 'feedback' => 'Satisfactory.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 1, 'student_id' => 9, 'file_path' => 'submissions/9/assignment1.pdf', 'grade' => 82, 'feedback' => 'Keep it up.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 1, 'student_id' => 10, 'file_path' => 'submissions/10/assignment1.pdf', 'grade' => 87, 'feedback' => 'Very good.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 1, 'student_id' => 11, 'file_path' => 'submissions/11/assignment1.pdf', 'grade' => 90, 'feedback' => 'Excellent work!', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+        ]);
+
+        // Assignment Submissions for Assignment ID 1
+        DB::table('submissions')->insert([
+            ['assignment_id' => 2, 'student_id' => 1, 'file_path' => 'submissions/1/assignment1.pdf', 'grade' => 85, 'feedback' => 'Well done.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 2, 'student_id' => 2, 'file_path' => 'submissions/2/assignment1.pdf', 'grade' => 80, 'feedback' => 'Good effort.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 2, 'student_id' => 4, 'file_path' => 'submissions/4/assignment1.pdf', 'grade' => 75, 'feedback' => 'Nice work.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 2, 'student_id' => 3, 'file_path' => 'submissions/5/assignment1.pdf', 'grade' => 88, 'feedback' => 'Great job.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 2, 'student_id' => 6, 'file_path' => 'submissions/6/assignment1.pdf', 'grade' => 90, 'feedback' => 'Excellent!', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 2, 'student_id' => 7, 'file_path' => 'submissions/7/assignment1.pdf', 'grade' => 85, 'feedback' => 'Good improvement.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 2, 'student_id' => 8, 'file_path' => 'submissions/8/assignment1.pdf', 'grade' => 78, 'feedback' => 'Satisfactory.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 2, 'student_id' => 9, 'file_path' => 'submissions/9/assignment1.pdf', 'grade' => 82, 'feedback' => 'Keep it up.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 2, 'student_id' => 10, 'file_path' => 'submissions/10/assignment1.pdf', 'grade' => 87, 'feedback' => 'Very good.', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
+            ['assignment_id' => 2, 'student_id' => 11, 'file_path' => 'submissions/11/assignment1.pdf', 'grade' => 90, 'feedback' => 'Excellent work!', 'submission_date' => now(), 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }

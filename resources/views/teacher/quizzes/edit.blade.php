@@ -19,7 +19,8 @@
             <!-- Detail Kuis -->
             <div class="mb-4">
                 <label for="title" class="form-label">Judul Kuis</label>
-                <input type="text" class="form-control" id="title" name="title" value="{{ $quiz->title }}" required>
+                <input type="text" class="form-control" id="title" name="title" value="{{ $quiz->title }}"
+                    required>
             </div>
 
             <div class="mb-4">
@@ -91,25 +92,60 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+            <div class="mt-4">
+                <a href="{{ route('teacher.quizzes.show', $quiz->id) }}" class="btn btn-success">Simpan Perubahan</a>
+            </div>
         </form>
     </div>
 
-    <!-- Modal Tambah Pertanyaan -->
     <div class="modal fade" id="addQuestionModal" tabindex="-1" aria-labelledby="addQuestionModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form id="addQuestionForm">
+            <form id="addQuestionForm" method="POST" action="{{ route('teacher.questions.store', $quiz->id) }}">
+                @csrf
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="addQuestionModalLabel">Tambah Pertanyaan</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Mirip dengan struktur modal "Create Quiz" -->
+                        <!-- Question Text -->
+                        <div class="mb-3">
+                            <label for="question_text" class="form-label">Teks Pertanyaan</label>
+                            <textarea class="form-control" id="question_text" name="question_text" rows="3" required></textarea>
+                        </div>
+                        <!-- Points -->
+                        <div class="mb-3">
+                            <label for="points" class="form-label">Poin</label>
+                            <input type="number" class="form-control" id="points" name="points" min="1"
+                                required>
+                        </div>
+                        <!-- Question Type -->
+                        <div class="mb-3">
+                            <label for="question_type" class="form-label">Tipe Pertanyaan</label>
+                            <select class="form-select" id="question_type" name="question_type" required>
+                                <option value="" disabled selected>Pilih tipe pertanyaan</option>
+                                <option value="0">Pilihan Tunggal</option>
+                                <option value="1">Pilihan Ganda</option>
+                                <option value="2">Jawaban Singkat</option>
+                            </select>
+                        </div>
+                        <!-- Choices -->
+                        <div id="choicesContainer" class="d-none">
+                            <h6>Pilihan Jawaban</h6>
+                            <div id="choicesList"></div>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" id="addChoiceButton">
+                                <i class="bi bi-plus-circle"></i> Tambah Pilihan
+                            </button>
+                        </div>
+                        <!-- Short Answer -->
+                        <div id="shortAnswerContainer" class="d-none">
+                            <label for="short_answer" class="form-label">Jawaban Benar</label>
+                            <input type="text" class="form-control" id="short_answer" name="short_answer">
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                        <button type="button" class="btn btn-primary">Simpan Pertanyaan</button>
+                        <button type="submit" class="btn btn-primary">Simpan Pertanyaan</button>
                     </div>
                 </div>
             </form>
@@ -133,7 +169,8 @@
                         <div class="modal-body">
                             <!-- Teks Pertanyaan -->
                             <div class="mb-3">
-                                <label for="edit_question_text_{{ $question->id }}" class="form-label">Teks Pertanyaan</label>
+                                <label for="edit_question_text_{{ $question->id }}" class="form-label">Teks
+                                    Pertanyaan</label>
                                 <textarea class="form-control" id="edit_question_text_{{ $question->id }}" name="question_text" rows="3"
                                     required>{{ $question->question_text }}</textarea>
                             </div>
@@ -147,12 +184,16 @@
 
                             <!-- Tipe Pertanyaan -->
                             <div class="mb-3">
-                                <label for="edit_question_type_{{ $question->id }}" class="form-label">Tipe Pertanyaan</label>
+                                <label for="edit_question_type_{{ $question->id }}" class="form-label">Tipe
+                                    Pertanyaan</label>
                                 <select class="form-select" id="edit_question_type_{{ $question->id }}"
                                     name="question_type" required>
-                                    <option value="0" {{ $question->type == 0 ? 'selected' : '' }}>Pilihan Tunggal</option>
-                                    <option value="1" {{ $question->type == 1 ? 'selected' : '' }}>Pilihan Ganda</option>
-                                    <option value="2" {{ $question->type == 2 ? 'selected' : '' }}>Jawaban Singkat</option>
+                                    <option value="0" {{ $question->type == 0 ? 'selected' : '' }}>Pilihan Tunggal
+                                    </option>
+                                    <option value="1" {{ $question->type == 1 ? 'selected' : '' }}>Pilihan Ganda
+                                    </option>
+                                    <option value="2" {{ $question->type == 2 ? 'selected' : '' }}>Jawaban Singkat
+                                    </option>
                                 </select>
                             </div>
 
@@ -174,7 +215,8 @@
                                             <label class="form-check-label"
                                                 for="is_correct_{{ $choice->id }}">Benar</label>
                                         </div>
-                                        <button type="button" class="btn btn-danger btn-sm remove-choice" onclick="this.parentElement.remove();">
+                                        <button type="button" class="btn btn-danger btn-sm remove-choice"
+                                            onclick="this.parentElement.remove();">
                                             <i class="bi bi-x-circle"></i> Hapus
                                         </button>
                                     </div>
@@ -200,7 +242,8 @@
     @endforeach
 
     <!-- Modal Hapus Kuis -->
-    <div class="modal fade" id="deleteQuizModal" tabindex="-1" aria-labelledby="deleteQuizModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteQuizModal" tabindex="-1" aria-labelledby="deleteQuizModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <form method="POST" action="{{ route('teacher.quizzes.destroy', $quiz->id) }}">
                 @csrf
@@ -213,7 +256,8 @@
                     <div class="modal-body">
                         <p>Apakah Anda yakin ingin menghapus kuis ini?</p>
                         <p class="text-danger">
-                            Tindakan ini akan menghapus semua pertanyaan dan pilihan yang terkait dengan kuis dan tidak dapat dibatalkan.
+                            Tindakan ini akan menghapus semua pertanyaan dan pilihan yang terkait dengan kuis dan tidak
+                            dapat dibatalkan.
                         </p>
                     </div>
                     <div class="modal-footer">
@@ -243,4 +287,41 @@
         `;
         container.appendChild(newField);
     }
+
+    document.getElementById('question_type').addEventListener('change', function() {
+        const questionType = this.value;
+        const choicesContainer = document.getElementById('choicesContainer');
+        const shortAnswerContainer = document.getElementById('shortAnswerContainer');
+        if (questionType === '0' || questionType === '1') {
+            choicesContainer.classList.remove('d-none');
+            shortAnswerContainer.classList.add('d-none');
+        } else if (questionType === '2') {
+            shortAnswerContainer.classList.remove('d-none');
+            choicesContainer.classList.add('d-none');
+        }
+    });
+
+    // Add dynamic choice fields
+    document.getElementById('addChoiceButton').addEventListener('click', function() {
+        const choicesList = document.getElementById('choicesList');
+        const choiceIndex = choicesList.children.length;
+        const newChoice = document.createElement('div');
+        newChoice.classList.add('input-group', 'mb-2');
+        newChoice.innerHTML = `
+        <input type="text" class="form-control" name="choices[${choiceIndex}][choice_text]" placeholder="Pilihan Jawaban" required>
+        <input type="checkbox" class="form-check-input ms-2" name="choices[${choiceIndex}][is_correct]">
+        <button type="button" class="btn btn-danger btn-sm remove-choice">Hapus</button>
+    `;
+        choicesList.appendChild(newChoice);
+
+        // Add event listener for removing choice
+        newChoice.querySelector('.remove-choice').addEventListener('click', function() {
+            this.parentElement.remove();
+        });
+    });
+
+    document.getElementById('editQuizForm').addEventListener('submit', function(event) {
+        const quizId = "{{ $quiz->id }}"; // Laravel dynamically inserts the quiz ID
+        this.action = "{{ route('teacher.quizzes.show', ':id') }}".replace(':id', quizId);
+    });
 </script>

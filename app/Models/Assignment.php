@@ -31,10 +31,15 @@ class Assignment extends Model
         return $this->hasMany(Submission::class, 'assignment_id', 'id');
     }
 
+    public function submission(): HasMany
+    {
+        return $this->hasMany(Submission::class, 'assignment_id', 'id');
+    }
+
     public function isDeadlinePassed()
     {
         return $this->deadline && Carbon::now()->greaterThan($this->deadline);
     }
 
-    
+
 }

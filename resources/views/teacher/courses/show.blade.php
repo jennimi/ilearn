@@ -309,7 +309,7 @@
                             <div class="d-flex justify-content-end mb-3">
                                 <button type="button" class="btn btn-outline-primary tw-me-1" data-bs-toggle="modal"
                                     data-bs-target="#generateQuizModal{{ $module->id }}">
-                                    <i class="bi bi-lightbulb"></i> Buat Kuis dengan AI
+                                    <i class="bi bi-lightbulb"></i> Auto Generate Kuis
                                 </button>
                                 <a href="{{ route('teacher.quizzes.create', $module->id) }}" class="btn btn-primary">
                                     <i class="bi bi-file-earmark-text"></i> Tambah Kuis

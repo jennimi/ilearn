@@ -25,8 +25,15 @@ class StudentController extends Controller
 
         $classroom = $student->classrooms()->orderBy('classroom_student.created_at', 'desc')->first();
 
-        $dayOfWeek = now()->format('l');
-
+        $dayOfWeek = match (now()->format('l')) {
+            'Monday' => 'Senin',
+            'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis',
+            'Friday' => 'Jumat',
+            'Saturday' => 'Sabtu',
+            'Sunday' => 'Minggu',
+        };
         // Today's schedule
         $scheduleOfTheDay = $student->classrooms()
             ->with(['courses' => function ($query) use ($dayOfWeek) {
